@@ -24,4 +24,12 @@
     <servlet-name>query</servlet-name>
     <url-pattern>/query</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>addwrapper</servlet-name>
+    <servlet-class>edu.cmu.mixer.wrapup.AddWrapper</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>addwrapper</servlet-name>
+    <url-pattern>/admin/wrapper/add</url-pattern>
+  </servlet-mapping>
 </web-app>

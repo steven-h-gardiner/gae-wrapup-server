@@ -6,5 +6,7 @@
   <threadsafe>false</threadsafe>
   <sessions-enabled>true</sessions-enabled>
   <system-properties>
+    <property name="devkey" value="dev" />
+    <!-- devkey only works in local server -->
   </system-properties>
 </appengine-web-app>
