@@ -3,9 +3,25 @@
   <property name="sdk.dir" location="sdk/${sdk.filename}" />
 
   <target name="jquery">
-    <get dest="war/"
+    <mkdir dir="war/js"/>
+    <get dest="war/js/"
          usetimestamp="true"
          src="http://code.jquery.com/jquery-2.1.1.min.js"/>
+    <get dest="war/js"
+         usetimestamp="true"
+         src="https://github.com/ilinsky/jquery-xpath/blob/master/jquery.xpath.min.js" />
+  </target>
+
+  <target name="wrapup-client" depends="jquery">
+    <get dest="war/test"
+         usetimestamp="true"
+         src="https://wrapup-client.googlecode.com/hg/content/js/wrapup.js"/>
+    <get dest="war/test"
+         usetimestamp="true"
+         src="https://wrapup-client.googlecode.com/hg/skin/wrapped.css"/>
+   <get dest="war/test"
+         usetimestamp="true"
+         src="https://wrapup-client.googlecode.com/hg/content/test/hoover.xhtml"/>
   </target>
 
   <target name="sdk">
@@ -56,7 +72,7 @@
     </copy>
   </target>
 
-  <target name="compile" depends="copyjars, jquery"
+  <target name="compile" depends="copyjars"
       description="Compiles Java source and copies other source files to the WAR.">
     <mkdir dir="war/WEB-INF/classes" />
     <copy todir="war/WEB-INF/classes">
@@ -71,7 +87,7 @@
         debug="on" />
   </target>
 
-  <target name="deployable" depends="compile"/>
+  <target name="deployable" depends="compile, jquery, wrapup-client"/>
 
   <target name="runserver" depends="deployable"
       description="Starts the development server.">
