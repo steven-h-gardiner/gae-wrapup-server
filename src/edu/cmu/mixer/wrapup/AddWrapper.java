@@ -36,11 +36,13 @@ public class AddWrapper extends javax.servlet.http.HttpServlet {
         addWrapper(spec0);
       }
 
-      for (String jsontxt : req.getParameterValues("json")) {
-        org.json.JSONObject spec = new org.json.JSONObject(jsontxt);
-
-        if (spec.has("wrapper")) {
-          addWrapper(spec);
+      if (req.getParameterValues("json") != null) {      
+        for (String jsontxt : req.getParameterValues("json")) {
+          org.json.JSONObject spec = new org.json.JSONObject(jsontxt);
+          
+          if (spec.has("wrapper")) {
+            addWrapper(spec);
+          }
         }
       }
     } catch (Exception ex) {
@@ -58,7 +60,7 @@ public class AddWrapper extends javax.servlet.http.HttpServlet {
       new com.google.appengine.api.datastore.Entity("Wrapper");
     
     if (spec.opt("wrapper") != null) {
-      wrapper.setProperty("wrapper", spec.opt("wrapper").toString());
+      wrapper.setProperty("wrapper", new com.google.appengine.api.datastore.Text(spec.opt("wrapper").toString()));
     }
     if (spec.opt("signature") != null) {
       wrapper.setProperty("signature", spec.opt("signature").toString());
