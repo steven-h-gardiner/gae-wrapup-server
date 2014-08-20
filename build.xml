@@ -9,7 +9,7 @@
          src="http://code.jquery.com/jquery-2.1.1.min.js"/>
     <get dest="war/js"
          usetimestamp="true"
-         src="https://github.com/ilinsky/jquery-xpath/blob/master/jquery.xpath.min.js" />
+         src="https://raw.githubusercontent.com/ilinsky/jquery-xpath/master/jquery.xpath.min.js" />
   </target>
 
   <target name="wrapup-client" depends="jquery">
