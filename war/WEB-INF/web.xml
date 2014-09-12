@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE web-app PUBLIC
+ "-//Oracle Corporation//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
+  <servlet>
+    <servlet-name>hello</servlet-name>
+    <servlet-class>edu.cmu.mixer.wrapup.HelloWorld</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>hello</servlet-name>
+    <url-pattern>/hello</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>hello</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>query</servlet-name>
+    <servlet-class>edu.cmu.mixer.wrapup.WrapupQuery</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>query</servlet-name>
+    <url-pattern>/query</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>addwrapper</servlet-name>
+    <servlet-class>edu.cmu.mixer.wrapup.AddWrapper</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>addwrapper</servlet-name>
+    <url-pattern>/admin/wrapper/add</url-pattern>
+  </servlet-mapping>
+</web-app>
