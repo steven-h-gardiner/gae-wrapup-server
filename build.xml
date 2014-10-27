@@ -1,5 +1,5 @@
 <project>
-  <property name="sdk.filename" value="appengine-java-sdk-1.9.9" />
+  <property name="sdk.filename" value="appengine-java-sdk-1.9.14" />
   <property name="sdk.dir" location="sdk/${sdk.filename}" />
 
   <target name="jquery">
