@@ -50,6 +50,8 @@ public class WrapupQuery extends javax.servlet.http.HttpServlet {
         resp.setStatus(resp.SC_NO_CONTENT);
       }
       
+      System.err.println("#WRAP: " + wrappers.length());
+
 
       if (callback == null) {
         resp.setContentType("application/json");
