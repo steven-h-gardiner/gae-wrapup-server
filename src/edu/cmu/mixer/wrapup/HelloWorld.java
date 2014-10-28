@@ -18,6 +18,7 @@ public class HelloWorld extends javax.servlet.http.HttpServlet {
 
       resp.setContentType("application/json");
       resp.getWriter().write(json.toString(2));
+      resp.getWriter().write("\n");
     } catch (Exception ex) {
       resp.setContentType("text/plain");
       ex.printStackTrace(resp.getWriter());
