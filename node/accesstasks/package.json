@@ -1,0 +1,10 @@
+{
+  "name": "accesstasks",
+  "main": "main.js",
+  "dependencies": {
+    "nomnom": "*",
+    "luigi": "file:../luigi/",
+    "stdlog": "*"
+  },
+  "version": "0.0.1"
+}
