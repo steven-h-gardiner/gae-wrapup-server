@@ -12,10 +12,21 @@ at.rez = {};
 at.rez.wrapup = {};
 at.rez.wrapup.prefix = "https://gae-wrapup-server.appspot.com";
 at.rez.wrapup.path = "/access/tasklist.csv";
+at.rez.swauth = {};
+at.rez.swauth.prefix = "https://sw-auth.appspot.com";
+at.rez.swauth.path = "/admin/blob";
+at.rez.swauth.token = "abcd1253";
 
 at.procs = {};
 
 at.eq = process;
+
+at.getBlobUrl = function(spec) {
+  return [[at.rez.swauth.prefix,at.rez.swauth.path].join(""),
+	  [["token", at.rez.swauth.token].join("="),
+	   ["type", spec.type].join("="),
+	   ["reqid", spec.respid].join("=")].join("&")].join("?");
+};
 
 at.eq.on('task', function(spec) {
   spec = spec || {};
@@ -27,10 +38,19 @@ at.eq.on('task', function(spec) {
   spec.downloads = spec.downloads || {};
 
   spec.downloads.examples = {
+    localdir: spec.respid,
     localfile: [spec.respid, 'examples.json'].join("/"),
+    url: at.getBlobUrl({respid:spec.respid,type:"examples"}),
   };
   spec.downloads.dom = {
+    localdir: spec.respid,
     localfile: [spec.respid, 'document.xhtml'].join("/"),
+    url: at.getBlobUrl({respid:spec.respid,type:"document"}),
+  };
+  spec.downloads.meta = {
+    localdir: spec.respid,
+    localfile: [spec.respid, 'meta.json'].join("/"),
+    url: at.getBlobUrl({respid:spec.respid,type:"metainfo"}),
   };
 
 });
@@ -64,12 +84,26 @@ at.eq.on('tasklist', function() {
 
     Object.keys(spec.downloads).forEach(function(key) {
       var download = spec.downloads[key];
-      that.output.write(["#",
+      that.output.write([//"#",
+			 "mkdir"
+			 , "-p", download.localdir
+			 , "\n" ].join(" "));
+      that.output.write(["ls", download.localfile, '||', "\n"].join(" "));
+      that.output.write(["(", "\n"].join(" "));     
+      at.rez.archives.forEach(function(arch) {
+        that.output.write(["tar",
+			   "xvzOf", arch,
+			   ["req",download.localfile].join("/"),
+			   "||",
+			   "\n" ].join(" "));
+      });
+      that.output.write([//"#",
 			 "curl"
-			 , "-s" 
-			 , "-o", download.localfile
+			 //, "-s" 
+			 //, "-o", download.localfile
 			 , ["'",download.url,"'"].join("")
 			 , "\n" ].join(" "));
+      that.output.write([")", ">", download.localfile, "\n"].join(" "));
     });
     that.output.write(["echo"
 		       , ["'", line, "'"].join("")
@@ -97,9 +131,11 @@ at.eq.on('tasklist', function() {
      //,"3"
      ].forEach(function(condition) {
 	 that.output.write(["java"
-			    , "-jar", "/tmp/foo.jar"
+			    , "-jar", "./smartwrap-cli.jar"
 			    , "-e", spec.downloads.examples.localfile
 			    , "-d", spec.downloads.dom.localfile
+			    , "-i", spec.downloads.meta.localfile
+			    , "--format", "xhtml"
 			    , "-o", [spec.taskid, condition, '.xhtml'].join("")
 			    , "\n"].join(" "));
     });
@@ -127,4 +163,27 @@ at.eq.on('tasklist', function() {
 
 });
 
-at.eq.emit('tasklist');
+at.eq.on('archives', function(spec) {
+  at.rez.archives = [];
+
+  at.procs.find = at.mods.cp.spawn('find', 
+				   [spec.root,
+				    '-name', '*.tgz']);
+
+  at.procs.ffilt = new at.mods.luigi.filter();
+  at.procs.ffilt.on('line', function(line) {
+    at.rez.archives.push(line);  
+  });
+
+  at.procs.find.stdout.pipe(at.procs.ffilt.stdin);
+  at.procs.find.stderr.pipe(process.stderr);
+
+  at.procs.ffilt.stdout.on('end', function() {
+    at.procs = {};
+    console.error("ARCHIVES %j", at.rez.archives);
+
+    at.eq.emit('tasklist');
+  });
+});
+
+at.eq.emit('archives', {root:'./archive'});
