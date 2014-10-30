@@ -2,6 +2,14 @@
   <property name="sdk.filename" value="appengine-java-sdk-1.9.14" />
   <property name="sdk.dir" location="sdk/${sdk.filename}" />
 
+
+  <target name="swcli">
+    <mkdir dir="bin"/>
+    <get dest="bin/smartwrap-cli.jar"
+	 verbose="true" 
+         usetimestamp="true"
+	 src="http://radar2.isri.cmu.edu:8000/smartwrap/export/HEAD/releases/smartwrap-cli-latest.jar" />
+  </target>
   <target name="jquery">
     <mkdir dir="war/js"/>
     <get dest="war/js/"
@@ -101,6 +109,21 @@
   </target>
   <target name="deploy" depends="deployable,predeploy">
     <appcfg war="war" action="update" />
+  </target>
+
+  <target name="node_modules" depends="swcli">
+    <copy file="bin/smartwrap-cli.jar"
+	  tofile="node/accesstasks/smartwrap-cli.jar"/>
+    <exec executable="npm">
+      <arg value="install"/>
+      <arg file="node/accesstasks"/>
+    </exec>
+  </target>
+  
+  <target name="experiment" depends="node_modules">
+    <exec executable="node">
+      <arg file="node_modules/accesstasks/main.js"/>
+    </exec>
   </target>
 
 </project>

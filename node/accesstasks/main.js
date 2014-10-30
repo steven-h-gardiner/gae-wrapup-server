@@ -88,7 +88,7 @@ at.eq.on('tasklist', function() {
 			 "mkdir"
 			 , "-p", download.localdir
 			 , "\n" ].join(" "));
-      that.output.write(["ls", download.localfile, '||', "\n"].join(" "));
+      that.output.write(["test", "-f", download.localfile, '||', "\n"].join(" "));
       that.output.write(["(", "\n"].join(" "));     
       at.rez.archives.forEach(function(arch) {
         that.output.write(["tar",
@@ -125,22 +125,35 @@ at.eq.on('tasklist', function() {
     spec.downloads = {};
     at.eq.emit('task', spec);
 
-    ["0"
-     //,"1"
-     //,"2"
-     //,"3"
-     ].forEach(function(condition) {
-	 that.output.write(["java"
-			    , "-jar", "./smartwrap-cli.jar"
-			    , "-e", spec.downloads.examples.localfile
-			    , "-d", spec.downloads.dom.localfile
-			    , "-i", spec.downloads.meta.localfile
-			    , "--format", "xhtml"
-			    , "-o", [spec.taskid, condition, '.xhtml'].join("")
-			    , "\n"].join(" "));
-    });
+    that.output.write(["java"
+		       , "-jar", require.resolve("./smartwrap-cli.jar")
+		       , "-e", spec.downloads.examples.localfile
+		       , "-d", spec.downloads.dom.localfile
+		       , "-i", spec.downloads.meta.localfile
+		       , "--format", "xhtml"
+		       , "-o", [spec.taskid, '.xhtml'].join("")
+		       , "\n"].join(" "));
+    that.output.write(["ls"
+		       , [spec.taskid, '.xhtml'].join("")
+		       , "\n"].join(" "));
   });
 
+  at.procs.exec2 = at.mods.cp.spawn('bash', ['-']);
+
+  var perl = "s/\\&\\#195;\\&\\#8218;\\&\\#194;//g;";
+  console.error("PERL %s", perl);
+  
+  at.procs.fix = at.mods.cp.spawn('parallel',
+				  [["tidy", "-quiet", "-asxml", "-numeric", "{}",
+				    "|", "tee", "{.}00.xhtml",
+				    "|", "perl", "-pe", ['"',perl,'"'].join(""),
+				    "|", "xsltproc", require.resolve("./general.xsl"), "-",
+				    "|", "tee", "{.}0.xhtml",
+				    "|", "xsltproc", require.resolve("./underuse.xsl"), "-",
+				    "|", "tee", "{.}1.xhtml",
+				    "|", "xsltproc", require.resolve("./overuse.xsl"), "-",
+				    ">", "{.}3.xhtml"].join(" ")]);
+  
   if (at.procs.curltee) {
     at.procs.curl.stdout.pipe(at.procs.curltee.stdin);
     at.procs.curltee.stdout.pipe(at.procs.filter.stdin);
@@ -159,8 +172,16 @@ at.eq.on('tasklist', function() {
   at.procs.swfetch.stdout.pipe(at.procs.filter2.stdin);
   at.procs.swfetch.stderr.pipe(process.stderr);
 
-  at.procs.filter2.stdout.pipe(process.stdout);
+  at.procs.filter2.stdout.pipe(at.procs.exec2.stdin);
 
+  at.procs.exec2.stdout.pipe(at.procs.fix.stdin);
+  at.procs.exec2.stderr.pipe(process.stderr);
+  
+  at.procs.fix.stdout.pipe(process.stdout);
+  at.procs.fix.stderr.pipe(process.stderr);
+
+
+  
 });
 
 at.eq.on('archives', function(spec) {

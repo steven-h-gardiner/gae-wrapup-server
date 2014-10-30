@@ -14,9 +14,11 @@
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="not(preceding::html:*[@itemscope = $tupleScope])">
-	<html:table>
+	<html:table>	  
 	  <xsl:for-each select=".|following::html:*[@itemscope = $tupleScope]">
 	    <html:tr>
+	      <xsl:copy-of select="@itemscope"/>
+	      <xsl:copy-of select="@itemtype"/>
 	      <xsl:apply-templates select="." mode="row"/>
 	    </html:tr>
 	  </xsl:for-each>
