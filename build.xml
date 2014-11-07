@@ -1,5 +1,5 @@
 <project>
-  <property name="sdk.filename" value="appengine-java-sdk-1.9.14" />
+  <property name="sdk.filename" value="appengine-java-sdk-1.9.15" />
   <property name="sdk.dir" location="sdk/${sdk.filename}" />
 
 
@@ -114,6 +114,7 @@
   <target name="node_modules" depends="swcli">
     <copy file="bin/smartwrap-cli.jar"
 	  tofile="node/accesstasks/smartwrap-cli.jar"/>
+    <mkdir dir="node_modules"/>
     <exec executable="npm">
       <arg value="install"/>
       <arg file="node/accesstasks"/>
