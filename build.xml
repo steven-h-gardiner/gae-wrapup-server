@@ -122,6 +122,9 @@
   </target>
   
   <target name="experiment" depends="node_modules">
+    <mkdir dir="experiments"/>
+    <mkdir dir="experiments/data"/>
+    <mkdir dir="experiments/tasks"/>
     <exec executable="node">
       <arg file="node_modules/accesstasks/main.js"/>
     </exec>
