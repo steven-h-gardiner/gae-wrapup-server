@@ -86,9 +86,9 @@ at.eq.on('tasklist', function() {
       var download = spec.downloads[key];
       that.output.write([//"#",
 			 "mkdir"
-			 , "-p", download.localdir
+			 , "-p", ["experiments","data",download.localdir].join("/")
 			 , "\n" ].join(" "));
-      that.output.write(["test", "-f", download.localfile, '||', "\n"].join(" "));
+      that.output.write(["test", "-f", ["experiments","data",download.localfile].join("/"), '||', "\n"].join(" "));
       that.output.write(["(", "\n"].join(" "));     
       at.rez.archives.forEach(function(arch) {
         that.output.write(["tar",
@@ -103,7 +103,7 @@ at.eq.on('tasklist', function() {
 			 //, "-o", download.localfile
 			 , ["'",download.url,"'"].join("")
 			 , "\n" ].join(" "));
-      that.output.write([")", ">", download.localfile, "\n"].join(" "));
+      that.output.write([")", ">", ["experiments","data",download.localfile].join("/"), "\n"].join(" "));
     });
     that.output.write(["echo"
 		       , ["'", line, "'"].join("")
@@ -111,7 +111,9 @@ at.eq.on('tasklist', function() {
   });
 
 
-  at.procs.swfetch = at.mods.cp.spawn('bash', ['-']);
+  at.procs.swfetch = at.mods.cp.spawn('bash', ['-c',
+                                               ["tee /tmp/swfetch.sh",
+                                                "bash -"].join(" | ")]);
 
   at.procs.filter2 = new at.mods.luigi.filter();
   at.procs.filter2.on('line', function(line) {
@@ -127,24 +129,29 @@ at.eq.on('tasklist', function() {
 
     that.output.write(["java"
 		       , "-jar", require.resolve("./smartwrap-cli.jar")
-		       , "-e", spec.downloads.examples.localfile
-		       , "-d", spec.downloads.dom.localfile
-		       , "-i", spec.downloads.meta.localfile
+		       , "-e", ["experiments","data",spec.downloads.examples.localfile].join("/")
+		       , "-d", ["experiments","data",spec.downloads.dom.localfile].join("/")
+		       , "-i", ["experiments","data",spec.downloads.meta.localfile].join("/")
 		       , "--format", "xhtml"
-		       , "-o", [spec.taskid, '.xhtml'].join("")
+		       , "-o", ["experiments", "tasks", [spec.taskid, '.xhtml'].join("")].join("/")
 		       , "\n"].join(" "));
     that.output.write(["ls"
-		       , [spec.taskid, '.xhtml'].join("")
+		       , ["experiments", "tasks", [spec.taskid, '.xhtml'].join("")].join("/")
 		       , "\n"].join(" "));
   });
 
-  at.procs.exec2 = at.mods.cp.spawn('bash', ['-']);
+  at.procs.exec2 = at.mods.cp.spawn('bash', ['-c',
+                                             ["tee /tmp/swwrap.sh",
+                                              "bash -"].join(" | ")]);
 
   var perl = "s/\\&\\#195;\\&\\#8218;\\&\\#194;//g;";
   console.error("PERL %s", perl);
   
   at.procs.fix = at.mods.cp.spawn('parallel',
-				  [["tidy", "-quiet", "-asxml", "-numeric", "{}",
+				  [["tidy", "-quiet", "--show-warnings", "0", 
+                                            "--new-blocklevel-tags", "svg,g,path,sfmsg",
+                                            "-asxml", "-numeric", "{}", 
+                                    //'2>>/tmp/tidy.err',
 				    "|", "tee", "{.}00.xhtml",
 				    "|", "perl", "-pe", ['"',perl,'"'].join(""),
 				    "|", "xsltproc", require.resolve("./general.xsl"), "-",
