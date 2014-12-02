@@ -33,6 +33,8 @@ public class AccessTaskList  extends javax.servlet.http.HttpServlet {
 	  resp.getWriter().write(new Long(task.getKey().getId()).toString());
 	  resp.getWriter().write(",");
 	  resp.getWriter().write(task.getProperty("representative").toString());
+	  resp.getWriter().write(",");
+	  resp.getWriter().write(task.getProperty("url").toString());
 	  resp.getWriter().write("\n");
 	}
       }
