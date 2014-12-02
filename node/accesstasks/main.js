@@ -17,6 +17,21 @@ at.rez.swauth.prefix = "https://sw-auth.appspot.com";
 at.rez.swauth.path = "/admin/blob";
 at.rez.swauth.token = "abcd1253";
 
+at.rez.extratags = [
+  "header",
+  "section",
+  "nav",
+  "data",
+  "footer",
+  "time",
+  "svg",
+  "g",
+  "path",
+  "canvas",
+  "fblike",
+  "sfmsg",
+];
+
 at.procs = {};
 
 at.eq = process;
@@ -148,10 +163,10 @@ at.eq.on('tasklist', function() {
   console.error("PERL %s", perl);
   
   at.procs.fix = at.mods.cp.spawn('parallel',
-				  [["tidy", "-quiet", "--show-warnings", "0", 
-                                            "--new-blocklevel-tags", "svg,g,path,sfmsg",
-                                            "-asxml", "-numeric", "{}", 
-                                    //'2>>/tmp/tidy.err',
+				  [["tidy", "-utf8", "-quiet", "--show-warnings", "0", 
+				    "--new-blocklevel-tags", at.rez.extratags.join(","),
+				    "-asxml", "-numeric", "{}", 
+                                    '2>>/tmp/tidy.err',
 				    "|", "tee", "{.}00.xhtml",
 				    "|", "perl", "-pe", ['"',perl,'"'].join(""),
 				    "|", "xsltproc", require.resolve("./general.xsl"), "-",
