@@ -12,6 +12,9 @@
   o.putOnce("condition", "0");
 
   o.putOpt("sessionid", session.getId());
+  //o.putOpt("md5sum", edu.cmu.mixer.util.ServletUtil.getMD5Sum(o.optString("sessionid", o.toString())));
+  o.putOpt("hash",Integer.toString(Math.abs(o.optString("sessionid", o.toString()).hashCode()), 32).toUpperCase());
+  //o.putOpt("uuid", java.util.UUID.nameUUIDFromBytes(o.optString("sessionid", o.toString()).getBytes()).toString());
   o.putOpt("sessioninterval", session.getMaxInactiveInterval());
 
   o.putOpt("taskno", Integer.parseInt(o.optString("taskno", "-1")));
@@ -23,6 +26,7 @@
   o.putOpt("eventname", "viewtask");
   o.putOpt("response", edu.cmu.mixer.access.EventLog.getInstance().log(o));
 
+  o.putOpt("orderings", edu.cmu.mixer.access.EventLog.getInstance().drawOrderings(o));
 
   com.google.appengine.api.datastore.Entity entity = 
     new com.google.appengine.api.datastore.Entity("AccessTask");
@@ -72,6 +76,17 @@
   <c:set var="sessionid">
    <jsp:expression>o.optString("sessionid")</jsp:expression>
   </c:set>
+  <!--
+  <c:set var="md5sum">
+   <jsp:expression>o.optString("md5sum")</jsp:expression>
+  </c:set>
+  <c:set var="uuid">
+   <jsp:expression>o.optString("uuid")</jsp:expression>
+  </c:set>
+  -->
+  <c:set var="hash">
+   <jsp:expression>o.optString("hash")</jsp:expression>
+  </c:set>
   <c:set var="question">
    <jsp:expression>entity.getProperty("question")</jsp:expression>
   </c:set>
@@ -99,6 +114,23 @@
           <div>
             <span class="label">SESSIONID</span>
             <span>${sessionid}</span>
+            
+          </div>
+<!--
+	  <div>
+            <span class="label">MD5SUM</span>
+            <span>${md5sum}</span>
+            
+          </div>
+          <div>
+            <span class="label">UUID</span>
+            <span>${uuid}</span>
+            
+          </div>
+-->	
+          <div>
+            <span class="label">HASH</span>
+            <span>|| ${hash} ||</span>
             
           </div>
           <div>
