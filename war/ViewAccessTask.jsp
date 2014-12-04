@@ -5,63 +5,18 @@
   <jsp:scriptlet>
 <![CDATA[
 
-  org.json.JSONObject o = new org.json.JSONObject();
-  o.putOpt("url", request.getParameter("url"));
-  o.putOpt("taskno", request.getParameter("taskno"));
-  o.putOpt("condition", request.getParameter("condition"));
-  o.putOnce("condition", "0");
-
-  o.putOpt("sessionid", session.getId());
-  //o.putOpt("md5sum", edu.cmu.mixer.util.ServletUtil.getMD5Sum(o.optString("sessionid", o.toString())));
-  o.putOpt("hash",Integer.toString(Math.abs(o.optString("sessionid", o.toString()).hashCode()), 32).toUpperCase());
-  //o.putOpt("uuid", java.util.UUID.nameUUIDFromBytes(o.optString("sessionid", o.toString()).getBytes()).toString());
-  o.putOpt("sessioninterval", session.getMaxInactiveInterval());
-
-  o.putOpt("taskno", Integer.parseInt(o.optString("taskno", "-1")));
+  edu.cmu.mixer.access.AccessTask atask = new edu.cmu.mixer.access.AccessTask(3);  
+  org.json.JSONObject o = atask.process(session, request);
 
   if (request.getParameter("flush") != null) {
     session.invalidate();
   }
 
-  o.putOpt("eventname", "viewtask");
-  o.putOpt("response", edu.cmu.mixer.access.EventLog.getInstance().log(o));
-
-  o.putOpt("orderings", edu.cmu.mixer.access.EventLog.getInstance().drawOrderings(o));
-
-  com.google.appengine.api.datastore.Entity entity = 
-    new com.google.appengine.api.datastore.Entity("AccessTask");
-  // default so non-null but never stored to datastore
-
-  com.google.appengine.api.datastore.DatastoreService ds =
-    com.google.appengine.api.datastore.DatastoreServiceFactory.getDatastoreService();
-  com.google.appengine.api.datastore.Query query = 
-    new com.google.appengine.api.datastore.Query("AccessTask");
-  com.google.appengine.api.datastore.PreparedQuery pq = null;
-  if (o.has("url")) {
-    query = query.setFilter(new com.google.appengine.api.datastore.Query.FilterPredicate("url",
-                                                                                         com.google.appengine.api.datastore.Query.FilterOperator.EQUAL,
-                                                                                         o.optString("url")));
-
-    pq = ds.prepare(query);
-    for (com.google.appengine.api.datastore.Entity result : pq.asIterable()) {
-      entity = result;
-    }
-  }
-  if (o.optInt("taskno", -1) >= 0) {
-
-    query = query.setFilter(new com.google.appengine.api.datastore.Query.FilterPredicate("taskno",
-                                                                                         com.google.appengine.api.datastore.Query.FilterOperator.EQUAL,
-                                                                                         o.optInt("taskno", -1)));
-
-    pq = ds.prepare(query);
-  }
-  if (pq != null) {
-    for (com.google.appengine.api.datastore.Entity result : pq.asIterable()) {
-      entity = result;
-    }
+  if (o.has("finished")) {
+    response.sendRedirect("/ConfirmTasks.jsp?numtasks=" + atask.numtasks);
+    return;
   }
 
-  o.putOpt("title", entity.getProperty("title"));
 ]]>
   </jsp:scriptlet>
   <c:set var="response">
@@ -71,7 +26,7 @@
    <jsp:expression>o.optString("sessioninterval")</jsp:expression>
   </c:set>
   <c:set var="url">
-   <jsp:expression>entity.getProperty("url")</jsp:expression>
+   <jsp:expression>o.optString("url")</jsp:expression>
   </c:set>
   <c:set var="sessionid">
    <jsp:expression>o.optString("sessionid")</jsp:expression>
@@ -88,10 +43,16 @@
    <jsp:expression>o.optString("hash")</jsp:expression>
   </c:set>
   <c:set var="question">
-   <jsp:expression>entity.getProperty("question")</jsp:expression>
+   <jsp:expression>o.optString("question")</jsp:expression>
+  </c:set>
+  <c:set var="taskno">
+   <jsp:expression>1+o.optInt("taskno", 0)</jsp:expression>
+  </c:set>
+  <c:set var="numtasks">
+   <jsp:expression>atask.numtasks</jsp:expression>
   </c:set>
   <c:set var="id">
-   <jsp:expression>entity.getKey().getId()</jsp:expression>
+   <jsp:expression>o.optString("taskid", "TASK" + o.optString("pageno"))</jsp:expression>
   </c:set>
   <c:set var="condition">
    <jsp:expression>o.optString("condition", "0")</jsp:expression>
@@ -163,6 +124,11 @@
             <span>${condition}</span>
             
           </div>
+	  <div class="progress">
+	    <span class="taskno">${taskno}</span>
+	    <span> of </span>
+	    <span class="numtasks">${numtasks}</span>
+	  </div>
           <div class="text">
             <p>
               Please find the answer to the following question in the
@@ -176,6 +142,9 @@
               <a class="mainlink" href="/atask/${id}${condition}.html">${title}</a>
             </p>
             <form method="get">
+              <input type="hidden" id="taskid" name="taskid" value="${id}">
+                <!-- jsp parsing workaround -->
+              </input>
               <textarea id="answer" name="answer">
                 <!-- jsp parsing workaround -->
               </textarea>
