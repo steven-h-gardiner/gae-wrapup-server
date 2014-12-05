@@ -51,6 +51,12 @@
   <c:set var="numtasks">
    <jsp:expression>atask.numtasks</jsp:expression>
   </c:set>
+  <c:set var="pctdone">
+   <jsp:expression>Math.round((0.0+o.optInt("taskno", 0)) / (0.01*atask.numtasks))</jsp:expression>
+  </c:set>
+  <c:set var="donebr">
+   <jsp:expression>Math.min(2+Math.round((0.0+o.optInt("taskno", 0)) / (0.01*atask.numtasks)), 100)</jsp:expression>
+  </c:set>
   <c:set var="id">
    <jsp:expression>o.optString("taskid", "TASK" + o.optString("pageno"))</jsp:expression>
   </c:set>
@@ -64,20 +70,23 @@
     <html>
       <head>
         <title> View Task </title>
-        <style>
-          .inviz { opacity: 0.5; }
-          .label { width: 20%; padding-right: 15%; }
-          div.main { margin-left: auto; margin-right: auto; width: 40%; } 
+        <link rel="stylesheet" type="text/css" href="access.css">
+	  <!-- JSP workaround -->
+	</link>
+	<style>
+	  .progress {
+	    background: linear-gradient(to right, rgba(210,162,45,1.0), rgba(210,162,45,0.9) ${pctdone}%, rgba(210,162,45,0.6) ${donebr}%, rgba(210,162,45,0.3));
+	  }
         </style>
       </head>       
       <body>
         <div class="main">
+<!--
           <div>
             <span class="label">SESSIONID</span>
             <span>${sessionid}</span>
             
           </div>
-<!--
 	  <div>
             <span class="label">MD5SUM</span>
             <span>${md5sum}</span>
@@ -88,7 +97,6 @@
             <span>${uuid}</span>
             
           </div>
--->	
           <div>
             <span class="label">HASH</span>
             <span>|| ${hash} ||</span>
@@ -124,6 +132,7 @@
             <span>${condition}</span>
             
           </div>
+-->	
 	  <div class="progress">
 	    <span class="taskno">${taskno}</span>
 	    <span> of </span>
@@ -135,22 +144,43 @@
               information presented in the linked page, and enter the
               answer in the box below.
             </p>
-            <p>
-              <span class="question">${question}</span>
-            </p>
-            <p>
-              <a class="mainlink" href="/atask/${id}${condition}.html">${title}</a>
-            </p>
             <form method="get">
+              <div class="question ccontainer">
+		<label for="question">
+		  <span class="label">Question</span>
+		</label>
+		<p class="question card" id="question">${question}</p>
+              </div>
+              <div class="link ccontainer">
+		<label for="mainlink">
+		  <span class="label">Link</span>
+		</label>
+     		<div class="mainlink card">
+            	  <a class="mainlink" id="mainlink" href="/atasks/${id}${condition}.xhtml">${title}</a>
+		</div>   
+              </div>
               <input type="hidden" id="taskid" name="taskid" value="${id}">
                 <!-- jsp parsing workaround -->
               </input>
-              <textarea id="answer" name="answer">
-                <!-- jsp parsing workaround -->
-              </textarea>
-              <input type="submit" id="submit" name="submit" value="Submit">
+              <input type="hidden" id="taskno" name="taskno" value="${taskno}">
                 <!-- jsp parsing workaround -->
               </input>
+              <input type="hidden" id="condition" name="condition" value="${condition}">
+                <!-- jsp parsing workaround -->
+              </input>
+	      <div class="answer ccontainer">
+		<label for="answer">
+		  <span class="label">Answer</span>
+		</label>
+		<textarea id="answer" name="answer">
+                  <!-- jsp parsing workaround -->
+		</textarea>		
+	      </div>
+	      <div class="button">
+		<input type="submit" id="submit" name="submit" value="Submit">
+                  <!-- jsp parsing workaround -->
+		</input>
+	      </div>
             </form>
           </div>
         </div>

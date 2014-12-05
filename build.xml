@@ -125,6 +125,7 @@
     <mkdir dir="experiments"/>
     <mkdir dir="experiments/data"/>
     <mkdir dir="experiments/tasks"/>
+    <mkdir dir="war/atasks"/>
     <exec executable="node">
       <arg file="node_modules/accesstasks/main.js"/>
     </exec>

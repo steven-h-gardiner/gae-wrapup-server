@@ -35,6 +35,7 @@ public class EventLog {
       entity.setProperty("taskno", event.optString("taskno", ""));
       entity.setProperty("taskid", event.optString("taskid", ""));
       entity.setProperty("answer", event.optString("answer", ""));
+      entity.setProperty("answercorrect", null);
       entity.setProperty("condition", event.optString("condition", ""));
       entity.setProperty("sessionid", event.optString("sessionid", ""));
       entity.setProperty("hash", event.optString("hash", ""));
