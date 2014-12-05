@@ -148,10 +148,10 @@ at.eq.on('tasklist', function() {
 		       , "-d", ["experiments","data",spec.downloads.dom.localfile].join("/")
 		       , "-i", ["experiments","data",spec.downloads.meta.localfile].join("/")
 		       , "--format", "xhtml"
-		       , "-o", ["experiments", "tasks", [spec.taskid, '.xhtml'].join("")].join("/")
+		       , "-o", ["war", "atasks", [spec.taskid, '.xhtml'].join("")].join("/")
 		       , "\n"].join(" "));
     that.output.write(["ls"
-		       , ["experiments", "tasks", [spec.taskid, '.xhtml'].join("")].join("/")
+		       , ["war", "atasks", [spec.taskid, '.xhtml'].join("")].join("/")
 		       , "\n"].join(" "));
   });
 

@@ -16,12 +16,18 @@ public class AccessTaskList  extends javax.servlet.http.HttpServlet {
 	new com.google.appengine.api.datastore.Query("AccessTask");
 
       query = query.setFilter(new com.google.appengine.api.datastore.Query.FilterPredicate("representative",
-                                                                                         com.google.appengine.api.datastore.Query.FilterOperator.NOT_EQUAL,
+											   com.google.appengine.api.datastore.Query.FilterOperator.NOT_EQUAL,
 											   null));
       query = query.setFilter(new com.google.appengine.api.datastore.Query.FilterPredicate("representative",
-                                                                                         com.google.appengine.api.datastore.Query.FilterOperator.NOT_EQUAL,
+											   com.google.appengine.api.datastore.Query.FilterOperator.NOT_EQUAL,
 											   ""));
 
+      query = query.setFilter(new com.google.appengine.api.datastore.Query.FilterPredicate("taskno",
+											   com.google.appengine.api.datastore.Query.FilterOperator.GREATER_THAN,
+											   -1));
+
+      query = query.addSort("taskno");
+      
       com.google.appengine.api.datastore.PreparedQuery pq = ds.prepare(query);
     
       org.json.JSONObject spec = edu.cmu.mixer.util.ServletUtil.req2json(req);
@@ -33,6 +39,8 @@ public class AccessTaskList  extends javax.servlet.http.HttpServlet {
 	  resp.getWriter().write(new Long(task.getKey().getId()).toString());
 	  resp.getWriter().write(",");
 	  resp.getWriter().write(task.getProperty("representative").toString());
+	  resp.getWriter().write(",");
+	  resp.getWriter().write(task.getProperty("taskno").toString());
 	  resp.getWriter().write(",");
 	  resp.getWriter().write(task.getProperty("url").toString());
 	  resp.getWriter().write("\n");
