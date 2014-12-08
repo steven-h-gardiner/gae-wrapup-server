@@ -18,6 +18,7 @@ at.rez.swauth.path = "/admin/blob";
 at.rez.swauth.token = "abcd1253";
 
 at.rez.extratags = [
+  "article",
   "header",
   "section",
   "nav",
@@ -149,6 +150,7 @@ at.eq.on('tasklist', function() {
 		       , "-i", ["experiments","data",spec.downloads.meta.localfile].join("/")
 		       , "--format", "xhtml"
 		       , "-o", ["war", "atasks", [spec.taskid, '.xhtml'].join("")].join("/")
+		       , "2>", ["experiments","data",[spec.taskid, '.err'].join("")].join("/")
 		       , "\n"].join(" "));
     that.output.write(["ls"
 		       , ["war", "atasks", [spec.taskid, '.xhtml'].join("")].join("/")

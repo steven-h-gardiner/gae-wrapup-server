@@ -5,7 +5,7 @@
   <jsp:scriptlet>
 <![CDATA[
 
-  edu.cmu.mixer.access.AccessTask atask = new edu.cmu.mixer.access.AccessTask(3);  
+  edu.cmu.mixer.access.AccessTask atask = new edu.cmu.mixer.access.AccessTask(8);  
   org.json.JSONObject o = atask.process(session, request);
 
   if (request.getParameter("flush") != null) {
@@ -139,11 +139,19 @@
 	    <span class="numtasks">${numtasks}</span>
 	  </div>
           <div class="text">
-            <p>
-              Please find the answer to the following question in the
-              information presented in the linked page, and enter the
-              answer in the box below.
-            </p>
+	    <div class="instructions">
+              <p>	 
+		Please find the answer to the following question in
+		the information presented in the linked page, and
+		enter the answer in the box below.
+              </p>
+              <p>
+		Every question should have an answer in the linked
+		page, without visiting any links or changing pages.
+		If you cannot find an answer in the linked page, just
+		answer "No answer found" in the box below.
+              </p>
+	    </div>
             <form method="get">
               <div class="question ccontainer">
 		<label for="question">
@@ -156,7 +164,7 @@
 		  <span class="label">Link</span>
 		</label>
      		<div class="mainlink card">
-            	  <a class="mainlink" id="mainlink" href="/atasks/${id}${condition}.xhtml">${title}</a>
+            	  <a class="mainlink" id="mainlink" href="/atasks/${id}${condition}.xhtml" target="_blank">${title}</a>
 		</div>   
               </div>
               <input type="hidden" id="taskid" name="taskid" value="${id}">
