@@ -40,4 +40,12 @@
     <servlet-name>addwrapper</servlet-name>
     <url-pattern>/admin/wrapper/add</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>addorder</servlet-name>
+    <servlet-class>edu.cmu.mixer.access.AddOrdering</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>addorder</servlet-name>
+    <url-pattern>/admin/ordering/add</url-pattern>
+  </servlet-mapping>
 </web-app>
