@@ -1,0 +1,134 @@
+<project>
+  <property name="sdk.filename" value="appengine-java-sdk-1.9.15" />
+  <property name="sdk.dir" location="sdk/${sdk.filename}" />
+
+
+  <target name="swcli">
+    <mkdir dir="bin"/>
+    <get dest="bin/smartwrap-cli.jar"
+	 verbose="true" 
+         usetimestamp="true"
+	 src="http://radar2.isri.cmu.edu:8000/smartwrap/export/HEAD/releases/smartwrap-cli-latest.jar" />
+  </target>
+  <target name="jquery">
+    <mkdir dir="war/js"/>
+    <get dest="war/js/"
+         usetimestamp="true"
+         src="http://code.jquery.com/jquery-2.1.1.min.js"/>
+    <get dest="war/js"
+         usetimestamp="true"
+         src="https://raw.githubusercontent.com/ilinsky/jquery-xpath/master/jquery.xpath.min.js" />
+  </target>
+
+  <target name="wrapup-client" depends="jquery">
+    <get dest="war/test"
+         usetimestamp="true"
+         src="https://wrapup-client.googlecode.com/hg/content/js/wrapup.js"/>
+    <get dest="war/test"
+         usetimestamp="true"
+         src="https://wrapup-client.googlecode.com/hg/skin/wrapped.css"/>
+   <get dest="war/test"
+         usetimestamp="true"
+         src="https://wrapup-client.googlecode.com/hg/content/test/hoover.xhtml"/>
+  </target>
+
+  <target name="sdk">
+    <get dest="${sdk.filename}.zip" 
+         verbose="true" 
+         src="https://commondatastorage.googleapis.com/appengine-sdks/featured/${sdk.filename}.zip"
+         usetimestamp="true" />
+         <!-- src="http://googleappengine.googlecode.com/files/${sdk.filename}.zip" -->
+    <mkdir dir="sdk"/>
+    <unzip src="${sdk.filename}.zip" dest="sdk"/>
+    <chmod file="sdk/${sdk.filename}/bin/run_java.sh" perm="+x"/>
+  </target>
+
+  <import optional="true" file="${sdk.dir}/config/user/ant-macros.xml" />
+
+  <path id="project.classpath">
+    <pathelement path="war/WEB-INF/classes" />
+    <fileset dir="war/WEB-INF/lib">
+      <include name="**/*.jar" />
+    </fileset>
+    <fileset dir="${sdk.dir}/lib">
+      <include name="shared/**/*.jar" />
+    </fileset>
+  </path>
+
+  <path id="appcfg">
+    <fileset dir="${sdk.dir}/bin">
+      <include name="appcfg.sh"/>
+    </fileset>
+  </path>
+  <path id="war">
+    <fileset dir=".">
+      <include name="war"/>
+    </fileset>
+  </path>
+
+  <target name="copyjars"
+      description="Copies the App Engine JARs to the WAR.">
+    <copy
+        todir="war/WEB-INF/lib"
+        flatten="true">
+      <fileset dir="${sdk.dir}/lib/user">
+        <include name="**/*.jar" />
+      </fileset>
+      <fileset dir="lib/">
+        <include name="**/*.jar" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="compile" depends="copyjars"
+      description="Compiles Java source and copies other source files to the WAR.">
+    <mkdir dir="war/WEB-INF/classes" />
+    <copy todir="war/WEB-INF/classes">
+      <fileset dir="src">
+        <exclude name="**/*.java" />
+      </fileset>
+    </copy>
+    <javac
+        srcdir="src"
+        destdir="war/WEB-INF/classes"
+        classpathref="project.classpath"
+        debug="on" />
+  </target>
+
+  <target name="deployable" depends="compile, jquery, wrapup-client"/>
+
+  <target name="runserver" depends="deployable"
+      description="Starts the development server.">
+    <dev_appserver war="war" />
+  </target>
+
+  <target name="predeploy" depends="deployable">
+    <pathconvert property="shpath" pathsep=":" refid="appcfg" /> 
+    <pathconvert property="warpath" pathsep=":" refid="war" /> 
+    <echo message="bash ${shpath} update war" />
+  </target>
+  <target name="deploy" depends="deployable,predeploy">
+    <appcfg war="war" action="update" />
+  </target>
+
+  <target name="node_modules" depends="swcli">
+    <copy file="bin/smartwrap-cli.jar"
+	  tofile="node/accesstasks/smartwrap-cli.jar"/>
+    <mkdir dir="node_modules"/>
+    <exec executable="npm">
+      <arg value="install"/>
+      <arg file="node/accesstasks"/>
+    </exec>
+  </target>
+  
+  <target name="experiment" depends="node_modules">
+    <mkdir dir="experiments"/>
+    <mkdir dir="experiments/data"/>
+    <mkdir dir="experiments/tasks"/>
+    <mkdir dir="war/atasks"/>
+    <exec executable="node">
+      <arg file="node_modules/accesstasks/main.js"/>
+    </exec>
+  </target>
+
+</project>
