@@ -46,6 +46,9 @@
    <jsp:expression>o.optString("question")</jsp:expression>
   </c:set>
   <c:set var="taskno">
+   <jsp:expression>o.optInt("taskno", 0)</jsp:expression>
+  </c:set>
+  <c:set var="taskno1">
    <jsp:expression>1+o.optInt("taskno", 0)</jsp:expression>
   </c:set>
   <c:set var="numtasks">
@@ -134,7 +137,7 @@
           </div>
 -->	
 	  <div class="progress">
-	    <span class="taskno">${taskno}</span>
+	    <span class="taskno">${taskno1}</span>
 	    <span> of </span>
 	    <span class="numtasks">${numtasks}</span>
 	  </div>
@@ -164,7 +167,7 @@
 		  <span class="label">Link</span>
 		</label>
      		<div class="mainlink card">
-            	  <a class="mainlink" id="mainlink" href="/atasks/${id}${condition}.xhtml" target="_blank">${title}</a>
+            	  <a class="mainlink" id="mainlink" href="/atasks/${id}${condition}.xhtml" target="access-task">${title}</a>
 		</div>   
               </div>
               <input type="hidden" id="taskid" name="taskid" value="${id}">
