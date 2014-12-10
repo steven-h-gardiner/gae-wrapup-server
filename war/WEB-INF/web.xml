@@ -48,4 +48,16 @@
     <servlet-name>addorder</servlet-name>
     <url-pattern>/admin/ordering/add</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>bulk</servlet-name>
+    <servlet-class>edu.cmu.mixer.util.BulkExport</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>bulk</servlet-name>
+    <url-pattern>/admin/bulk</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>bulk</servlet-name>
+    <url-pattern>/admin/bulk/*</url-pattern>
+  </servlet-mapping>
 </web-app>

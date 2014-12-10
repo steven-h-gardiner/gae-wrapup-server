@@ -44,4 +44,30 @@ public class ServletUtil {
 
     return json;
   }
+
+  public static org.json.JSONObject grokFile(String filepath) throws org.json.JSONException {
+    org.json.JSONObject grok = new org.json.JSONObject();
+    
+    grok.putOpt("filepath", filepath);
+
+    String[] path = filepath.split("/");
+    grok.putOpt("path", new org.json.JSONArray(path));
+
+    String filename = path[-1+path.length];
+    grok.putOpt("filename", filename);
+    
+    org.json.JSONArray parts = new org.json.JSONArray(filename.split("\\."));
+
+    if (parts.length() > 1) {
+      String extension = parts.remove(-1+parts.length()).toString();
+      grok.putOpt("extension", extension);
+    }
+    String basename = "";
+    for (int i = 0; i < parts.length(); i++) {
+      basename = basename + parts.optString(i) + ".";
+    }
+    grok.putOpt("basename", basename.substring(0,-1+basename.length()));
+
+    return grok;
+  }
 }
