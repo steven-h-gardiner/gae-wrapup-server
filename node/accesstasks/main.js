@@ -10,7 +10,7 @@ at.logger = at.mods.stdlog.call();
 at.rez = {};
 
 at.rez.wrapup = {};
-at.rez.wrapup.prefix = "https://gae-wrapup-server.appspot.com";
+at.rez.wrapup.prefix = "https://1412-dot-gae-wrapup-server.appspot.com";
 at.rez.wrapup.path = "/access/tasklist.csv";
 at.rez.swauth = {};
 at.rez.swauth.prefix = "https://sw-auth.appspot.com";
