@@ -20,3 +20,10 @@ access.sqlite: idb.sql AccessEvent.csv AccessTask.csv OrderStatus.csv batch.csv
 	(echo ".import OrderStatus.csv OrderStatus") | sqlite3 -csv $@
 	(echo ".import batch.csv TurkResults") | sqlite3 -csv $@
 	cat $< | sqlite3 $@
+
+pright.rin: access.sqlite
+	echo "select taskid,pright,meanbad,meanright from taskrating ; " | sqlite3 -header $< > $@
+
+pright.rout: pright.r pright.rin
+	cat $< | R --vanilla > $@
+
