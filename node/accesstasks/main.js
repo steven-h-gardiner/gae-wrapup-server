@@ -174,8 +174,12 @@ at.eq.on('tasklist', function() {
 				    "|", "xsltproc", require.resolve("./general.xsl"), "-",
 				    "|", "tee", "{.}0.xhtml",
 				    "|", "xsltproc", require.resolve("./underuse.xsl"), "-",
+				    "|", "xmllint", "--nsclean", "-",
+				    "|", "perl", "-pe", "'s@html:@@g;'",
 				    "|", "tee", "{.}1.xhtml",
 				    "|", "xsltproc", require.resolve("./overuse.xsl"), "-",
+				    "|", "xmllint", "--nsclean", "-",
+				    "|", "perl", "-pe", "'s@html:@@g;'",
 				    ">", "{.}3.xhtml"].join(" ")]);
   
   if (at.procs.curltee) {
