@@ -69,6 +69,7 @@ CREATE VIEW IF NOT EXISTS TaskTimes3 AS
        	      taskid,
 	      conditions as condition,
 	      answers,
+	      stopsecs,
        	      stopsecs - startsecs as delta,
 	      answercorrect,
 	      defbad,
@@ -124,6 +125,7 @@ CREATE VIEW IF NOT EXISTS GradedTasks AS
        	      E.question,
        	      E.answer,
 	      E.defbad,
+	      E.stopsecs,
 	      K.answercorrect,	      
 	      CASE K.answercorrect WHEN 'true' THEN 1
 	      	   		   WHEN 'false' then -1
@@ -133,7 +135,7 @@ CREATE VIEW IF NOT EXISTS GradedTasks AS
 	      E.eventid as eventid
        FROM TaskTimes E LEFT OUTER JOIN AnswerKey K ON (1 
             AND E.taskid = K.taskid
-	    AND E.answer = K.answer
+	    AND lower(E.answer) = lower(K.answer)
 	    AND 1) 
        WHERE 1
        AND 1;
@@ -236,5 +238,22 @@ CREATE VIEW IF NOT EXISTS TaskQuintile AS
        AND 1
        ORDER BY pright ASC;
 
+DROP VIEW IF EXISTS timeline;
+
+CREATE VIEW IF NOT EXISTS timeline AS
+       SELECT stopsecs as unixtime,
+       	      grade2 as grade,
+	      defbad as badness,
+	      taskno
+       FROM GradedTasks
+       ORDER BY stopsecs ASC;
 
 
+DROP VIEW IF EXISTS pright;
+
+CREATE VIEW IF NOT EXISTS pright AS
+       SELECT taskid,
+       	      pright,
+	      meanbad,
+	      meanright
+       FROM taskrating;
