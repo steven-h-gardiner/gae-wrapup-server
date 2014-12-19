@@ -257,3 +257,19 @@ CREATE VIEW IF NOT EXISTS pright AS
 	      meanbad,
 	      meanright
        FROM taskrating;
+
+DROP VIEW IF EXISTS TasksWiki;
+
+CREATE VIEW IF NOT EXISTS TasksWiki AS
+       SELECT '' AS '',
+              1+taskno as num,
+              question,
+              '[http://gae-wrapup-server.appspot.com/atasks/' || id || '0.xhtml raw]' as 'raw',
+              '[http://gae-wrapup-server.appspot.com/atasks/' || id || '1.xhtml FU]' as 'fix underuse',
+              '[http://gae-wrapup-server.appspot.com/atasks/' || id || '3.xhtml FO]' as 'fix overuse',
+              '' AS ' '
+       FROM AccessTask
+       WHERE 1
+       AND taskno >= 0
+       AND 1
+       ORDER BY 1*taskno asc;

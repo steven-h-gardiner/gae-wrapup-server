@@ -32,3 +32,6 @@ _pright.rout: pright.r pright.rin
 
 %.rout: %.r %.rin
 	cat $< | R --vanilla > $@
+
+tasks.wiki: access.sqlite
+	(echo ".sep '||'"; echo "select * from taskswiki ; ") | sqlite3 -header $< > $@
