@@ -2,16 +2,23 @@ package edu.cmu.mixer.wrapup;
 
 import org.json.JSONObject;
 
+import javax.servlet.http.HttpServletResponse;
+
+@SuppressWarnings("serial")
 public class AddWrapper extends javax.servlet.http.HttpServlet {
 
+  private static final String[] properties =
+  {"url", "signature", "wrapper", "timestamp", "grade", "isauto"};
+
   public void doGet(javax.servlet.http.HttpServletRequest req,
-                    javax.servlet.http.HttpServletResponse resp) throws java.io.IOException {
+                    HttpServletResponse resp)
+  throws java.io.IOException {
     this.doPost(req, resp);
   }
 
   public void doPost(javax.servlet.http.HttpServletRequest req,
-                    javax.servlet.http.HttpServletResponse resp) throws java.io.IOException {
-
+                     HttpServletResponse resp)
+  throws java.io.IOException {
     boolean auth = false;
     try {
       auth = WrapupUser.canhazAdmin(req);
@@ -19,55 +26,71 @@ public class AddWrapper extends javax.servlet.http.HttpServlet {
       ex.printStackTrace(System.err);
       auth = false;
     }
-    
+
     System.err.println("NUH-UH");
     if (! auth) {
-      resp.sendError(resp.SC_FORBIDDEN, "not for you");
+      resp.sendError(HttpServletResponse.SC_FORBIDDEN, "not for you");
       return;
     }
 
     try {
-      org.json.JSONObject spec0 = new org.json.JSONObject();
-      spec0.putOpt("wrapper", req.getParameter("wrapper"));
-      spec0.putOpt("url", req.getParameter("url"));
-      spec0.putOpt("signature", req.getParameter("signature"));
-      
-      if (spec0.has("wrapper")) {
-        addWrapper(spec0);
+      JSONObject jsonobj = new JSONObject();
+      String value = null;
+      for (String property : properties) {
+        value = req.getParameter(property);
+        if (value != null) {
+          jsonobj.putOpt(property, value);
+        }
       }
 
-      if (req.getParameterValues("json") != null) {      
+      if (jsonobj.has("wrapper")) {
+        jsonobj.putOpt("ack", addWrapper(jsonobj));
+      }
+
+      if (req.getParameterValues("json") != null) {
+	org.json.JSONArray acks = new org.json.JSONArray();
+	jsonobj.putOpt("acks", acks);
         for (String jsontxt : req.getParameterValues("json")) {
-          org.json.JSONObject spec = new org.json.JSONObject(jsontxt);
-          
+          JSONObject spec = new JSONObject(jsontxt);
+
           if (spec.has("wrapper")) {
-            addWrapper(spec);
+            acks.putOpt(addWrapper(spec));
           }
         }
       }
     } catch (Exception ex) {
       ex.printStackTrace(System.err);
     }
+
+    resp.setContentType("application/json");
+    resp.getWriter().write(jsonobj.toString(2));
+    resp.getWriter().write("\n");
   }
 
   protected static com.google.appengine.api.datastore.DatastoreService ds =
     com.google.appengine.api.datastore.DatastoreServiceFactory.getDatastoreService();
 
-  public static void addWrapper(org.json.JSONObject spec) {
-    System.err.println("ADDWRAP: " + spec.toString());
+  public static JSONObject addWrapper(JSONObject jsonobj)
+  throws Exception {
+    System.err.println("ADDWRAP: " + jsonobj.toString());
 
+    /** Add wrapper to DataStore. **/
     com.google.appengine.api.datastore.Entity wrapper =
-      new com.google.appengine.api.datastore.Entity("Wrapper");
-    
-    if (spec.opt("wrapper") != null) {
-      wrapper.setProperty("wrapper", new com.google.appengine.api.datastore.Text(spec.opt("wrapper").toString()));
+      new com.google.appengine.api.datastore.Entity("Wrapper"); // Wrapper
+    for (String property : JSONObject.getNames(jsonobj)) {
+      if (property.equals("wrapper")) {
+        wrapper.setProperty(property,
+                            new com.google.appengine.api.datastore.Text(jsonobj.get(property).toString()));
+        continue;
+      }
+      wrapper.setProperty(property, jsonobj.get(property));
     }
-    if (spec.opt("signature") != null) {
-      wrapper.setProperty("signature", spec.opt("signature").toString());
-    }
-    wrapper.setProperty("url", spec.optString("url", null));
-
     ds.put(wrapper);
+
+    /** Give ack. **/
+    org.json.JSONObject ack = new JSONObject();
+    ack.putOpt("wrapper", wrapper);
+    return ack;
   }
 
 }
