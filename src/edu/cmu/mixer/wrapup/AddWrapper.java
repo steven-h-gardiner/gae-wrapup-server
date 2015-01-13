@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 public class AddWrapper extends javax.servlet.http.HttpServlet {
 
   private static final String[] properties =
-  {"url", "signature", "wrapper", "timestamp", "grade", "isauto"};
+    {"url", "signature", "wrapper", "timestamp", "grade", "isauto", "addtime"};
 
   public void doGet(javax.servlet.http.HttpServletRequest req,
                     HttpServletResponse resp)
@@ -42,6 +42,7 @@ public class AddWrapper extends javax.servlet.http.HttpServlet {
           jsonobj.putOpt(property, value);
         }
       }
+      jsonobj.putOnce("addtime", WrapupUser.getTimestamp());
 
       if (jsonobj.has("wrapper")) {
         jsonobj.putOpt("ack", addWrapper(jsonobj));
@@ -49,22 +50,22 @@ public class AddWrapper extends javax.servlet.http.HttpServlet {
 
       if (req.getParameterValues("json") != null) {
 	org.json.JSONArray acks = new org.json.JSONArray();
-	jsonobj.putOpt("acks", acks);
         for (String jsontxt : req.getParameterValues("json")) {
           JSONObject spec = new JSONObject(jsontxt);
 
           if (spec.has("wrapper")) {
-            acks.putOpt(addWrapper(spec));
+            acks.put(addWrapper(spec));
           }
         }
+	jsonobj.putOpt("acks", acks);
       }
+
+      resp.setContentType("application/json");
+      resp.getWriter().write(jsonobj.toString(2));
+      resp.getWriter().write("\n");
     } catch (Exception ex) {
       ex.printStackTrace(System.err);
     }
-
-    resp.setContentType("application/json");
-    resp.getWriter().write(jsonobj.toString(2));
-    resp.getWriter().write("\n");
   }
 
   protected static com.google.appengine.api.datastore.DatastoreService ds =
