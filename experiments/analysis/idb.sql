@@ -126,6 +126,8 @@ CREATE VIEW IF NOT EXISTS GradedTasks AS
        	      E.answer,
 	      E.defbad,
 	      E.stopsecs,
+	      E.delta as elapsed,
+	      E.condition as condition,
 	      K.answercorrect,	      
 	      CASE K.answercorrect WHEN 'true' THEN 1
 	      	   		   WHEN 'false' then -1
@@ -257,6 +259,21 @@ CREATE VIEW IF NOT EXISTS pright AS
 	      meanbad,
 	      meanright
        FROM taskrating;
+
+DROP VIEW IF EXISTS delta;
+
+CREATE VIEW IF NOT EXISTS delta AS
+       SELECT taskid,
+       	      't'||taskno as taskno,
+       	      condition,
+       	      'c'||condition as condid,
+       	      grade,
+	      elapsed
+       FROM gradedtasks
+       WHERE 1
+       AND condition like '_'
+       AND taskid in (select taskid from accesstask where taskno >= 0)
+       AND 1;
 
 DROP VIEW IF EXISTS TasksWiki;
 
