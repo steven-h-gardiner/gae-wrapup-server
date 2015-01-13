@@ -145,6 +145,7 @@ at.eq.on('tasklist', function() {
 
     that.output.write(["java"
 		       , "-jar", require.resolve("./smartwrap-cli.jar")
+		       //, '-l', 'FINEST'
 		       , "-e", ["experiments","data",spec.downloads.examples.localfile].join("/")
 		       , "-d", ["experiments","data",spec.downloads.dom.localfile].join("/")
 		       , "-i", ["experiments","data",spec.downloads.meta.localfile].join("/")
