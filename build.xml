@@ -1,5 +1,5 @@
 <project>
-  <property name="sdk.filename" value="appengine-java-sdk-1.9.15" />
+  <property name="sdk.filename" value="appengine-java-sdk-1.9.17" />
   <property name="sdk.dir" location="sdk/${sdk.filename}" />
 
 
@@ -34,9 +34,10 @@
 
   <target name="sdk">
     <get dest="${sdk.filename}.zip" 
-         verbose="true" 
-         src="https://commondatastorage.googleapis.com/appengine-sdks/featured/${sdk.filename}.zip"
+         verbose="true"
+         src="https://storage.googleapis.com/appengine-sdks/featured/${sdk.filename}.zip"
          usetimestamp="true" />
+         <!-- src="https://commondatastorage.googleapis.com/appengine-sdks/featured/${sdk.filename}.zip" -->
          <!-- src="http://googleappengine.googlecode.com/files/${sdk.filename}.zip" -->
     <mkdir dir="sdk"/>
     <unzip src="${sdk.filename}.zip" dest="sdk"/>
