@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0"
+                xmlns:mixer="http://cmu.edu/mixer"
 		xmlns:exslt="http://exslt.org/common"
 		xmlns:html="http://www.w3.org/1999/xhtml"
 		xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -76,8 +77,8 @@
 	  </xsl:variable>
 	  <xsl:choose>
 	    <xsl:when test="$row//html:*[@itemprop = $itemprop]">
-	      <html:td>
-		<xsl:copy-of select="$row//html:*[@itemprop = $itemprop]"/>
+	      <html:td mixer:meta="injected">
+		<xsl:apply-templates select="$row//html:*[@itemprop = $itemprop]" mode="cell"/>
 	      </html:td>
 	    </xsl:when>
 	    <xsl:when test="true()">
@@ -91,6 +92,19 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template match="html:td" mode="cell" priority="1">
+    <html:div mixer:meta="rewritten">
+      <xsl:apply-templates select="@*" mode="cell"/>
+      <xsl:apply-templates select="node()" mode="cell"/>
+    </html:div>
+  </xsl:template>
+  <xsl:template match="html:*|@*|node()" mode="cell" priority="-100">
+    <xsl:copy>
+      <xsl:apply-templates select="@*" mode="cell"/>
+      <xsl:apply-templates select="node()" mode="cell"/>
+    </xsl:copy>
+  </xsl:template>
+  
   <xsl:template match="/|*|@*|text()|node()" priority="-100">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>
