@@ -50,7 +50,11 @@ at.eq.on('task', function(spec) {
   spec.fields = spec.line.split(/,/);
   spec.taskid = spec.fields.shift();
   spec.respid = spec.fields.shift();
-  
+  spec.taskno = spec.fields.shift();
+  spec.url = spec.fields.join(",");
+
+  spec.server = spec.url.split(/\//).slice(0,3).join("/");					     
+    
   spec.downloads = spec.downloads || {};
 
   spec.downloads.examples = {
@@ -153,35 +157,49 @@ at.eq.on('tasklist', function() {
 		       , "-o", ["war", "atasks", [spec.taskid, '.xhtml'].join("")].join("/")
 		       , "2>", ["experiments","data",[spec.taskid, '.err'].join("")].join("/")
 		       , "\n"].join(" "));
-    that.output.write(["ls"
+    that.output.write(["echo"
 		       , ["war", "atasks", [spec.taskid, '.xhtml'].join("")].join("/")
+		       , "\n"].join(" "));
+    that.output.write(["echo"
+		       , spec.url
+		       , "\n"].join(" "));
+    that.output.write(["echo"
+		       , spec.server
 		       , "\n"].join(" "));
   });
 
   at.procs.exec2 = at.mods.cp.spawn('bash', ['-c',
                                              ["tee /tmp/swwrap.sh",
-                                              "bash -"].join(" | ")]);
+                                              "bash -",
+					      "tee /tmp/swtofix.txt",
+					     ].join(" | ")]);
 
-  var perl = "s/\\&\\#195;\\&\\#8218;\\&\\#194;//g;";
+  var perl = "s/\\&\\#195;\\&\\#8218;\\&\\#194;//g; s/[\\x{0c3}\\x{0c2}]./ /g;";
   console.error("PERL %s", perl);
   
   at.procs.fix = at.mods.cp.spawn('parallel',
-				  [["tidy", "-utf8", "-quiet", "--show-warnings", "0", 
+				  ['-n3',
+				   ["tidy", "-utf8", "-quiet", "--show-warnings", "0", 
 				    "--new-blocklevel-tags", at.rez.extratags.join(","),
-				    "-asxml", "-numeric", "{}", 
+				    "-asxml", "-numeric", "{1}", 
                                     '2>>/tmp/tidy.err',
-				    "|", "tee", "{.}00.xhtml",
+				    "|", "tee", "{1.}00.xhtml",
 				    "|", "perl", "-pe", ['"',perl,'"'].join(""),
-				    "|", "xsltproc", require.resolve("./general.xsl"), "-",
-				    "|", "tee", "{.}0.xhtml",
+				    "|", "tee", "{1.}01.xhtml",
+				    "|", "xsltproc",
+				      '--stringparam', 'resolveServer', "{3}",
+				      '--stringparam', 'resolveBase', "{2}",				    
+				    require.resolve("./general.xsl"), "-",
+				    "|", "xmllint", "--format", "--nsclean", "-",
+				    "|", "tee", "{1.}0.xhtml",
 				    "|", "xsltproc", require.resolve("./underuse.xsl"), "-",
-				    "|", "xmllint", "--nsclean", "-",
+				    "|", "xmllint", "--format", "--nsclean", "-",
 				    "|", "perl", "-pe", "'s@html:@@g;'",
-				    "|", "tee", "{.}1.xhtml",
+				    "|", "tee", "{1.}1.xhtml",
 				    "|", "xsltproc", require.resolve("./overuse.xsl"), "-",
-				    "|", "xmllint", "--nsclean", "-",
+				    "|", "xmllint", "--format", "--nsclean", "-",
 				    "|", "perl", "-pe", "'s@html:@@g;'",
-				    ">", "{.}3.xhtml"].join(" ")]);
+				    ">", "{1.}3.xhtml"].join(" ")]);
   
   if (at.procs.curltee) {
     at.procs.curl.stdout.pipe(at.procs.curltee.stdin);
