@@ -31,6 +31,8 @@ at.rez.extratags = [
   "canvas",
   "fblike",
   "sfmsg",
+  "video",
+  "source",
 ];
 
 at.procs = {};
