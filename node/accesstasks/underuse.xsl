@@ -43,6 +43,13 @@
 	  <xsl:element name="columns"/>
 	</xsl:message>
 	<html:table>
+          <html:tr>
+            <xsl:for-each select="exslt:node-set($columns)//column">
+              <html:th>
+                <xsl:value-of select="@itemprop"/>
+              </html:th>
+            </xsl:for-each>
+          </html:tr>
 	  <xsl:for-each select=".|following::html:*[@itemscope = $tupleScope]">
 	    <html:tr>
 	      <xsl:copy-of select="@itemscope"/>
