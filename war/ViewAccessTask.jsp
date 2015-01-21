@@ -5,7 +5,7 @@
   <jsp:scriptlet>
 <![CDATA[
 
-  edu.cmu.mixer.access.AccessTask atask = new edu.cmu.mixer.access.AccessTask(9);  
+  edu.cmu.mixer.access.AccessTask atask = new edu.cmu.mixer.access.AccessTask(4);  
   org.json.JSONObject o = atask.process(session, request);
 
   if (request.getParameter("flush") != null) {
@@ -149,11 +149,12 @@
 		enter the answer in the box below.
               </p>
               <p>
-		Every question should have an answer in the linked
-		page, without visiting any links or changing pages.
-		If you cannot find an answer in the linked page, just
-		answer "No answer found" in the box below.
-              </p>
+	        Every question should be answered based on only the
+	        linked page, without visiting any links or changing
+	        pages.  If the requested information is not present in
+	        the linked page, just answer "No answer found" in the
+	        box below.
+	      </p>		
 	    </div>
             <form method="get">
               <div class="question ccontainer">
