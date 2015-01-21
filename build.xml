@@ -1,7 +1,9 @@
 <project>
   <property name="sdk.filename" value="appengine-java-sdk-1.9.17" />
   <property name="sdk.dir" location="sdk/${sdk.filename}" />
-
+  <property name="jquery.url" value="http://code.jquery.com/jquery-2.1.3.min.js"/>
+  <property name="dataTables.js.url" value="http://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"/>
+  <property name="dataTables.css.url" value="http://cdn.datatables.net/1.10.4/css/jquery.dataTables.css"/>
 
   <target name="swcli">
     <mkdir dir="bin"/>
@@ -14,10 +16,20 @@
     <mkdir dir="war/js"/>
     <get dest="war/js/"
          usetimestamp="true"
-         src="http://code.jquery.com/jquery-2.1.1.min.js"/>
+         src="${jquery.url}"/>
+    <get dest="war/js/jquery-latest.min.js"
+         usetimestamp="true"
+         src="${jquery.url}"/>
+    <get dest="war/js/"
+         usetimestamp="true"
+         src="${dataTables.js.url}"/>
     <get dest="war/js"
          usetimestamp="true"
          src="https://raw.githubusercontent.com/ilinsky/jquery-xpath/master/jquery.xpath.min.js" />
+    <mkdir dir="war/css"/>
+    <get dest="war/css/"
+         usetimestamp="true"
+         src="${dataTables.css.url}"/>
   </target>
 
   <target name="wrapup-client" depends="jquery">
