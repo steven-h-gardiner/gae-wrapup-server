@@ -19,7 +19,11 @@
         org.json.JSONArray row = new org.json.JSONArray();
 	row.put(i);
 	row.put("ROW1" + i);
-	row.put("ROWz" + Math.random());
+
+	org.json.JSONObject cell = new org.json.JSONObject();	
+	cell.put("text","ROWz" + Math.random());
+	cell.put("href","http://www.google.com");
+	row.put(cell);
 	wrapperList.put(row);
       }
 
@@ -32,16 +36,23 @@
       wrapperObj.putOpt("columns", columns);
 
       org.json.JSONObject spec = new org.json.JSONObject();
-      //spec.putOpt("mockup", true);
+      spec.putOpt("mockup", request.getParameter("mockup"));
+      spec.putOpt("mockup", Boolean.parseBoolean(spec.optString("mockup", "false")));
 
       spec.putOpt("newest", request.getParameter("newest"));
       spec.putOpt("newest", Boolean.parseBoolean(spec.optString("newest", "false")));
+
+      spec.putOpt("activeOnly", request.getParameter("activeOnly"));
+      spec.putOpt("activeOnly", Boolean.parseBoolean(spec.optString("activeOnly", "true")));
 
       org.json.JSONObject wrappers = new edu.cmu.mixer.wrapup.WrapperList(spec).getJSONObject();
     ]]>
   </jsp:scriptlet>
   <c:set var="wrapperJSON">
    <jsp:expression>wrappers.toString()</jsp:expression>
+  </c:set>
+  <c:set var="spec">
+   <jsp:expression>spec.toString()</jsp:expression>
   </c:set>
   <jsp:text>
     <html>
@@ -55,6 +66,9 @@
 	</script>
 	<script type="application/json" id="wrapperData">
 	  ${wrapperJSON}
+	</script>
+	<script type="application/json" id="listSpec">
+	  ${spec}
 	</script>
 	<style type="text/css">
 	  #main {
@@ -78,7 +92,7 @@
 	  </thead>
 	  <tbody>
 	    <tr>
-	      <td>bar</td>
+	      <td><a href="http://www.google.com">bar</a></td>
 	    </tr>
 	  </tbody>
 	</table>
@@ -87,6 +101,13 @@
 	jQuery(document).on('ready', function() {
 	  var wl = {};
 	  wl.data = JSON.parse(jQuery("#wrapperData").text());
+	  wl.spec = JSON.parse(jQuery("#listSpec").text());
+	  wl.sorting = [];
+	  if (wl.spec.newest) {
+	    wl.sorting.push([1,'desc']);
+	  }
+
+	  
 	  wl.tablify = function(selector) {
 	    var tab = jQuery("#mainTable");
 	    var thead = jQuery("#lumber thead").clone().empty();
@@ -104,8 +125,17 @@
 	      var rowElt = jQuery("#lumber tbody tr").clone().empty();
 	      rowElt.appendTo(tbody);
 	      row.forEach(function(cell) {
-	        var dCell = jQuery("#lumber tbody td").clone();
-		dCell.text(cell);
+		var dCell = jQuery("#lumber tbody td").clone().empty();
+		if (typeof cell === 'string') {
+		  dCell.text(cell);
+		} else {
+		  if (cell.href) {
+		    var link = jQuery("#lumber tbody td a").clone().empty();
+		    link.text(cell.text);
+		    link.attr("href", cell.href);
+		    link.appendTo(dCell);
+		  }
+		}
 		dCell.appendTo(rowElt);
 	      });
 	    });
@@ -114,7 +144,7 @@
 	  jQuery("#mainTable").dataTable({
 	    //"data": wl.data.dataset,
 	    //"columns": wl.data.columns,
-	    "order": [],
+	    "order": [].concat(wl.sorting),
 	  });
 	});
       </script>
