@@ -134,6 +134,8 @@ public class WrapupQuery extends javax.servlet.http.HttpServlet {
           com.google.appengine.api.datastore.Query.FilterOperator.EQUAL,
           url);
     query = query.setFilter(filter);
+    query = query.addSort("diameter",
+			  com.google.appengine.api.datastore.Query.SortDirection.DESCENDING);    
     query = query.addSort("timestamp",
 			  com.google.appengine.api.datastore.Query.SortDirection.DESCENDING);    
     

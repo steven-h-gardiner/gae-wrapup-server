@@ -39,6 +39,8 @@ public class WrapperList {
     
     query = query.addSort("url",
 			  com.google.appengine.api.datastore.Query.SortDirection.ASCENDING); 
+    query = query.addSort("diameter",
+			  com.google.appengine.api.datastore.Query.SortDirection.DESCENDING); 
     query = query.addSort("timestamp",
 			  com.google.appengine.api.datastore.Query.SortDirection.DESCENDING); 
 
@@ -47,15 +49,19 @@ public class WrapperList {
     com.google.appengine.api.datastore.PreparedQuery pq =
       ds.prepare(query);
     columnTitles.put("url");
+    columnTitles.put("diameter");
     columnTitles.put("timestamp");
     for (com.google.appengine.api.datastore.Entity result : pq.asIterable(fo)) {
       String url = result.getProperty("url").toString();
 
-      if (spec.optBoolean("activeOnly", true)) {
+      if (spec.optBoolean("activeOnly", true)) {                  
 	if (url.equals(prevurl)) {
 	  continue;
 	}
 	prevurl = url;
+        if (((Long) result.getProperty("diameter")) == 0) {
+          continue;
+        }
       }
       
       org.json.JSONArray row = new org.json.JSONArray();
@@ -63,6 +69,7 @@ public class WrapperList {
       urlCell.putOpt("href",url);
       urlCell.putOpt("text",url.substring(0,Math.min(url.length(),60)));
       row.put(urlCell);
+      row.put(result.getProperty("diameter").toString());
       row.put(result.getProperty("timestamp").toString());
       dataset.put(row);
 
