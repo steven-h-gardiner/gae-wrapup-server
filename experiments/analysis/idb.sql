@@ -140,6 +140,7 @@ CREATE VIEW IF NOT EXISTS GradedTasks AS
 	    AND lower(E.answer) = lower(K.answer)
 	    AND 1) 
        WHERE 1
+       AND taskno >= 0
        AND 1;
 
 DROP VIEW IF EXISTS UngradedTasks0;
@@ -169,6 +170,7 @@ DROP VIEW IF EXISTS TaskBadness;
 CREATE VIEW IF NOT EXISTS TaskBadness AS
        SELECT round(avg(G.defbad)*10000.0)/10000.0 AS meanbad,
 	      G.taskid,
+              G.taskno,
 	      G.question
        FROM GradedTasks G
        WHERE 1
@@ -182,6 +184,7 @@ DROP VIEW IF EXISTS TaskRightness;
 CREATE VIEW IF NOT EXISTS TaskRightness AS
        SELECT round(avg(G.grade)*10000.0)/10000.0 AS meanright,
 	      G.taskid,
+              G.taskno,
 	      G.question
        FROM GradedTasks G
        WHERE 1
@@ -212,6 +215,7 @@ DROP VIEW IF EXISTS TaskRating;
 
 CREATE VIEW IF NOT EXISTS TaskRating AS
        SELECT B.taskid,
+              B.taskno,
        	      B.meanbad,
 	      R.meanright,
 	      (1-meanbad)*meanright as pright,
@@ -255,6 +259,7 @@ DROP VIEW IF EXISTS pright;
 
 CREATE VIEW IF NOT EXISTS pright AS
        SELECT taskid,
+              taskno,
        	      pright,
 	      meanbad,
 	      meanright
