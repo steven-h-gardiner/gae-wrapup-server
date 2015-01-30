@@ -1,0 +1,56 @@
+.inviz { opacity: 0.5; }
+.label { width: 20%; padding-right: 15%; }
+div.main {
+  margin-left: auto;
+  margin-right: auto;
+  width: 40%;
+  margin-top: 4%;
+  font-size: large;
+  background-color: rgba(210,162,45,0.5); 
+  padding: 2%;
+  border-radius: 1em;
+}
+div.answer {
+    -text-align: center;
+}
+	    
+div.button {
+    text-align: right;
+    margin-right: 10%;
+    margin-top: 2%;
+}
+textarea {
+    width: 100%;
+    height: 5em;
+    padding: 1em;
+    border-radius: 5px;
+}
+.progress {
+    text-align: center;
+    padding: 8px;
+    background: linear-gradient(to right, rgba(210,162,45,1.0), rgba(210,162,45,0.9) 100%, rgba(210,162,45,0.6) 100%, rgba(210,162,45,0.3));
+    font-weight: bold;
+    border-radius: 5px;
+}
+input#submit {
+    padding: 5px 3em;
+    border-radius: 5px;
+    font-size: x-large;
+}
+.card {
+    border-radius: 5px;
+    text-align: center;
+    background-color: rgba(210,162,45,0.4);
+    padding: 1em;
+    -margin: 0em 5% 1em;
+}
+label {
+    margin-left: 5%;
+}
+form {
+    width: 90%;
+    margin: 5%; 
+}
+.ccontainer {
+    margin-bottom: 1em;
+}
