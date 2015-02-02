@@ -80,6 +80,7 @@ DROP VIEW IF EXISTS Turk0;
 CREATE VIEW IF NOT EXISTS Turk0 AS
        SELECT WorkerId,
               hitid,
+	      substr(RequesterAnnotation,9) as batchno,
               SubmitTime,
               "Answer.surveycode" as hash
        FROM TurkResults
@@ -115,4 +116,42 @@ CREATE VIEW IF NOT EXISTS RecentAnswer AS
        FROM AnswerKey 
        WHERE 1
        AND timestamp > '2015-01-25'
+       AND 1;
+
+DROP VIEW IF EXISTS TurkAnswer1;
+
+CREATE VIEW IF NOT EXISTS TurkAnswer1 AS
+       SELECT *,
+       	      CASE WHEN graded THEN NULL
+	      	   ELSE '|' || answer || '|' END as unanswer
+       FROM TurkAnswer;
+
+DROP VIEW IF EXISTS TurkSummary;
+
+CREATE VIEW IF NOT EXISTS TurkSummary0 AS
+       SELECT batchno,
+       	      taskno,
+       	      question,
+	      avg(grade) as meangrade,
+	      avg(graded) as meangraded,
+	      group_concat(distinct(graded)) as graded,
+	      group_concat(distinct(answer)) as answers,
+	      group_concat(distinct(unanswer)) as unanswers
+       FROM TurkAnswer1
+       WHERE 1
+       AND 1
+       GROUP BY batchno,question;
+
+DROP VIEW IF EXISTS TurkSummary;
+
+CREATE VIEW IF NOT EXISTS TurkSummary AS
+       SELECT batchno,question,meangrade,meangraded FROM TurkSummary0;
+
+DROP VIEW IF EXISTS TurkSummary1;
+
+CREATE VIEW IF NOT EXISTS TurkSummary1 AS
+       SELECT *
+       FROM TurkSummary0
+       WHERE 1
+       AND batchno in (select distinct batchno from turk0 order by 1*batchno desc limit 1)
        AND 1;
