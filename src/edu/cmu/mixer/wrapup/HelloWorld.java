@@ -11,6 +11,15 @@ public class HelloWorld extends javax.servlet.http.HttpServlet {
   public void doPost(javax.servlet.http.HttpServletRequest req,
                     javax.servlet.http.HttpServletResponse resp) throws java.io.IOException {
 
+    String xo = req.getParameter("xo");
+    if (xo != null) {
+      resp.setHeader("Access-Control-Allow-Origin", "*");
+      resp.setHeader("Access-Control-Allow-Methods",
+		     "POST, GET, OPTIONS, DELETE");
+      resp.setHeader("Access-Control-Max-Age", "3600");
+      resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+    }
+
     try {
       org.json.JSONObject json = new JSONObject();
       
