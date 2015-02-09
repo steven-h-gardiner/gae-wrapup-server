@@ -33,13 +33,26 @@
   </target>
 
   <target name="wrapup-client" depends="jquery">
+    <mkdir dir="war/js"/>
+    <mkdir dir="war/test"/>
+    <get dest="war/js"
+         usetimestamp="true"
+         src="https://wrapup-client.googlecode.com/hg/content/js/wrapup.js"/>
+    <get dest="war/js"
+         usetimestamp="true"
+         src="https://wrapup-client.googlecode.com/hg/content/js/wrapup-standalone.js"/>
+    <!--
+    <get dest="war/js"
+         usetimestamp="true"
+         src="https://wrapup-client.googlecode.com/hg/content/js/smartwrap-docmarker.js"/>
+         -->
     <get dest="war/test"
          usetimestamp="true"
          src="https://wrapup-client.googlecode.com/hg/content/js/wrapup.js"/>
     <get dest="war/test"
          usetimestamp="true"
          src="https://wrapup-client.googlecode.com/hg/skin/wrapped.css"/>
-   <get dest="war/test"
+    <get dest="war/test"
          usetimestamp="true"
          src="https://wrapup-client.googlecode.com/hg/content/test/hoover.xhtml"/>
   </target>
@@ -108,7 +121,7 @@
         debug="on" />
   </target>
 
-  <target name="deployable" depends="compile, jquery, wrapup-client"/>
+  <target name="deployable" depends="compile, jquery, wrapup-client, dist"/>
 
   <target name="runserver" depends="deployable"
       description="Starts the development server.">
@@ -131,6 +144,28 @@
     <exec executable="npm">
       <arg value="install"/>
       <arg file="node/accesstasks"/>
+    </exec>
+    <exec executable="npm">
+      <arg value="install"/>
+      <arg value="git://github.com/steven-h-gardiner/greasecooper.git"/>
+    </exec>
+  </target>
+
+  <target name="dist" depends="node_modules">
+    <mkdir dir="war/dist"/>
+    <exec executable="node">
+      <arg file="node_modules/greasecooper/greasecooper.js"/>
+      <arg value="--output"/>
+      <arg value="war/dist/wrapup-access.xpi"/>
+      <arg value="-u"/>
+      <arg file="../wrapup-client/content/js/wrapup-access.user.js"/>
+    </exec>
+    <exec executable="node">
+      <arg file="node_modules/greasecooper/greasecooper.js"/>
+      <arg value="--output"/>
+      <arg value="war/dist/wrapup-csv.xpi"/>
+      <arg value="-u"/>
+      <arg file="../wrapup-client/content/js/wrapup-csv.user.js"/>
     </exec>
   </target>
   
