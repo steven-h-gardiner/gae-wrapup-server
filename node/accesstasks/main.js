@@ -3,7 +3,8 @@ var at = {};
 at.mods = {};
 at.mods.cp = require('child_process');
 at.mods.stdlog = require('stdlog');
-at.mods.luigi = require('luigi');
+//at.mods.luigi = require('luigi');
+at.mods.eachline = require('eachline');
 
 at.logger = at.mods.stdlog.call();
 
@@ -86,10 +87,11 @@ at.eq.on('tasklist', function() {
     at.procs.scrtee = at.mods.cp.spawn('tee', ['/tmp/fetch_sw.sh']);
   }
 
-  at.procs.filter = new at.mods.luigi.filter();
-  at.procs.filter.on('line', function(line) {
+  at.procs.filter = new at.mods.eachline(function(line) {
     var that = this;
- 
+
+    var output = [];
+    
     console.error("LINE: %s", line);
 
     var spec = {};
@@ -106,30 +108,32 @@ at.eq.on('tasklist', function() {
 
     Object.keys(spec.downloads).forEach(function(key) {
       var download = spec.downloads[key];
-      that.output.write([//"#",
+      output.push([//"#",
 			 "mkdir"
 			 , "-p", ["experiments","data",download.localdir].join("/")
 			 , "\n" ].join(" "));
-      that.output.write(["test", "-f", ["experiments","data",download.localfile].join("/"), '||', "\n"].join(" "));
-      that.output.write(["(", "\n"].join(" "));     
+      output.push(["test", "-f", ["experiments","data",download.localfile].join("/"), '||', "\n"].join(" "));
+      output.push(["(", "\n"].join(" "));     
       at.rez.archives.forEach(function(arch) {
-        that.output.write(["tar",
+        output.push(["tar",
 			   "xvzOf", arch,
 			   ["req",download.localfile].join("/"),
 			   "||",
 			   "\n" ].join(" "));
       });
-      that.output.write([//"#",
+      output.push([//"#",
 			 "curl"
 			 //, "-s" 
 			 //, "-o", download.localfile
 			 , ["'",download.url,"'"].join("")
 			 , "\n" ].join(" "));
-      that.output.write([")", ">", ["experiments","data",download.localfile].join("/"), "\n"].join(" "));
+      output.push([")", ">", ["experiments","data",download.localfile].join("/"), "\n"].join(" "));
     });
-    that.output.write(["echo"
+    output.push(["echo"
 		       , ["'", line, "'"].join("")
 		       , "\n" ].join(" "));
+
+    return output.join("");
   });
 
 
@@ -137,10 +141,11 @@ at.eq.on('tasklist', function() {
                                                ["tee /tmp/swfetch.sh",
                                                 "bash -"].join(" | ")]);
 
-  at.procs.filter2 = new at.mods.luigi.filter();
-  at.procs.filter2.on('line', function(line) {
+  at.procs.filter2 = new at.mods.eachline(function(line) {
     var that = this;
- 
+
+    var output = [];
+      
     console.error("LINE2: %s", line);
 
     var spec = {};
@@ -149,7 +154,7 @@ at.eq.on('tasklist', function() {
     spec.downloads = {};
     at.eq.emit('task', spec);
 
-    that.output.write(["java"
+    output.push(["java"
 		       , "-jar", require.resolve("./smartwrap-cli.jar")
 		       //, '-l', 'FINEST'
 		       , "-e", ["experiments","data",spec.downloads.examples.localfile].join("/")
@@ -159,15 +164,17 @@ at.eq.on('tasklist', function() {
 		       , "-o", ["war", "atasks", [spec.taskid, '.xhtml'].join("")].join("/")
 		       , "2>", ["experiments","data",[spec.taskid, '.err'].join("")].join("/")
 		       , "\n"].join(" "));
-    that.output.write(["echo"
+    output.push(["echo"
 		       , ["war", "atasks", [spec.taskid, '.xhtml'].join("")].join("/")
 		       , "\n"].join(" "));
-    that.output.write(["echo"
+    output.push(["echo"
 		       , spec.url
 		       , "\n"].join(" "));
-    that.output.write(["echo"
+    output.push(["echo"
 		       , spec.server
 		       , "\n"].join(" "));
+
+    return output.join("");
   });
 
   at.procs.exec2 = at.mods.cp.spawn('bash', ['-c',
@@ -205,23 +212,23 @@ at.eq.on('tasklist', function() {
   
   if (at.procs.curltee) {
     at.procs.curl.stdout.pipe(at.procs.curltee.stdin);
-    at.procs.curltee.stdout.pipe(at.procs.filter.stdin);
+    at.procs.curltee.stdout.pipe(at.procs.filter);
   } else {
     at.procs.curl.stdout.pipe(at.procs.filter.stdin);
   }
   at.procs.curl.stderr.pipe(process.stderr);
 
   if (at.procs.scrtee) {
-    at.procs.filter.stdout.pipe(at.procs.scrtee.stdin);
+    at.procs.filter.pipe(at.procs.scrtee.stdin);
     at.procs.scrtee.stdout.pipe(at.procs.swfetch.stdin);
   } else {
-    at.procs.filter.stdout.pipe(at.procs.swfetch.stdin);
+    at.procs.filter.pipe(at.procs.swfetch.stdin);
   }
 
-  at.procs.swfetch.stdout.pipe(at.procs.filter2.stdin);
+  at.procs.swfetch.stdout.pipe(at.procs.filter2);
   at.procs.swfetch.stderr.pipe(process.stderr);
 
-  at.procs.filter2.stdout.pipe(at.procs.exec2.stdin);
+  at.procs.filter2.pipe(at.procs.exec2.stdin);
 
   at.procs.exec2.stdout.pipe(at.procs.fix.stdin);
   at.procs.exec2.stderr.pipe(process.stderr);
@@ -240,15 +247,14 @@ at.eq.on('archives', function(spec) {
 				   [spec.root,
 				    '-name', '*.tgz']);
 
-  at.procs.ffilt = new at.mods.luigi.filter();
-  at.procs.ffilt.on('line', function(line) {
+  at.procs.ffilt = new at.mods.eachline(function(line) {
     at.rez.archives.push(line);  
   });
 
-  at.procs.find.stdout.pipe(at.procs.ffilt.stdin);
+  at.procs.find.stdout.pipe(at.procs.ffilt).pipe(process.stdout);
   at.procs.find.stderr.pipe(process.stderr);
-
-  at.procs.ffilt.stdout.on('end', function() {
+    
+  at.procs.find.stdout.on('end', function() {
     at.procs = {};
     console.error("ARCHIVES %j", at.rez.archives);
 

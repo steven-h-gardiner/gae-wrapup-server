@@ -3,7 +3,7 @@
   "main": "main.js",
   "dependencies": {
     "nomnom": "*",
-    "luigi": "file:../luigi/",
+    "eachline": "*",
     "stdlog": "*"
   },
   "version": "0.0.1"
