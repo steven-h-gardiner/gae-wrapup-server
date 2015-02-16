@@ -35,7 +35,7 @@ _pright.rin: access.sqlite
 _pright.rout: pright.r pright.rin
 	cat $< | R --vanilla > $@
 
-%.rin: access.sqlite
+%.rin: access2.sqlite
 	echo $@ | parallel echo "select \* from {.} \; " | sqlite3 -header $< > $@
 
 %.rout: %.r %.rin
