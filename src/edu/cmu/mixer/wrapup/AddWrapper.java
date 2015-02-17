@@ -75,9 +75,22 @@ public class AddWrapper extends javax.servlet.http.HttpServlet {
   throws Exception {
     System.err.println("ADDWRAP: " + jsonobj.toString());
 
+    com.google.appengine.api.datastore.Entity wrapper; // Wrapper
+
+    String uid = jsonobj.optString("uid", jsonobj.optString("wrappername", null));
+    if (uid != null) {
+      com.google.appengine.api.datastore.Key wrapkey = 
+	com.google.appengine.api.datastore.KeyFactory.createKey("Wrapper", uid);
+      try {
+	wrapper = ds.get(wrapkey);
+      } catch (com.google.appengine.api.datastore.EntityNotFoundException enfe) {
+	wrapper = new com.google.appengine.api.datastore.Entity("Wrapper", uid);
+      }
+    } else {
+      wrapper = new com.google.appengine.api.datastore.Entity("Wrapper"); // Wrapper
+    }
+    
     /** Add wrapper to DataStore. **/
-    com.google.appengine.api.datastore.Entity wrapper =
-      new com.google.appengine.api.datastore.Entity("Wrapper"); // Wrapper
     for (String property : JSONObject.getNames(jsonobj)) {
       if (property.equals("wrapper")) {
         wrapper.setProperty(property,
