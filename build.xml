@@ -137,7 +137,7 @@
     <appcfg war="war" action="update" />
   </target>
 
-  <target name="node_modules" depends="swcli">
+  <target name="node_modules"> <!-- depends="swcli" -->
     <copy file="bin/smartwrap-cli.jar"
 	  tofile="node/accesstasks/smartwrap-cli.jar"/>
     <mkdir dir="node_modules"/>
@@ -153,19 +153,31 @@
 
   <target name="dist" depends="node_modules">
     <mkdir dir="war/dist"/>
+    <mkdir dir="war/dist/content"/>
+    <mkdir dir="war/dist/content/js"/>
+    <mkdir dir="war/dist/content/ui"/>
+    <mkdir dir="war/dist/skin"/>
+    <copy file="../wrapup-client/wrapup-access.user.js"
+	  tofile="war/dist/wrapup-access.user.js"/>
+    <copy file="../wrapup-client/wrapup-access.user.js"
+	  tofile="war/dist/wrapup-access.tamper.js"/>
     <exec executable="node">
       <arg file="node_modules/greasecooper/greasecooper.js"/>
       <arg value="--output"/>
       <arg value="war/dist/wrapup-access.xpi"/>
       <arg value="-u"/>
-      <arg file="../wrapup-client/content/js/wrapup-access.user.js"/>
+      <arg file="../wrapup-client/wrapup-access.user.js"/>
     </exec>
+    <copy file="../wrapup-client/wrapup-csv.user.js"
+	  tofile="war/dist/wrapup-csv.user.js"/>
+    <copy file="../wrapup-client/wrapup-csv.user.js"
+	  tofile="war/dist/wrapup-csv.tamper.js"/>
     <exec executable="node">
       <arg file="node_modules/greasecooper/greasecooper.js"/>
       <arg value="--output"/>
       <arg value="war/dist/wrapup-csv.xpi"/>
       <arg value="-u"/>
-      <arg file="../wrapup-client/content/js/wrapup-csv.user.js"/>
+      <arg file="../wrapup-client/wrapup-csv.user.js"/>
     </exec>
   </target>
   
