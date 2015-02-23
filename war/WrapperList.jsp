@@ -49,7 +49,7 @@
     ]]>
   </jsp:scriptlet>
   <c:set var="wrapperJSON">
-   <jsp:expression>wrappers.toString()</jsp:expression>
+   <jsp:expression>wrapperObj.toString()</jsp:expression>
   </c:set>
   <c:set var="spec">
    <jsp:expression>spec.toString()</jsp:expression>
@@ -70,6 +70,12 @@
 	<script type="application/json" id="listSpec">
 	  ${spec}
 	</script>
+        <link rel="stylesheet" href="/css/jquery-ui.css">
+	  <!-- JSP workaround -->
+        </link>
+        <link rel="stylesheet" href="/css/jquery.dataTables.css">
+	  <!-- JSP workaround -->
+        </link>
 	<style type="text/css">
 	  #main {
 	    margin-left: auto;
@@ -77,7 +83,7 @@
 	    width: 50%;
 	    text-align: center;
 	  }
-          div.lumber {
+          .lumber {
             display: none;
           }
 	</style>
@@ -87,23 +93,23 @@
 	  <table cellpadding="0" cellspacing="0" border="1" class="display" id="mainTable">
 	  </table>
 	</center>
-        <div class="lumber">
-	  <table cellpadding="0" cellspacing="0" border="1" class="display" id="lumber">
-	    <thead>
-	      <tr>
-	        <th>foo</th>
-	      </tr>
-	    </thead>
-	    <tbody>
-	      <tr>
-	        <td><a href="http://www.google.com">bar</a></td>
-	      </tr>
-	    </tbody>
-	  </table>
-        </div>
+	<table cellpadding="0" cellspacing="0" border="1" class="display lumber" id="lumber">
+          <thead>
+	    <tr>
+	      <th>foo</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    <tr>
+	      <td><a href="http://www.google.com">bar</a></td>
+	    </tr>
+	  </tbody>
+	</table>
       </body>
       <script id="driver" type="text/javascript">
+          console.log("DRIVE");
 	jQuery(document).on('ready', function() {
+          console.log("READY");
 	  var wl = {};
 	  wl.data = JSON.parse(jQuery("#wrapperData").text());
 	  wl.spec = JSON.parse(jQuery("#listSpec").text());
@@ -151,6 +157,7 @@
 	    //"columns": wl.data.columns,
 	    "order": [].concat(wl.sorting),
 	  });
+          console.log("READY9");
 	});
       </script>
     </html>
