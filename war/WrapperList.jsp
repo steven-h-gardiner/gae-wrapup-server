@@ -64,6 +64,9 @@
 	<script type="text/javascript" id="dataTables" src="/js/jquery.dataTables.min.js">
 	  <!-- JSP workaround -->
 	</script>
+	<script type="text/javascript" id="dataTables" src="/js/dataTables.jqueryui.js">
+	  <!-- JSP workaround -->
+	</script>
 	<script type="application/json" id="wrapperData">
 	  ${wrapperJSON}
 	</script>
@@ -73,7 +76,7 @@
         <link rel="stylesheet" href="/css/jquery-ui.css">
 	  <!-- JSP workaround -->
         </link>
-        <link rel="stylesheet" href="/css/jquery.dataTables.css">
+        <link rel="stylesheet" href="/css/dataTables.jqueryui.css">
 	  <!-- JSP workaround -->
         </link>
 	<style type="text/css">
