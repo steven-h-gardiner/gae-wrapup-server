@@ -1,0 +1,205 @@
+<html>
+  <head>
+    <title>CMU Study Announcement: Web Accessibility</title>
+    <script src="./js/jquery-2.1.1.min.js"></script>
+    <script src="./js/jquery.qrcode.js"></script>
+    <script src="./js/qrcode.js"></script>
+    <script src="./js/jquery.rc4.js"></script>
+    <script>
+      var qrtext = "http://goo.gl/VZRvjs";
+      var viztext = "http://goo.gl/oAY9k9";
+      var linktext = "http://goo.gl/KcsgIv";
+      //linktext = "http://gae-wrapup-server.appspot.com/flyer.html";
+      var chadcount = 12;
+      jQuery(document).on('ready', function() {
+      
+        jQuery(".qrlink, .vizlink").text('');
+        jQuery(".vizlink").text(linktext);
+        jQuery(".qrlink, .vizlink").attr('href', qrtext);
+
+        for (var i = 0; i < chadcount; i++) {
+          jQuery("aside > div:first-child").clone().appendTo("aside");
+        }
+        jQuery(".qrlink").qrcode({
+          text: qrtext,
+          render1: "table",
+        });
+      });
+    </script>
+    <script>
+      jQuery(document).on('ready', function() {
+        setTimeout(function() {
+          var plaintext = jQuery(".email.plaintext").text();
+          plaintext = plaintext.split(/\./).reverse().join(".");
+          var cipher = jQuery(jQuery(".email.encrypted").get().reverse()).text();
+          cipher = cipher || jQuery.hexEncode(plaintext);
+          jQuery(".email.encrypted").text(cipher);
+          jQuery(".email.decrypted").text(jQuery.hexDecode(cipher).split(/\./).reverse().join("."));
+        }, 500);
+      });
+    </script>
+    <style>
+      .email.encrypted { display: none; }
+      .email.plaintext { color: red; font-size: 300% }
+      
+      aside .qrlink {
+        zoom: 0.2;
+      }
+      aside {
+        font-size: 70%;
+      }
+      main .qrlink {
+        zoom: 0.8;
+      }
+      div.qr {
+        margin: 0.5ex 1em;
+      }
+      aside div.qr {
+        float: left;
+      }
+      main div.qr {
+        float: right;
+        
+      }
+      aside {
+        float: left;
+        margin-right: 5em;
+        border-right: 1px dashed black;
+      }
+      aside > div {
+        padding: 1ex 2em 1ex 0em;
+        -border-top: 1px dashed black;
+      }
+      aside > div {
+        border-bottom: 1px dashed black;
+      }
+      aside > div:last-child {
+        -border-bottom: none;
+      }
+      aside > div:first-child {
+        border-top: 1px dashed black;
+      }
+      aside div.vizmeta > div {
+	padding-top: 3px;
+      }
+      main .lorem {
+	display: none;
+      }
+	main dl {
+	  font-size: 135%;
+	}
+	main dl dd {
+	  margin-left: 4em;
+	  margin-bottom: 1em;
+	  -border: 12pt solid blue;
+	}
+    </style>
+    <style media="screen">
+      aside {
+        display: none;
+      }
+    </style>
+    <style media="print">
+      main {
+        width: 70%;
+        margin-left: 30%;
+      }
+      aside {
+        width: 30%;
+      }
+    </style>
+  </head>
+  <body>
+    <span class="email encrypted">e64726577</span>	    
+    <aside>
+      <div>
+	<div class="qr">
+	  <a href="www.google.com" class="qrlink">ABC</a>
+	</div>
+	<div class="vizmeta">
+	  <div>
+	    CMU Web Accessibility Study
+	  </div>
+	  <div>
+	    $25 / hour
+	  </div>
+	  <div>
+	    <a class="vizlink" href="www.google.com">DEF</a>
+	  </div>
+	</div>
+      </div>
+    </aside>
+    <main>
+      <h1>CMU Study Announcement: Web Accessibility</h1>
+      <div class="qr">
+	<a href="www.google.com" class="qrlink">DEF</a>
+      </div>
+      <div class="lorem">
+      The shizzle Lorem ipsum dolor sit amet, consectetur adipiscing
+      elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas
+      congue ligula ac quam viverra nec consectetur ante
+      hendrerit. Donec et mollis dolor. Praesent et diam eget libero
+      egestas mattis sit amet vitae augue. Nam tincidunt congue enim,
+      ut porta lorem lacinia consectetur. Donec ut libero sed arcu
+      vehicula ultricies a non tortor. Lorem ipsum dolor sit amet,
+      consectetur adipiscing elit. Aenean ut gravida lorem. Ut turpis
+      felis, pulvinar a semper sed, adipiscing id dolor. Pellentesque
+      auctor nisi id magna consequat sagittis. Curabitur dapibus enim
+      sit amet elit pharetra tincidunt feugiat nisl imperdiet. Ut
+      convallis libero in urna ultrices accumsan. Donec sed odio
+      eros. Donec viverra mi quis quam pulvinar at malesuada arcu
+      rhoncus. Cum sociis natoque penatibus et magnis dis parturient
+      montes, nascetur ridiculus mus. In rutrum accumsan
+      ultricies. Mauris vitae nisi at sem facilisis semper ac in est.
+      <br/>
+
+      Vivamus fermentum semper porta. Nunc diam velit, adipiscing ut
+      tristique vitae, sagittis vel odio. Maecenas convallis
+      ullamcorper ultricies. Curabitur ornare, ligula semper
+      consectetur sagittis, nisi diam iaculis velit, id fringilla sem
+      nunc vel mi. Nam dictum, odio nec pretium volutpat, arcu ante
+      placerat erat, non tristique elit urna et turpis. Quisque mi
+      metus, ornare sit amet fermentum et, tincidunt et orci. Fusce
+      eget orci a orci congue vestibulum. Ut dolor diam, elementum et
+      vestibulum eu, porttitor vel elit. Curabitur venenatis pulvinar
+      tellus gravida ornare. Sed et erat faucibus nunc euismod
+      ultricies ut id justo. Nullam cursus suscipit nisi, et ultrices
+      justo sodales nec. Fusce venenatis facilisis lectus ac
+      semper. Aliquam at massa ipsum. Quisque bibendum purus convallis
+      nulla ultrices ultricies. Nullam aliquam, mi eu aliquam
+      tincidunt, purus velit laoreet tortor, viverra pretium nisi quam
+      vitae mi. Fusce vel volutpat elit. Nam sagittis nisi dui.
+      </div>
+      <dl>
+	<dt>Study Name</dt>
+	<dd>Utility of tabular structure for nonvisual browsing</dd>
+	<dt>Description</dt>
+	<dd>The study addresses the question of whether websites
+	  presenting data using tables are easier to use with screen
+	  readers than websites that use other formats.  Participants
+	  will be asked to use a series of websites that use different
+	  configurations, and their actions will be logged for
+	  analysis.  </dd>
+	<dt>Location</dt>
+	<dd>CMU campus, or we can come to locations within the
+	  Pittsburgh region.</dd>
+	<dt>Pay</dt>
+	<dd>$25 per hour</dd>
+	<dt>Contact</dt>
+	<dd>
+	  <div>Researcher: Steven Gardiner</div>
+	  <div>
+	    email:
+	    <span class="email encrypted">36d752e7367617264696e6540616</span>	    
+	    <span class="email decrypted">junkmail@yahoo.com</span>	    
+	  </div>
+	</dd>
+	<dt>Duration</dt>
+	<dd>60 - 90 minutes</dd>
+	<dt>Website</dt>
+	<dd><a href="www.google.com" class="vizlink">60 - 90 minutes</a></dd>
+      </dl>
+    </main>
+    <div class="email encrypted">6564752e6</div>	    
+  </body>
+</html>
