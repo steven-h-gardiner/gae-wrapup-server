@@ -49,7 +49,7 @@
     ]]>
   </jsp:scriptlet>
   <c:set var="wrapperJSON">
-   <jsp:expression>wrapperObj.toString()</jsp:expression>
+   <jsp:expression>wrappers.toString()</jsp:expression>
   </c:set>
   <c:set var="spec">
    <jsp:expression>spec.toString()</jsp:expression>
@@ -93,7 +93,7 @@
       </head>
       <body>
 	<center id="main">	  
-	  <table cellpadding="0" cellspacing="0" border="1" class="display" id="mainTable">
+	  <table cellpadding="0" cellspacing="0" border="1" class="display" id="mainTable" data-paging="false">
 	  </table>
 	</center>
 	<table cellpadding="0" cellspacing="0" border="1" class="display lumber" id="lumber">
@@ -159,7 +159,7 @@
 	    //"data": wl.data.dataset,
 	    //"columns": wl.data.columns,
 	    "order": [].concat(wl.sorting),
-	  });
+          });
           console.log("READY9");
 	});
       </script>
