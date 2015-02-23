@@ -77,6 +77,9 @@
 	    width: 50%;
 	    text-align: center;
 	  }
+          div.lumber {
+            display: none;
+          }
 	</style>
       </head>
       <body>
@@ -84,18 +87,20 @@
 	  <table cellpadding="0" cellspacing="0" border="1" class="display" id="mainTable">
 	  </table>
 	</center>
-	<table cellpadding="0" cellspacing="0" border="1" class="display" id="lumber">
-	  <thead>
-	    <tr>
-	      <th>foo</th>
-	    </tr>
-	  </thead>
-	  <tbody>
-	    <tr>
-	      <td><a href="http://www.google.com">bar</a></td>
-	    </tr>
-	  </tbody>
-	</table>
+        <div class="lumber">
+	  <table cellpadding="0" cellspacing="0" border="1" class="display" id="lumber">
+	    <thead>
+	      <tr>
+	        <th>foo</th>
+	      </tr>
+	    </thead>
+	    <tbody>
+	      <tr>
+	        <td><a href="http://www.google.com">bar</a></td>
+	      </tr>
+	    </tbody>
+	  </table>
+        </div>
       </body>
       <script id="driver" type="text/javascript">
 	jQuery(document).on('ready', function() {
