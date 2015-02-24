@@ -131,13 +131,23 @@
           wl.url2text = function(url) {
             var text = url;
 
-            text = decodeURIComponent(text);
+            try {
+              text = decodeURIComponent(text);
+            } catch (ee) {
+              console.log(ee.message);
+            }
+
 
             text = text.replace(/^https?:\/\//g, '');
             text = text.replace(/(.*\/.*)\.[^\.\/]*$/g, '$1');
 
-            var parts = text.split(/[\/\&\?\-]/);
+            var parts = text.split(/[\/\&\?\-_\+]/);
             parts[0] = parts[0].replace(/^www\./g, '');
+
+            parts = parts.map(function(word) {
+              return word.substring(0,40);
+            });
+
             text = parts.join(" ");
 
             return text;
