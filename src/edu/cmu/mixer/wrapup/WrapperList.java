@@ -1,11 +1,19 @@
 package edu.cmu.mixer.wrapup;
 
+import java.text.SimpleDateFormat;
+
 public class WrapperList {
   org.json.JSONObject output = new org.json.JSONObject();
   org.json.JSONArray dataset = new org.json.JSONArray();
   org.json.JSONArray columns = new org.json.JSONArray();
   org.json.JSONArray columnTitles = new org.json.JSONArray();
-  
+
+  public static final SimpleDateFormat datein =
+    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
+  public static final SimpleDateFormat dateout =
+    new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    
   public WrapperList(org.json.JSONObject spec) throws Exception {
     output.putOpt("dataset", dataset);
     output.putOpt("columns", columns);
@@ -28,7 +36,8 @@ public class WrapperList {
       }
       return;
     }
-
+    
+    
     com.google.appengine.api.datastore.DatastoreService ds =
       com.google.appengine.api.datastore.DatastoreServiceFactory.getDatastoreService();
 
@@ -67,10 +76,17 @@ public class WrapperList {
       org.json.JSONArray row = new org.json.JSONArray();
       org.json.JSONObject urlCell = new org.json.JSONObject();
       urlCell.putOpt("href",url);
-      urlCell.putOpt("text",url.substring(0,Math.min(url.length(),60)));
+      //urlCell.putOpt("text",url.substring(0,Math.min(url.length(),60)));
       row.put(urlCell);
       row.put(result.getProperty("diameter").toString());
-      row.put(result.getProperty("timestamp").toString());
+      String timestamp = null;
+      timestamp = result.getProperty("timestamp").toString();  
+      try {
+        timestamp = dateout.format(datein.parse(result.getProperty("timestamp").toString()));          
+      } catch (Throwable th) {
+          //ignore
+      }
+      row.put(timestamp);
       dataset.put(row);
 
     }    
