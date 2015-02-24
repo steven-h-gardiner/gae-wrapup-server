@@ -45,6 +45,12 @@
       spec.putOpt("activeOnly", request.getParameter("activeOnly"));
       spec.putOpt("activeOnly", Boolean.parseBoolean(spec.optString("activeOnly", "true")));
 
+      spec.putOpt("paging", request.getParameter("paging"));
+      spec.putOpt("paging", Boolean.parseBoolean(spec.optString("paging", "false")));
+
+      spec.putOpt("searching", request.getParameter("searching"));
+      spec.putOpt("searching", Boolean.parseBoolean(spec.optString("searching", "false")));
+
       org.json.JSONObject wrappers = new edu.cmu.mixer.wrapup.WrapperList(spec).getJSONObject();
     ]]>
   </jsp:scriptlet>
@@ -93,7 +99,7 @@
       </head>
       <body>
 	<center id="main">	  
-	  <table cellpadding="0" cellspacing="0" border="1" class="display" id="mainTable" data-paging="false">
+	  <table cellpadding="0" cellspacing="0" border="1" class="display" id="mainTable">
 	  </table>
 	</center>
 	<table cellpadding="0" cellspacing="0" border="1" class="display lumber" id="lumber">
@@ -110,6 +116,7 @@
 	</table>
       </body>
       <script id="driver" type="text/javascript">
+<![CDATA[
           console.log("DRIVE");
 	jQuery(document).on('ready', function() {
           console.log("READY");
@@ -121,6 +128,20 @@
 	    wl.sorting.push([1,'desc']);
 	  }
 
+          wl.url2text = function(url) {
+            var text = url;
+
+            text = decodeURIComponent(text);
+
+            text = text.replace(/^https?:\/\//g, '');
+            text = text.replace(/(.*\/.*)\.[^\.\/]*$/g, '$1');
+
+            var parts = text.split(/[\/\&\?\-]/);
+            parts[0] = parts[0].replace(/^www\./g, '');
+            text = parts.join(" ");
+
+            return text;
+          };
 	  
 	  wl.tablify = function(selector) {
 	    var tab = jQuery("#mainTable");
@@ -145,7 +166,7 @@
 		} else {
 		  if (cell.href) {
 		    var link = jQuery("#lumber tbody td a").clone().empty();
-		    link.text(cell.text);
+		    link.text(cell.text || wl.url2text(cell.href));
 		    link.attr("href", cell.href);
 		    link.appendTo(dCell);
 		  }
@@ -159,9 +180,13 @@
 	    //"data": wl.data.dataset,
 	    //"columns": wl.data.columns,
 	    "order": [].concat(wl.sorting),
+            "paging": !! wl.spec.paging,
+            "searching": !! wl.spec.searching,
           });
+
           console.log("READY9");
 	});
+]]>
       </script>
     </html>
   </jsp:text>
