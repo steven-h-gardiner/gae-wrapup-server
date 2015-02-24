@@ -1,0 +1,106 @@
+<html>
+  <head>
+    <title>Installation Procedure</title>
+  </head>
+  <body>
+    <h2>Installation</h2>
+    There are several ways to install the software.
+    <ol>
+      <li>
+        <h3>Greasemonkey Script</h3>
+        <dl>
+	  <dt>Installation</dt>
+          <dd>If you are running Firefox with the Greasemonkey
+          extension installed, you can
+          use <a href="./dist/wrapup-access.user.js">this link</a> to
+          install it as a user script.  You will be prompted one or
+          two times to grant permission for the script to be
+          installed.</dd>
+	  <dt>Disable for a page</dt>
+	  <dd>Greasemonkey can be disabled for a particular page by
+	  unchecking "Enabled" in the menu Tools &gt; Greasemonkey
+	  &gt; Enabled; after disabling the script you'll have to
+	  refresh the page to restore its original structure</dd>
+	  <dt>Uninstallation</dt>
+	  <dd>The script can be uninstalled by selecting "Remove" in
+	  the "User Scripts" section of the Tools &gt; Add-Ons
+	  panel</dd>
+        </dl>	
+      </li>
+      <li>
+        <h3>Tampermonkey Script</h3>
+        <dl>
+	  <dt>Installation</dt>
+          <dd>If you are running Chrome with the Tampermonkey
+          extension installed, you can
+          use <a href="./dist/wrapup-access.tamper.js">this link</a> to
+          install it as a user script.  You will be prompted one or
+          two times to grant permission for the script to be
+          installed.</dd>
+	  <dt>Disable for a page</dt>
+	  <dd>Tampermonkey can be disabled for a particular page by
+	  unchecking "Enabled" in the Tampermonkey menu; after
+	  disabling the script you'll have to refresh the page to
+	  restore its original structure</dd>
+	  <dt>Uninstallation</dt>
+	  <dd>The script can be uninstalled by selecting the "Delete"
+	  Action for the script in Tampermonkey's Dashboard
+	  (Tampermonkey menu &gt; Dashboard)</dd>
+        </dl>	
+      </li>
+      <li>
+        <h3>Firefox Extension</h3>
+        <dl>
+	  <dt>Installation</dt>
+          <dd>If you are running Firefox, you can
+          use <a href="./dist/wrapup-access.xpi">this link</a> to
+          download it as a standalone Firefox extension.  To install
+          the extension, open the file you downloaded with Firefox by
+          using the File &gt; Open File menu (the standard keyboard
+          shortcut is Ctrl+O).  You will be prompted one or two times
+          to grant permission for the script to be installed.  After
+          installation, Firefox will prompt you to restart before the
+          extension can be used.</dd>
+	  <dt>Disable for a page</dt>
+	  <dd>The extension includes a keyboard shortcut Ctrl+Alt+W
+	  which will disable its effect; after disabling the extension
+	  you'll have to refresh the page to restore its original
+	  structure.  You can also disable the extension by unchecking
+	  "Enabled" in the menu Tools &gt; Greasemonkey &gt;
+	  Enabled.</dd>
+	  <dt>Uninstallation</dt>
+	  <dd>The extension can be uninstalled in the Tools &gt;
+	  Add-Ons panel by using the "Remove" buttons for both the
+	  "Greasemonkey" and the "wrapup-access-scripts"
+	    extensions.</dd>
+	  <dt>Note on Greasemonkey</dt>
+	  <dd>The standalone extension is implemented by packaging the
+	  user script alongside Greasemonkey itself</dd>
+        </dl>	
+      </li>
+      <li>
+        <h3>Proxy</h3>
+        <dl>
+	  <dt>Installation</dt>
+          <dd>You can point any browser at the form
+          on <a href="http://wrapup-proxy.appspot.com">this page</a>.
+          Paste the URL of the page you want to view into the form,
+            and press the "Go" button.
+	  </dd>
+	  <dt>Disable for a page</dt>
+	  <dd>All pages reached through the proxy will be re-written
+	  so that all links will continue through the proxy, but
+	  browsing in a new or different window will not be
+	  affected.</dd>
+	  <dt>Limitation</dt>
+	  <dd>The proxy can only visit pages that are not secured with
+	  SSL, i.e. only URLs that start with http:// and not
+	  https://</dd>
+        </dl>	
+      </li>
+    </ol>
+    <h2>Discovering Existing Wrappers</h2>
+    A list of existing wrappers is <a href="/WrapperList.jsp">available here</a>.
+  </body>
+         
+</html>
