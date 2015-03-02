@@ -125,14 +125,49 @@ public class WrapupQuery extends javax.servlet.http.HttpServlet {
   public static org.json.JSONArray queryByURL(String url) {
     org.json.JSONArray results = new JSONArray();
 
+    org.json.JSONObject urlparts = new org.json.JSONObject();
+    try {
+      java.net.URL purl = new java.net.URL(url);
+      urlparts.putOpt("hostname", purl.getHost());
+      urlparts.putOpt("pathname", purl.getPath());
+    } catch (Exception ex) {
+      urlparts = null;
+    }
+
+    com.google.appengine.api.datastore.Query.Filter filter = null;
+    if ((urlparts != null) && (urlparts.length() > 0)) {
+      filter = com.google.appengine.api.datastore.Query.CompositeFilterOperator.or(
+										   com.google.appengine.api.datastore.Query.CompositeFilterOperator.and(
+																			com.google.appengine.api.datastore.Query.FilterOperator.NOT_EQUAL.of("hostname", null),
+																			com.google.appengine.api.datastore.Query.FilterOperator.NOT_EQUAL.of("pathname", null),
+																			com.google.appengine.api.datastore.Query.FilterOperator.EQUAL.of("hostname", urlparts.optString("hostname")),
+																			com.google.appengine.api.datastore.Query.FilterOperator.EQUAL.of("pathname", urlparts.optString("pathname"))),
+										   com.google.appengine.api.datastore.Query.FilterOperator.EQUAL.of("url", url));	   
+
+      /*
+      filter =
+	new com.google.appengine.api.datastore.Query.CompositeFilter(com.google.appengine.api.datastore.Query.CompositeFilterOperator.AND,
+								     java.util.Arrays.asList(
+											     new com.google.appengine.api.datastore.Query.FilterPredicate("hostname",
+																			  com.google.appengine.api.datastore.Query.FilterOperator.EQUAL,
+																			  urlparts.optString("hostname")),
+											     new com.google.appengine.api.datastore.Query.FilterPredicate("pathname",
+																			  com.google.appengine.api.datastore.Query.FilterOperator.EQUAL,
+																			  urlparts.optString("pathname"))
+											     ));
+      */
+    } else {
+      // literal matching by url
+      filter = new com.google.appengine.api.datastore.Query.FilterPredicate("url",
+									    com.google.appengine.api.datastore.Query.FilterOperator.EQUAL,
+									    url);
+    }
+
+    
     com.google.appengine.api.datastore.FetchOptions fo = 
       com.google.appengine.api.datastore.FetchOptions.Builder.withDefaults();
     com.google.appengine.api.datastore.Query query =
       new com.google.appengine.api.datastore.Query("Wrapper");
-    com.google.appengine.api.datastore.Query.FilterPredicate filter =
-      new com.google.appengine.api.datastore.Query.FilterPredicate("url",
-          com.google.appengine.api.datastore.Query.FilterOperator.EQUAL,
-          url);
     query = query.setFilter(filter);
     query = query.addSort("diameter",
 			  com.google.appengine.api.datastore.Query.SortDirection.DESCENDING);    
