@@ -38,8 +38,8 @@ public class WrapupQuery extends javax.servlet.http.HttpServlet {
 
       json.putOpt("url", req.getParameter("url"));
       json.putOpt("wrappers", wrappers);
+      System.err.println("QUERY0: " + json.toString());
 
-      System.err.println("QUERY: " + json.toString());
 
       if (req.getParameter("signature") != null) {
         org.json.JSONArray bysig = queryBySignature(req.getParameter("signature"));
@@ -55,6 +55,7 @@ public class WrapupQuery extends javax.servlet.http.HttpServlet {
         }
 
       }
+      System.err.println("QUERY1: " + json.toString());
 
       if (wrappers.length() == 0) {
         logger.log(Level.WARNING, "No wrapper is retrieved.");
@@ -77,6 +78,7 @@ public class WrapupQuery extends javax.servlet.http.HttpServlet {
     } catch (Exception ex) {
       resp.setContentType("text/plain");
       ex.printStackTrace(resp.getWriter());
+      ex.printStackTrace(System.err);
     }
   }
 
@@ -138,8 +140,8 @@ public class WrapupQuery extends javax.servlet.http.HttpServlet {
     if ((urlparts != null) && (urlparts.length() > 0)) {
       filter = com.google.appengine.api.datastore.Query.CompositeFilterOperator.or(
 										   com.google.appengine.api.datastore.Query.CompositeFilterOperator.and(
-																			com.google.appengine.api.datastore.Query.FilterOperator.NOT_EQUAL.of("hostname", null),
-																			com.google.appengine.api.datastore.Query.FilterOperator.NOT_EQUAL.of("pathname", null),
+																			//com.google.appengine.api.datastore.Query.FilterOperator.NOT_EQUAL.of("hostname", null),
+																			//com.google.appengine.api.datastore.Query.FilterOperator.NOT_EQUAL.of("pathname", null),
 																			com.google.appengine.api.datastore.Query.FilterOperator.EQUAL.of("hostname", urlparts.optString("hostname")),
 																			com.google.appengine.api.datastore.Query.FilterOperator.EQUAL.of("pathname", urlparts.optString("pathname"))),
 										   com.google.appengine.api.datastore.Query.FilterOperator.EQUAL.of("url", url));	   
