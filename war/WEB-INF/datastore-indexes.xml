@@ -16,6 +16,15 @@
     <property name="timestamp" direction="desc"/>
   </datastore-index>
 
+  <datastore-index kind="Wrapper" ancestor="false" source="manual">
+    <property name="hostname" direction="asc"/>
+    <property name="pathname" direction="asc"/>
+    <property name="downVotes" direction="desc"/>
+    <property name="diameter" direction="desc"/>
+    <property name="upVotes" direction="desc"/>
+    <property name="timestamp" direction="desc"/>
+  </datastore-index>
+
   <datastore-index kind="AccessEvent" ancestor="false">
     <property name="eventname" direction="asc" />
     <property name="timestamp" direction="desc" />
