@@ -1,7 +1,23 @@
 <html>
   <head>
     <title>Accessible Tables Consent Form</title>
-    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="./js/jquery-2.1.1.min.js"></script>
+    <script src="./js/jquery.qrcode.js"></script>
+    <script src="./js/qrcode.js"></script>
+    <script src="./js/jquery.rc4.js"></script>
+    <script>
+      jQuery(document).on('ready', function() {
+        setTimeout(function() {
+          var plaintext = jQuery(".email.plaintext").text();
+	  plaintext = plaintext.split(/\./).reverse().join(".");
+	  
+	  var cipher = jQuery(jQuery(".email.encrypted").get().reverse()).text();
+	  cipher = cipher || jQuery.hexEncode(plaintext);
+	  //jQuery(".email.encrypted").text(cipher);
+           jQuery(".email.decrypted").text(jQuery.hexDecode(cipher).split(/\./).reverse().join("."));
+        }, 500);
+      });
+    </script>
     <script>
       jQuery(document).on('ready', function() {
         jQuery(".title.copy").text(jQuery("#title").text());
@@ -15,7 +31,25 @@
         header2.insertBefore(jQuery("main"));
       });
     </script>
+    <script>
+      var qrtext = "http://goo.gl/hq68we";
+      var linktext = "http://goo.gl/hq68we";
+      var viztext = "http://goo.gl/hq68we";
+      jQuery(document).on('ready', function() {
+      
+        jQuery(".qrlink, .vizlink").text('');
+        jQuery(".vizlink").text(viztext);
+        jQuery(".qrlink, .vizlink").attr('href', linktext);
+
+        jQuery(".qrlink").qrcode({
+          text: qrtext,
+          render1: "table",
+        });
+      });
+    </script>
     <style>
+      .email.encrypted { display: none; }
+      
       .offscreen {
         position:absolute;
         left:-10000px;
@@ -80,10 +114,29 @@
       .zoom {
         zoom: 1.8;
         margin: 0px;
+
+      }
+
+      .qr {
+        float: right;
+        padding: 1ex;
+        border: 1px solid black;
+      }
+
+      .qr .vizlink {
+        color: black;        
+      }
+      
+      footer .qrlink {
+        zoom: 0.6;
+      }
+      header .qrlink {
+        zoom: 0.7;
       }
     </style>
   </head>
   <body>
+    <span class="email encrypted">6577</span>
     <h1>Carnegie Mellon University &mdash; Consent Form for Participation in Research</h1>
     <h2 class="offscreen">Study Title: <span id="title">Utility of tabular structure for nonvisual browsing</span></h2>
     <main>
@@ -152,7 +205,10 @@
 	The risks and discomfort associated with participation in this
 	study are no greater than those ordinarily encountered in
 	daily life, during ordinary internet use, or during routine
-	psychological examinations or tests.
+	psychological examinations or tests.  There is a small risk
+	that other people will find out that you participated in this
+	study, though we will make every effort to avoid such a breach
+	of your confidentiality.
       </dd>
       
       <dt>Benefits</dt>
@@ -271,6 +327,13 @@
 
       <dd>
 	<p>
+	  An electronic version of this document was provided to you
+	  before the study, and is available at <a class="vizlink"
+	  href="www.google.com">GHI</a>.  A QR code is provided at the
+	  bottom right of the last page, and at the top right of the
+	  first page, of this document.
+	</p>
+	<p>
 	  If you have any questions about this study, you should feel
 	  free to ask them at any time before or during the study. If
 	  you have questions later, desire additional information, or
@@ -287,6 +350,7 @@
 	  irb-review@andrew.cmu.edu . Phone: 412-268-1901 or
 	  412-268-5460.
 	</p>
+	<span class="email encrypted">6540616e6472</span>	    
       </dd>
 
       <!--
@@ -339,8 +403,17 @@
       </dd>
     </dl>
     </main>
+    <div class="email encrypted">e636d752e7367617264696e</div>  
     <header class="insitu">
       <hr/>
+      <div class="qr">
+	A copy of this form is<br/>
+	available at <br/>
+	<a href="www.google.com" class="vizlink">DEF</a>
+	<br/>
+	<br/>
+	<a href="www.google.com" class="qrlink">ABC</a>
+      </div>
       <dl>
 	<dt>Study Title</dt>
 	<dd class="title copy">Utility of tabular structure for nonvisual browsing</dd>
@@ -348,7 +421,7 @@
 	<dt>Principal Investigator</dt>
 	<dd>
 	  <div>Steven Gardiner, PhD student</div>
-          <div>gardines@cmu.edu</div>  
+          <div class="email decrypted">junkmail@yahoo.com</div>  
 	  <div>Language Technologies Institute, Carnegie Mellon, GHC 6405</div>
 	</dd>
 	
@@ -365,11 +438,19 @@
       </dl>
       <hr/>
     </header>
+    <div class="email encrypted">6564752</div>	    
     <footer>
       <hr/>
+      <div class="qr">
+	A copy of this form is<br/>
+	available at <br/>
+	<a href="www.google.com" class="vizlink">DEF</a>
+	<br/><br/>
+	<a href="www.google.com" class="qrlink">ABC</a>
+      </div>      
       <dl>
 	<dt>IRB No</dt>
-	<dd>TBD</dd>
+	<dd>HS15-141</dd>
 
 	<dt>Approved</dt>
 	<dd>TBD</dd>

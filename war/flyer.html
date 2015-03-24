@@ -7,15 +7,15 @@
     <script src="./js/jquery.rc4.js"></script>
     <script>
       var qrtext = "http://goo.gl/VZRvjs";
-      var viztext = "http://goo.gl/oAY9k9";
-      var linktext = "http://goo.gl/KcsgIv";
+      var linktext = "http://goo.gl/oAY9k9";
+      var viztext = "http://goo.gl/KcsgIv";
       //linktext = "http://gae-wrapup-server.appspot.com/flyer.html";
       var chadcount = 12;
       jQuery(document).on('ready', function() {
       
         jQuery(".qrlink, .vizlink").text('');
-        jQuery(".vizlink").text(linktext);
-        jQuery(".qrlink, .vizlink").attr('href', qrtext);
+        jQuery(".vizlink").text(viztext);
+        jQuery(".qrlink, .vizlink").attr('href', linktext);
 
         for (var i = 0; i < chadcount; i++) {
           jQuery("aside > div:first-child").clone().appendTo("aside");
@@ -86,7 +86,7 @@
 	display: none;
       }
 	main dl {
-	  font-size: 135%;
+	  font-size: 115%;
 	}
 	main dl dd {
 	  margin-left: 4em;
@@ -183,6 +183,9 @@
 	<dt>Location</dt>
 	<dd>CMU campus, or we can come to locations within the
 	  Pittsburgh region.</dd>
+	<dt>Eligibility</dt>
+	<dd>Participants must be 18 years or older, and should be
+	experienced screen reader users.</dd>
 	<dt>Pay</dt>
 	<dd>$25 per hour</dd>
 	<dt>Contact</dt>
