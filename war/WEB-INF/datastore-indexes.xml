@@ -1,0 +1,36 @@
+<!-- Indices written at Wed, 25 Sep 2013 12:48:40 EDT -->
+
+<datastore-indexes autoGenerate="false">
+
+  <!-- Used 1 time in query history -->
+  <datastore-index kind="Wrapper" ancestor="false">
+    <property name="url" direction="asc" />
+    <property name="diameter" direction="desc" />
+    <property name="timestamp" direction="desc" />
+  </datastore-index>
+
+  <datastore-index kind="Wrapper" ancestor="false" source="manual">
+    <property name="hostname" direction="asc"/>
+    <property name="pathname" direction="asc"/>
+    <property name="diameter" direction="desc"/>
+    <property name="timestamp" direction="desc"/>
+  </datastore-index>
+
+  <datastore-index kind="AccessEvent" ancestor="false">
+    <property name="eventname" direction="asc" />
+    <property name="timestamp" direction="desc" />
+  </datastore-index>
+
+  <datastore-index kind="AccessEvent" ancestor="false">
+    <property name="eventname" direction="asc" />
+    <property name="taskid" direction="asc" />
+    <property name="answercorrect" direction="desc" />
+  </datastore-index>
+
+  <datastore-index kind="AccessEvent" ancestor="false">
+    <property name="eventname" direction="asc" />
+    <property name="taskid" direction="asc" />
+    <property name="timestamp" direction="desc" />
+  </datastore-index>
+
+</datastore-indexes>
