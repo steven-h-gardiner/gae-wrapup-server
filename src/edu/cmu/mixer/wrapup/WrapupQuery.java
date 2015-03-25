@@ -54,6 +54,21 @@ public class WrapupQuery extends javax.servlet.http.HttpServlet {
           wrappers.put(byurl.opt(i));
         }
 
+	if (wrappers.length() == 0) {
+	  // try www.HOSTNAME
+	  java.net.URL purl = new java.net.URL(req.getParameter("url"));
+	  if (! purl.getHost().startsWith("www.")) {
+	    purl = new java.net.URL(purl.getProtocol(),
+				    "www." + purl.getHost(),
+				    purl.getPort(),
+				    purl.getPath());
+	    byurl = queryByURL(purl, req.getParameter("url"));
+	    for (int i = 0; i < byurl.length(); i++) {
+	      wrappers.put(byurl.opt(i));
+	    }
+	    
+	  }
+	}
       }
       System.err.println("QUERY1: " + json.toString());
 
@@ -124,18 +139,22 @@ public class WrapupQuery extends javax.servlet.http.HttpServlet {
     // PLACEHOLDER; NOT YET IMPLEMENTED
     return new org.json.JSONArray();
   }
-  public static org.json.JSONArray queryByURL(String url) {
+  public static org.json.JSONArray queryByURL(String url) throws Exception {
+    return queryByURL(new java.net.URL(url), url);    
+  }
+  public static org.json.JSONArray queryByURL(java.net.URL purl, String url) {  
     org.json.JSONArray results = new JSONArray();
 
     org.json.JSONObject urlparts = new org.json.JSONObject();
     try {
-      java.net.URL purl = new java.net.URL(url);
       urlparts.putOpt("hostname", purl.getHost());
       urlparts.putOpt("pathname", purl.getPath());
     } catch (Exception ex) {
       urlparts = null;
     }
 
+    System.err.println("BYURL: " + urlparts.toString());
+    
     com.google.appengine.api.datastore.Query.Filter filter = null;
     if ((urlparts != null) && (urlparts.length() > 0)) {
       filter = com.google.appengine.api.datastore.Query.CompositeFilterOperator.or(
@@ -171,7 +190,11 @@ public class WrapupQuery extends javax.servlet.http.HttpServlet {
     com.google.appengine.api.datastore.Query query =
       new com.google.appengine.api.datastore.Query("Wrapper");
     query = query.setFilter(filter);
+    query = query.addSort("downVotes",
+			  com.google.appengine.api.datastore.Query.SortDirection.DESCENDING);    
     query = query.addSort("diameter",
+			  com.google.appengine.api.datastore.Query.SortDirection.DESCENDING);    
+    query = query.addSort("upVotes",
 			  com.google.appengine.api.datastore.Query.SortDirection.DESCENDING);    
     query = query.addSort("timestamp",
 			  com.google.appengine.api.datastore.Query.SortDirection.DESCENDING);    
@@ -183,13 +206,19 @@ public class WrapupQuery extends javax.servlet.http.HttpServlet {
 	continue;
       }
 
+      
       String wrapperString = ((com.google.appengine.api.datastore.Text) result.getProperty("wrapper")).getValue();
       JSONArray wrapper = new JSONArray();
       try {
 	wrapper = new JSONArray(wrapperString);
+	for (int i = 0; i < wrapper.length(); i++) {
+	  wrapper.optJSONObject(i).putOpt("wrapperName", result.getKey().getName());
+	}
       } catch (Exception ex) {
 	try {
-	  wrapper.put(new org.json.JSONObject(wrapperString));
+	  org.json.JSONObject obj = new org.json.JSONObject(wrapperString);
+	  obj.putOpt("wrapperName", result.getKey().getName());
+	  wrapper.put(obj);
 	} catch (Exception ex2) {
 	  ex2.printStackTrace(System.err);
 	}

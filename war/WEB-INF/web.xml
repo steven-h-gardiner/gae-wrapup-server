@@ -25,6 +25,14 @@
     <url-pattern>/access/tasklist.csv</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>feedback</servlet-name>
+    <servlet-class>edu.cmu.mixer.wrapup.WrapperFeedback</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>feedback</servlet-name>
+    <url-pattern>/feedback</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>query</servlet-name>
     <servlet-class>edu.cmu.mixer.wrapup.WrapupQuery</servlet-class>
   </servlet>
