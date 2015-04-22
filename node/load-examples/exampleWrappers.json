@@ -1,0 +1,7 @@
+[
+    {"url": "http://www.sydneyatoz.com.au/pk_sydney_parks_list.aspx",
+     "wrapper0": [{"name":"park","type":"http://schema.org/PostalAddress","xpathSelector":"//div[@id='contentMiddle']/div/p","attributes":{"name":{"xpathSelector":"./b"},"streetAddress":{"xpathSelector":"./br[1]/following-sibling::text()[1]"},"addressRegion":{"xpathSelector":"./br[2]/following-sibling::text()[1]"}}}]},
+    {"url": "http://www.sydneyatoz.com.au/pk_sydney_parks_list.asp",
+     "wrapper": [{"name":"park","type":"http://schema.org/PostalAddress","xpathSelector":"//div[@id='contentMiddle']/div//p","attributes":{"name":{"xpathSelector":"./span[1]"},"streetAddress":{"xpathSelector":"./span[2]"},"addressRegion":{"xpathSelector":"./span[3]"}}}]},
+    {}
+]
