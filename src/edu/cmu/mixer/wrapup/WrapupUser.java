@@ -16,6 +16,14 @@ public class WrapupUser {
     return sdf.format(new java.util.Date());
   }
 
+  public static String getUsername() {
+    com.google.appengine.api.users.User user = getCurrentUser();
+    if (user == null) {
+      return null;
+    }
+    return user.getEmail();
+  }
+    
   public static boolean canhazAdmin(javax.servlet.http.HttpServletRequest req) throws Exception {
     com.google.appengine.api.users.UserService userService =
       com.google.appengine.api.users.UserServiceFactory.getUserService();
