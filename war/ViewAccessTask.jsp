@@ -69,6 +69,9 @@
   <c:set var="title">
    <jsp:expression>o.optString("title", "Unnamed Page")</jsp:expression>
   </c:set>
+  <c:set var="accesstarget">
+   <jsp:expression>o.optString("accesstarget", "")</jsp:expression>
+  </c:set>
   <jsp:text>
     <html>
       <head>
@@ -164,11 +167,13 @@
 		<p class="question card" id="question">${question}</p>
               </div>
               <div class="link ccontainer">
+              <!--
 		<label for="mainlink">
 		  <span class="label">Link</span>
 		</label>
+                -->
      		<div class="mainlink card">
-            	  <a class="mainlink" id="mainlink" href="/atasks/${id}${condition}.xhtml" target="access-task">${title}</a>
+            	  <a class="mainlink" id="mainlink" href="/atasks/${id}${condition}.xhtml" target="${accesstarget}">${title}</a>
 		</div>   
               </div>
               <input type="hidden" id="taskid" name="taskid" value="${id}">
