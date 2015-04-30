@@ -80,6 +80,9 @@
 	  <!-- JSP workaround -->
 	</link>
 	<style>
+          .instructions {
+            display: none;
+          }
 	  .progress {
 	    background: linear-gradient(to right, rgba(210,162,45,1.0), rgba(210,162,45,0.9) ${pctdone}%, rgba(210,162,45,0.6) ${donebr}%, rgba(210,162,45,0.3));
 	  }
@@ -173,8 +176,13 @@
 		</label>
                 -->
      		<div class="mainlink card">
-            	  <a class="mainlink" id="mainlink" href="/atasks/${id}${condition}.xhtml" target="${accesstarget}">${title}</a>
-		</div>   
+                  Please answer the preceding question by consulting
+                  the page at <a class="mainlink" id="mainlink"
+                  href="/atasks/${id}${condition}.xhtml"
+                  target="${accesstarget}">this link</a>.  Remember
+                  that you will not need to follow any links from the
+                  page nor press any buttons.
+                </div>   
               </div>
               <input type="hidden" id="taskid" name="taskid" value="${id}">
                 <!-- jsp parsing workaround -->
