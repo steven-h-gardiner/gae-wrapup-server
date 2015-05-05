@@ -15,7 +15,7 @@
   <xsl:param name="resolveServer">
     <xsl:value-of select="//html:link[@rel='canonical']/@href"/>
   </xsl:param>
-	     
+  
   <xsl:template match="html:*/@class[contains(., 'sw_inserted')]">
     <xsl:variable name="reclass">
       <xsl:value-of select="substring-before(., 'sw_inserted')"/>
@@ -56,6 +56,8 @@
     
     <xsl:value-of select="$resolved"/>
   </xsl:template>
+
+  <xsl:template match="html:link[@rel='stylesheet'][contains(@href, 'global-typography')]" priority="100"/>
   
   <xsl:template match="html:link[@rel='stylesheet']/@href">
     <xsl:attribute name="href">
