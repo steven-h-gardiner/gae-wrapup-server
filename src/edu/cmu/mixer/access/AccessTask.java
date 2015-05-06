@@ -52,6 +52,8 @@ public class AccessTask {
       o.putOpt("finished", true);
       return o;
     }
+
+    System.err.println("ORDERINGS: " + orderings.toString(2));
     
   
     org.json.JSONArray condorder = orderings.optJSONArray("condorder");
@@ -59,11 +61,26 @@ public class AccessTask {
     o.putOpt("condix", condix);
     int condition = condorder.optInt(condix);
     o.putOpt("condition", condition);
-    
+
     org.json.JSONArray taskorder = orderings.optJSONArray("taskorder");  
     int pageno = taskorder.optInt(taskno, taskno);
-    o.putOpt("pageno", pageno);
+    o.putOpt("pageno.old", pageno);  
 
+    org.json.JSONArray typeorder = orderings.optJSONArray("typeorder");
+    org.json.JSONObject tasksByType = orderings.optJSONObject("tasksbytype");
+    String tasktype = typeorder.optString(taskno);
+    o.putOpt("tasktype", tasktype);
+    //System.err.println("OOOO: " + o.toString(2));
+    //System.err.println("TBT : " + tasksByType  );
+    org.json.JSONArray tasksOfType = tasksByType.optJSONArray(tasktype);
+    o.putOpt("taskcands", tasksOfType);
+    int taskDraw = (int) Math.floor(Math.random() * tasksOfType.length());
+    int staskno = tasksOfType.getJSONObject(taskDraw).optInt("taskno");
+    o.putOpt("pageno", staskno);
+    
+    System.err.println("OOOO: " + o.toString(2));
+    
+  
     com.google.appengine.api.datastore.Entity entity = 
       new com.google.appengine.api.datastore.Entity("AccessTask");
     // default so non-null but never stored to datastore
