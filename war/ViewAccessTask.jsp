@@ -177,13 +177,13 @@
 		</label>
                 -->
      		<div class="mainlink card">
-                  Please answer the preceding question by consulting
-                  the page at <a class="mainlink" id="mainlink"
-                  href="/atasks/${id}${condition}.xhtml"
-                  target="${accesstarget}">this link</a>.  Remember
-                  that you will not need to follow any links from the
-                  page nor press any buttons.
-                </div>   
+		  Please answer the preceding question by <a
+                  class="mainlink" id="mainlink"
+                  href="/atasks/${id}${condition}.xhtml?hash=${hash}"
+                  target="${accesstarget}">consulting the page at this
+                  link</a>.  Remember that you will not need to follow
+                  any links from the page nor press any buttons.
+		</div>   
               </div>
               <input type="hidden" id="taskid" name="taskid" value="${id}">
                 <!-- jsp parsing workaround -->

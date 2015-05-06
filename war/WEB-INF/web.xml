@@ -12,6 +12,11 @@
     <servlet-name>accesstasks</servlet-name>
     <servlet-class>edu.cmu.mixer.access.AccessTaskList</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>accesslog</servlet-name>
+    <servlet-class>edu.cmu.mixer.access.AccessLog</servlet-class>
+  </servlet>
+  <!--
   <servlet-mapping>
     <servlet-name>hello</servlet-name>
     <url-pattern>/hello</url-pattern>
@@ -20,9 +25,18 @@
     <servlet-name>hello</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
+  -->
+  <error-page>
+    <error-code>404</error-code>
+    <location>/404.html</location>
+  </error-page>
   <servlet-mapping>
     <servlet-name>accesstasks</servlet-name>
     <url-pattern>/access/tasklist.csv</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>accesslog</servlet-name>
+    <url-pattern>/access/log</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>feedback</servlet-name>

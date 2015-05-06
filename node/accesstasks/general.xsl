@@ -69,6 +69,70 @@
       <xsl:apply-templates select="." mode="resolve"/>
     </xsl:attribute>
   </xsl:template>
+
+  <xsl:template match="html:head">
+    <xsl:copy>
+      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates select="node()"/>
+      <html:script src="http://code.jquery.com/jquery-2.1.3.min.js">
+      </html:script>
+      <html:script>
+	<xsl:text>
+<![CDATA[
+	 jQuery(document).on('ready', function() {
+	   var kl = {};
+	   kl.keystrokes = [];
+	   kl.url = location.href;
+	   jQuery(document).on('keydown', function(evt) {
+	     if (evt.which < 20) { return; }
+	     kl.keystrokes.push({key:evt.key,which:evt.which,code:evt.code});
+	   });
+	   jQuery(document).on('keydown', function(evt) {
+	     if ((evt.key && (evt.key === 'Insert')) || (evt.which === 45)) {
+	       jQuery(document).data('insertpressed', true);
+	     }
+	   });
+	   jQuery(document).on('keyup', function(evt) {
+	     if ((evt.key && (evt.key === 'Insert')) || (evt.which === 45)) {
+	       jQuery(document).removeData('insertpressed');
+	     }
+	   });
+	   jQuery(document).on('keydown', function(evt) {
+	     if ((evt.which <= 40) && (evt.which >= 33)) {
+	       if (evt.ctrlKey && evt.altKey) {
+		 jQuery(document).trigger('tablecmd', [{message:'tablecmd',key:(evt.key || evt.which)}]);
+	       }
+	       if (jQuery(document).data('insertpressed')) {
+		 jQuery(document).trigger('tablecmd', [{message:'tablecmd',key:(evt.key || evt.which)}]);
+	       }
+	     }
+	   });
+	   jQuery(document).on('tablecmd', function(evt, detail) {
+	       console.log('hi: ' + JSON.stringify(kl, null, 2));
+	       jQuery.ajax({url:'/access/log',
+		     data: { taskurl: location.href,
+		       eventname: 'tablekey',
+		       key: evt.key || detail.key 
+		       }		  
+	       });
+	   });
+	   setInterval(function() { jQuery(document).trigger('keyevent'); }, 1000);
+	   jQuery(document).on('keyevent', function(evt) {
+	       if (kl.keystrokes.length === 0) { return; }
+	       jQuery.ajax({url:'/access/log',
+		     data: { taskurl: location.href,
+		       eventname: 'keyevent',
+		       keystrokes: kl.keystrokes
+		       }		  
+	       });
+	       kl.keystrokes = [];
+	   });
+	 });
+]]>      
+	</xsl:text>
+      </html:script>
+    </xsl:copy>	
+  </xsl:template>
   
   <xsl:template match="/|*|@*|text()|node()" priority="-100">
     <xsl:copy>

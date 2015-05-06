@@ -34,7 +34,8 @@ at.rez.extratags = [
   "sfmsg",
   "video",
   "source",
-  "glightbox"
+  "glightbox",
+  "bdi",
 ];
 
 at.procs = {};
