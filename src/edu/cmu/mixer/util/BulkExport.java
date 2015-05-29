@@ -194,10 +194,14 @@ public class BulkExport extends javax.servlet.http.HttpServlet {
         
         //useCache = useCache && (o.length() >= limit);
         
-        com.google.appengine.api.files.FileService fileService = null;
-        com.google.appengine.api.files.AppEngineFile file = null;
-        com.google.appengine.api.files.FileWriteChannel writeChannel = null;
-        
+        //com.google.appengine.api.files.FileService fileService = null;
+        //com.google.appengine.api.files.AppEngineFile file = null;
+        //com.google.appengine.api.files.FileWriteChannel writeChannel = null;
+
+	BulkFile file = null;
+	java.nio.channels.WritableByteChannel writeChannel = null;
+	org.json.JSONObject meta = new org.json.JSONObject();
+	
         if (format.equals("json")) {
           if (resp != null) {
             resp.setContentType("application/json");
@@ -205,21 +209,30 @@ public class BulkExport extends javax.servlet.http.HttpServlet {
           if (useCache) {
             String filename = String.format("%s_%d-%d.%s", type, offset, offset+limit-1, format);
             System.err.println("FILENAME: " + filename);
+
+	    meta.putOpt("mimetype", "application/json");
+	    file = BulkFile.create(filename, meta);
+	    writeChannel = file.openWriteChannel();
+	    /*
             fileService = com.google.appengine.api.files.FileServiceFactory.getFileService();
             file = fileService.createNewBlobFile("application/json", filename);
             boolean lock = true;
             writeChannel = fileService.openWriteChannel(file, lock);
-            
+	    */
+
+	    
             java.io.PrintWriter pw = new java.io.PrintWriter(java.nio.channels.Channels.newOutputStream(writeChannel));
             output = new java.io.PrintWriter(new TeeWriter(output, pw));
           }
           output.println(o.toString(2));
 
           if (useCache) {
-            writeChannel.closeFinally();
+	    //writeChannel.closeFinally();
+            writeChannel.close();
             com.google.appengine.api.datastore.Entity cacheItem = 
               new com.google.appengine.api.datastore.Entity(cacheKey);
-            cacheItem.setProperty("blobkey", fileService.getBlobKey(file).getKeyString());
+            //cacheItem.setProperty("blobkey", fileService.getBlobKey(file).getKeyString());
+            cacheItem.setProperty("blobkey", file.getBlobKey());
             cacheItem.setProperty("type", type);
             cacheItem.setProperty("offset", offset);
             ds.put(cacheItem);        
@@ -273,11 +286,17 @@ public class BulkExport extends javax.servlet.http.HttpServlet {
           if (useCache) {
             String filename = String.format("%s_%d-%d.%s", type, offset, offset+limit-1, format);
             System.err.println("FILENAME: " + filename);
+
+	    meta.putOpt("mimetype", "text/csv");
+	    file = BulkFile.create(filename, meta);
+	    writeChannel = file.openWriteChannel();
+	    /*
             fileService = com.google.appengine.api.files.FileServiceFactory.getFileService();
             file = fileService.createNewBlobFile("text/csv", filename);
             boolean lock = true;
             writeChannel = fileService.openWriteChannel(file, lock);
-            
+            */
+	    
             java.io.PrintWriter pw = new java.io.PrintWriter(java.nio.channels.Channels.newOutputStream(writeChannel));
             output = new java.io.PrintWriter(new TeeWriter(output, pw));
           }
@@ -309,10 +328,12 @@ public class BulkExport extends javax.servlet.http.HttpServlet {
         }
 
         if (useCache) {
-          writeChannel.closeFinally();
+          //writeChannel.closeFinally();
+          writeChannel.close();
           com.google.appengine.api.datastore.Entity cacheItem = 
             new com.google.appengine.api.datastore.Entity(cacheKey);
-          cacheItem.setProperty("blobkey", fileService.getBlobKey(file).getKeyString());
+          //cacheItem.setProperty("blobkey", fileService.getBlobKey(file).getKeyString());
+          cacheItem.setProperty("blobkey", file.getBlobKey());
           cacheItem.setProperty("type", type);
           cacheItem.setProperty("offset", offset);
           ds.put(cacheItem);        
