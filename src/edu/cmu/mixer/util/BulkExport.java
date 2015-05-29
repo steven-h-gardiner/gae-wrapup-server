@@ -34,6 +34,7 @@ public class BulkExport extends javax.servlet.http.HttpServlet {
 
     String url = req.getRequestURL().toString();
 
+    org.json.JSONObject jo = new org.json.JSONObject();
     try {
       org.json.JSONObject grok = ServletUtil.grokFile(url);
       System.err.println("GROK: " + grok.toString(2));
@@ -51,27 +52,36 @@ public class BulkExport extends javax.servlet.http.HttpServlet {
       if (format == null) {
         format = "json";
       }
+      
+      jo.putOnce("offset", grok.optString("lb", null));
+      jo.putOnce("limit", grok.optString("width", null));      
     } catch (Exception ex) {
       throw new Error(ex);
     }
 
 
-    String cacheKeyString = String.format("%s/%s?%s", "bulk", type, req.getQueryString());
-    com.google.appengine.api.datastore.Key cacheKey = 
-      com.google.appengine.api.datastore.KeyFactory.createKey("BulkCache", cacheKeyString);
     String deferParam = req.getParameter("defer");
     boolean defer = (deferParam != null) ? Boolean.parseBoolean(deferParam) : false;
-
-    org.json.JSONObject jo = new org.json.JSONObject();
+       
     try {
-      jo.putOpt("limit", req.getParameter("limit"));
-      jo.putOpt("offset", req.getParameter("offset"));
+      jo.putOnce("limit", req.getParameter("limit"));
+      jo.putOnce("offset", req.getParameter("offset"));
     } catch (Exception ex) {
       //ignore
     }
 
+    try {
+      System.err.println("JOJO: " + jo.toString(2));
+    } catch (Exception ex) {
+      //ignore
+    }
+    
     int limit = Integer.parseInt(jo.optString("limit", "1000"));
     int offset = Integer.parseInt(jo.optString("offset", "0"));    
+
+    String cacheKeyString = String.format("%s/%s?%s&offset=%s&limit=%s", "bulk", type, req.getQueryString(), offset, limit);
+    com.google.appengine.api.datastore.Key cacheKey = 
+      com.google.appengine.api.datastore.KeyFactory.createKey("BulkCache", cacheKeyString);
 
     try {
       String servletPath = req.getServletPath();
@@ -169,6 +179,10 @@ public class BulkExport extends javax.servlet.http.HttpServlet {
         }
         if (type.equals("Request")) {
           query = query.addSort("when",
+                                com.google.appengine.api.datastore.Query.SortDirection.ASCENDING);
+        }
+        if (type.equals("AccessEvent")) {
+          query = query.addSort("timestamp",
                                 com.google.appengine.api.datastore.Query.SortDirection.ASCENDING);
         }
         com.google.appengine.api.datastore.PreparedQuery pq = 
@@ -272,7 +286,10 @@ public class BulkExport extends javax.servlet.http.HttpServlet {
             columns.put("recordnum", "");
             columns.put("schema", "");
           }              
-          
+          if (type.equals("AccessEvent")) {
+            columns.put("answercorrect", "");
+          }
+	  
           for (int i = 0; i < o.length(); i++) {
             org.json.JSONObject row = o.optJSONObject(i);
             org.json.JSONArray cols = row.names();

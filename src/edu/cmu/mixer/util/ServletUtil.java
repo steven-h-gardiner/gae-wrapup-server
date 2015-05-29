@@ -45,6 +45,9 @@ public class ServletUtil {
     return json;
   }
 
+  public static java.util.regex.Pattern rangePatt =
+    java.util.regex.Pattern.compile("(\\p{Alpha}+)_(\\d+)(\\-|x)(\\d+)\\.?");
+    
   public static org.json.JSONObject grokFile(String filepath) throws org.json.JSONException {
     org.json.JSONObject grok = new org.json.JSONObject();
     
@@ -66,7 +69,20 @@ public class ServletUtil {
     for (int i = 0; i < parts.length(); i++) {
       basename = basename + parts.optString(i) + ".";
     }
-    grok.putOpt("basename", basename.substring(0,-1+basename.length()));
+    java.util.regex.Matcher m = rangePatt.matcher(basename);
+    if (m.matches()) {
+      grok.putOpt("basename", m.group(1));
+      grok.putOpt("lb", Integer.parseInt(m.group(2)));
+      String divider = m.group(3);
+      if ("x".equals(divider)) {
+	grok.putOpt("width", Integer.parseInt(m.group(4)));
+      } else {
+	grok.putOpt("ub", Integer.parseInt(m.group(4)));
+	grok.putOpt("width", grok.optInt("ub") - grok.optInt("lb"));
+      }
+    } else {
+      grok.putOpt("basename", basename.substring(0,-1+basename.length()));
+    }
 
     return grok;
   }
