@@ -52,7 +52,7 @@
 
               console.log("LOGME: " + JSON.stringify(data));
             });
-            jQuery("#consented").on('change', function() {
+            jQuery("#consented, #age").on('change', function() {
               jQuery(document).trigger("logconsent");
             });
             jQuery(".modality").on('change', function() {
@@ -71,7 +71,23 @@
         <div>
           Thanks for participating in this study!
         </div>
-        <h2 id="meta">Instructions</h2>
+	<h2 id="meta">About the study</h2>
+	<p>
+	  The purpose of the study is to determine whether websites
+	  presenting data as tables are easier to use with a screen
+	  reader than websites presenting the same information as a
+	  formatted list.
+	</p>
+	<p>
+	  The study is being conducted by Steven Gardiner, Anthony
+	  Tomasic and John Zimmerman, researchers at Carnegie Mellon
+	  University.  
+        </p>
+	<p>
+	  The study takes place online and will take between 20 and 40
+	  minutes.
+	</p>	  
+        <h2 id="procedure">Procedure</h2>
         <p>
           This study has three steps.
         </p>
@@ -114,9 +130,13 @@
             <p>
               <label><input type="checkbox" name="consented" class="consentBox"
               id="consented" _checked="false"></input>I have read and
-              agree to the consent form</label>
+              understood the consent form, and I agree to participate</label>
             </p>
-            <p class="offscreen">
+            <p>
+              <label><input type="checkbox" name="age" class="consentBox"
+              id="age" _checked="false"></input>I am over 18</label>
+            </p>
+            <p class="_offscreen">
               <label><input type="checkbox" name="screenreader" class="modality consentBox"
               id="screenreader" _checked="false"></input>I am using a
               screen reader to complete the study</label>

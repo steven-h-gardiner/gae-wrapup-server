@@ -49,4 +49,10 @@
     <property name="timestamp" direction="desc" />
   </datastore-index>
 
+  <datastore-index kind="AccessEvent" ancestor="false">
+    <property name="eventname" direction="asc" />
+    <property name="taskno" direction="asc" />
+    <property name="timestamp" direction="asc" />
+  </datastore-index>
+
 </datastore-indexes>
