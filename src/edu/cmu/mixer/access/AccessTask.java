@@ -41,31 +41,101 @@ public class AccessTask {
 
     o.putOpt("answers", answers);
     int taskno = answers.length();
-    o.putOpt("taskno", taskno);
     
-    session.setAttribute("answers", answers.toString());
-
     org.json.JSONObject orderings = edu.cmu.mixer.access.EventLog.getInstance().drawOrderings(o);
     o.putOpt("orderings", orderings);
+
+    //System.err.println("ORDERINGS: " + orderings.toString(2));
+
+    o.putOpt("pid", session.getAttribute("pid"));
+    try { o.putOnce("pid", request.getParameter("pid")); } catch (Exception ex) { /* ignore */ }
+    session.setAttribute("pid", o.optString("pid"));
+  
+    com.google.appengine.api.datastore.DatastoreService ds =
+      com.google.appengine.api.datastore.DatastoreServiceFactory.getDatastoreService();
+    
+    String bltext = (String) session.getAttribute("blacklist");
+    org.json.JSONObject blacklist = (bltext == null) ? null : new org.json.JSONObject(bltext);
+    if ((blacklist == null) && o.has("pid")) {
+      System.err.println("FORM BLACKLIST");
+      blacklist = new org.json.JSONObject();
+
+      //blacklist.put("20", true);
+
+      com.google.appengine.api.datastore.Query blq = 
+        new com.google.appengine.api.datastore.Query("Participant");
+      blq = blq.setFilter(new com.google.appengine.api.datastore.Query.FilterPredicate("ParticipantID",
+                                                                                       com.google.appengine.api.datastore.Query.FilterOperator.EQUAL,
+                                                                                       o.optString("pid", "")));
+      com.google.appengine.api.datastore.PreparedQuery blpq = ds.prepare(blq);
+
+      for (com.google.appengine.api.datastore.Entity result : blpq.asIterable()) {
+        o.putOpt("oldhash", result.getProperty("DataHash"));
+      }
+
+      blq = 
+        new com.google.appengine.api.datastore.Query("AccessEvent");
+      blq = blq.setFilter(com.google.appengine.api.datastore.Query.CompositeFilterOperator.and(new com.google.appengine.api.datastore.Query.FilterPredicate("eventname",
+                                                                                                                                                            com.google.appengine.api.datastore.Query.FilterOperator.EQUAL,
+                                                                                                                                                            "submitanswer"),
+                                                                                               new com.google.appengine.api.datastore.Query.FilterPredicate("hash",
+                                                                                                                                                            com.google.appengine.api.datastore.Query.FilterOperator.EQUAL,
+                                                                                                                                                            o.optString("oldhash", ""))));
+
+      System.err.println("PREP");
+      blpq = ds.prepare(blq);
+      System.err.println("QUERY");
+      for (com.google.appengine.api.datastore.Entity result : blpq.asIterable()) {
+        System.err.println("RESULT: " + result);
+        String bltaskid = (String) result.getProperty("taskid");
+        com.google.appengine.api.datastore.Key blkey =
+          com.google.appengine.api.datastore.KeyFactory.createKey("AccessTask", Long.parseLong(bltaskid));
+        com.google.appengine.api.datastore.Entity bltask = ds.get(blkey);
+        blacklist.putOpt(bltask.getProperty("taskno").toString(), true);
+      }
+      
+      session.setAttribute("blacklist", blacklist.toString());
+    }
+    o.putOpt("blacklist", blacklist);
+    
+    boolean blacklisted = true;
+
+    taskno--;
+    while (blacklisted) {
+      taskno++;
+      org.json.JSONArray taskorder = orderings.optJSONArray("taskorder");  
+      int pageno = taskorder.optInt(taskno, taskno);
+      o.putOpt("pageno", pageno);
+      if (blacklist.has(Integer.toString(pageno))) {
+        blacklisted = true;
+        answers.putOpt(Integer.toString(pageno), "NA");
+      } else {
+        blacklisted = false;
+      }
+    }
+    o.putOpt("taskno", taskno);
+
+    int realanswers = 0;
+    for (java.util.Iterator i = answers.keys(); i.hasNext(); ) {
+      String key = (String) i.next();
+      if (! answers.optString(key, "NA").equals("NA")) {
+        realanswers++;
+      } 
+    }
+    
+    org.json.JSONArray condorder = orderings.optJSONArray("condorder");
+    int condix = realanswers % (condorder.length());
+    o.putOpt("condix", condix);
+    int condition = condorder.optInt(condix);
+    o.putOpt("condition", condition);
 
     if (taskno >= numtasks) {
       o.putOpt("finished", true);
       return o;
     }
 
-    System.err.println("ORDERINGS: " + orderings.toString(2));
+    session.setAttribute("answers", answers.toString());
     
-  
-    org.json.JSONArray condorder = orderings.optJSONArray("condorder");
-    int condix = taskno % (condorder.length());
-    o.putOpt("condix", condix);
-    int condition = condorder.optInt(condix);
-    o.putOpt("condition", condition);
-
-    org.json.JSONArray taskorder = orderings.optJSONArray("taskorder");  
-    int pageno = taskorder.optInt(taskno, taskno);
-    o.putOpt("pageno.old", pageno);  
-
     org.json.JSONArray typeorder = orderings.optJSONArray("typeorder");
     org.json.JSONObject tasksByType = orderings.optJSONObject("tasksbytype");
     String tasktype = typeorder.optString(taskno);
@@ -74,9 +144,9 @@ public class AccessTask {
     //System.err.println("TBT : " + tasksByType  );
     org.json.JSONArray tasksOfType = tasksByType.optJSONArray(tasktype);
     o.putOpt("taskcands", tasksOfType);
-    int taskDraw = (int) Math.floor(Math.random() * tasksOfType.length());
-    int staskno = tasksOfType.getJSONObject(taskDraw).optInt("taskno");
-    o.putOpt("pageno", staskno);
+    //int taskDraw = (int) Math.floor(Math.random() * tasksOfType.length());
+    //int staskno = tasksOfType.getJSONObject(taskDraw).optInt("taskno");
+    //o.putOpt("pageno.bytasktype", staskno);
     
     System.err.println("OOOO: " + o.toString(2));
     
@@ -85,8 +155,6 @@ public class AccessTask {
       new com.google.appengine.api.datastore.Entity("AccessTask");
     // default so non-null but never stored to datastore
     
-    com.google.appengine.api.datastore.DatastoreService ds =
-      com.google.appengine.api.datastore.DatastoreServiceFactory.getDatastoreService();
     com.google.appengine.api.datastore.Query query = 
       new com.google.appengine.api.datastore.Query("AccessTask");
     com.google.appengine.api.datastore.PreparedQuery pq = null;

@@ -39,6 +39,9 @@
    <jsp:expression>o.optString("uuid")</jsp:expression>
   </c:set>
   -->
+  <c:set var="pid">
+   <jsp:expression>o.optString("pid")</jsp:expression>
+  </c:set>
   <c:set var="hash">
    <jsp:expression>o.optString("hash")</jsp:expression>
   </c:set>
@@ -185,6 +188,9 @@
                   any links from the page nor press any buttons.
 		</div>   
               </div>
+              <input type="hidden" id="pid" name="pid" value="${pid}">
+                <!-- jsp parsing workaround -->
+              </input>
               <input type="hidden" id="taskid" name="taskid" value="${id}">
                 <!-- jsp parsing workaround -->
               </input>

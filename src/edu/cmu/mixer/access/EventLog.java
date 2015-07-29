@@ -136,7 +136,7 @@ public class EventLog {
 
       orderingCache.putOpt("tasksbytype", this.getTasksByType());
     }
-    System.err.println("ORDERING CACHE: " + orderingCache.toString(2));
+    //System.err.println("ORDERING CACHE: " + orderingCache.toString(2));
 
     if (orderingCache.has(info.optString("sessionid"))) {
       return orderingCache.optJSONObject(info.optString("sessionid"));
