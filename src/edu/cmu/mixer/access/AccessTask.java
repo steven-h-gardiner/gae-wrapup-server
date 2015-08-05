@@ -16,6 +16,7 @@ public class AccessTask {
 
     o.putOpt("taskid", request.getParameter("taskid"));
     o.putOpt("taskno", request.getParameter("taskno"));
+    o.putOpt("pageno", request.getParameter("pageno"));
     o.putOpt("answer", request.getParameter("answer"));
     o.putOpt("condition", request.getParameter("condition"));
     
@@ -28,7 +29,7 @@ public class AccessTask {
     if (answers == null) {
       answers = new org.json.JSONObject();
     }
-    answers.putOpt(o.optString("taskid", null), o.optString("answer", null));
+    answers.putOpt(o.optString("pageno", o.optString("taskid", null)), o.optString("answer", null));
     
     o.putOpt("eventname", "submitanswer");
     if (o.has("taskid") &&  (! o.optString("taskid").equals(""))) {
@@ -96,29 +97,36 @@ public class AccessTask {
       
       session.setAttribute("blacklist", blacklist.toString());
     }
+    if (blacklist == null) {
+      blacklist = new org.json.JSONObject();
+    }
     o.putOpt("blacklist", blacklist);
     
     boolean blacklisted = true;
 
-    taskno--;
-    while (blacklisted) {
-      taskno++;
-      org.json.JSONArray taskorder = orderings.optJSONArray("taskorder");  
-      int pageno = taskorder.optInt(taskno, taskno);
-      o.putOpt("pageno", pageno);
-      if (blacklist.has(Integer.toString(pageno))) {
-        blacklisted = true;
-        answers.putOpt(Integer.toString(pageno), "NA");
-      } else {
-        blacklisted = false;
+    if (blacklist != null) {
+      taskno = -1;
+      while (blacklisted) {
+        taskno++;
+        org.json.JSONArray taskorder = orderings.optJSONArray("taskorder");  
+        int pageno = taskorder.optInt(taskno, taskno);
+        o.putOpt("pageno", pageno);
+        if (blacklist.has(Integer.toString(pageno))) {
+          blacklisted = true;
+          answers.putOpt(Integer.toString(pageno), "__NA__");
+        } else if (answers.has(Integer.toString(pageno))) {
+          blacklisted = true;
+        } else {
+          blacklisted = false;
+        }
       }
-    }
+    } 
     o.putOpt("taskno", taskno);
 
     int realanswers = 0;
     for (java.util.Iterator i = answers.keys(); i.hasNext(); ) {
       String key = (String) i.next();
-      if (! answers.optString(key, "NA").equals("NA")) {
+      if (! answers.optString(key, "__NA__").equals("__NA__")) {
         realanswers++;
       } 
     }

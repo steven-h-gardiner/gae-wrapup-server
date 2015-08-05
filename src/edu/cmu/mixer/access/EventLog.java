@@ -145,6 +145,8 @@ public class EventLog {
     org.json.JSONObject taskorders = orderingCache.optJSONObject("taskorders");
     org.json.JSONObject condorders = orderingCache.optJSONObject("condorders");
     org.json.JSONObject typeorders = orderingCache.optJSONObject("typeorders");
+
+    System.err.println("NEW ORDER!");
     
     org.json.JSONObject counts = new org.json.JSONObject();
     for (String orderid : org.json.JSONObject.getNames(taskorders)) {
