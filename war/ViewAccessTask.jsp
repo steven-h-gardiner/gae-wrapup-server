@@ -54,6 +54,9 @@
   <c:set var="taskno1">
    <jsp:expression>1+o.optInt("taskno", 0)</jsp:expression>
   </c:set>
+  <c:set var="pageno">
+   <jsp:expression>o.optInt("pageno", 0)</jsp:expression>
+  </c:set>
   <c:set var="numtasks">
    <jsp:expression>atask.numtasks</jsp:expression>
   </c:set>
@@ -192,6 +195,9 @@
                 <!-- jsp parsing workaround -->
               </input>
               <input type="hidden" id="taskid" name="taskid" value="${id}">
+                <!-- jsp parsing workaround -->
+              </input>
+              <input type="hidden" id="pageno" name="pageno" value="${pageno}">
                 <!-- jsp parsing workaround -->
               </input>
               <input type="hidden" id="taskno" name="taskno" value="${taskno}">
