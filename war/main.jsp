@@ -136,7 +136,7 @@
               <label><input type="checkbox" name="age" class="consentBox"
               id="age" _checked="false"></input>I am over 18</label>
             </p>
-            <p class="_offscreen">
+            <p hidden="true" aria-hidden="false">
               <label><input type="checkbox" name="screenreader" class="modality consentBox"
               id="screenreader" _checked="false"></input>I am using a
               screen reader to complete the study</label>
