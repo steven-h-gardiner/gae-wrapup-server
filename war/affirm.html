@@ -1,0 +1,70 @@
+<html>
+  <head>
+    <title>Consent Affirmation Form</title>
+    <script src="./js/jquery-2.1.3.min.js"></script>
+  </head>
+  <body style="padding: 2em">
+    <form method="get">
+      <p>
+        Please check the boxes below to indicate that you've
+        read and understood the consent information presented in
+        the <a href="onlineConsent.html">consent form</a>.  Any
+        questions about any part of the consent form or process
+        can be addressed to the investigators, whose contact
+        information is listed on the form.
+      </p>                      
+      <p style="display: none">
+        <label><input type="text" name="hash"
+                      id="hash"></input>Participation Code</label>
+      </p>
+      <p>
+        <label><input type="checkbox" name="consented" class="consentBox"
+                      id="consented" _checked="false"></input>I have read and
+          understood the consent form, and I agree to participate</label>
+      </p>
+      <p>
+        <label><input type="checkbox" name="age" class="consentBox"
+                      id="age" _checked="false"></input>I am over 18</label>
+      </p>
+      <p hidden="true" aria-hidden="false">
+        <label><input type="radio" name="modality" value="screenreader" class="modality consentBox"
+                      id="screenreader" _checked="false"></input>I am using a
+          screen reader to complete the study</label>
+      </p>          
+      <p aria-hidden="true">
+        <label><input type="radio" name="modality" value="viz" class="modality consentBox"
+                      id="viz" _checked="false"></input>I am using a
+          visual browser to complete the study</label>
+      </p>
+      <input id="submit" type="submit" value="Submit"></input>
+    </form>
+  </body>
+  <script>
+    var affirm = {};
+    jQuery(document).on('ready', function() {
+      var hashdata = document.location.hash.substr(1).split(/\&amp;/).reduce(function(accum,kv) {
+        var kvp = kv.split(/=/);
+        accum[kvp[0]] = kvp.slice(1).join('=');
+        return accum;
+      }, {});
+      //alert("HI: " + JSON.stringify(hashdata));
+      if (hashdata.hash) {
+        jQuery('#hash').val(hashdata.hash);
+      }
+      jQuery('#submit').on('click', function() {
+        if (! affirm.timer) { return; }
+        //alert('submit');
+        clearTimeout(affirm.timer);
+        delete affirm.timer;
+      });
+      jQuery('.consentBox').on('change', function() {
+        if (affirm.timer) { return; }
+        affirm.timer = setTimeout(function() {
+          //alert('autosubmit');
+          delete affirm.timer;
+          jQuery('#submit').click();    
+        }, 15000);
+      });
+    });
+  </script>
+</html>
