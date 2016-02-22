@@ -92,6 +92,8 @@ at.eq.on('tasklist', function() {
   at.procs.filter = new at.mods.eachline(function(line) {
     var that = this;
 
+    if (line === '') { return; }
+      
     var output = [];
     
     console.error("LINE: %s", line);
