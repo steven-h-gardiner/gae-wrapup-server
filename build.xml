@@ -219,4 +219,14 @@
     </exec>
   </target>
 
+  <target name="jars" depends="dist">
+    <mkdir dir="jars"/>
+    <jar file="jars/wrapup.jar">
+      <fileset dir="war/WEB-INF/classes">
+        <include name="**/*.class" />
+      </fileset>
+    </jar>
+
+  </target>
+  
 </project>

@@ -146,6 +146,8 @@ at.eq.on('tasklist', function() {
                                                 "bash -"].join(" | ")]);
 
   at.procs.filter2 = new at.mods.eachline(function(line) {
+    if (line === '') { return; }
+        
     var that = this;
 
     var output = [];
