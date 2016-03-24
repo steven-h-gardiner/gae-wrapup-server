@@ -28,6 +28,7 @@ at.rez.extratags = [
   "time",
   "svg",
   "g",
+  "h",
   "path",
   "canvas",
   "fblike",
@@ -36,6 +37,7 @@ at.rez.extratags = [
   "source",
   "glightbox",
   "bdi",
+  "hgroup",  
 ];
 
 at.procs = {};
@@ -207,14 +209,19 @@ at.eq.on('tasklist', function() {
 				    require.resolve("./general.xsl"), "-",
 				    "|", "xmllint", "--format", "--nsclean", "-",
 				    "|", "tee", "{1.}0.xhtml",
+				    "|", "tee", "{1.}0.html",
 				    "|", "xsltproc", require.resolve("./underuse.xsl"), "-",
 				    "|", "xmllint", "--format", "--nsclean", "-",
 				    "|", "perl", "-pe", "'s@html:@@g;'",
 				    "|", "tee", "{1.}1.xhtml",
+				    "|", "tee", "{1.}1.html",
 				    "|", "xsltproc", require.resolve("./overuse.xsl"), "-",
 				    "|", "xmllint", "--format", "--nsclean", "-",
 				    "|", "perl", "-pe", "'s@html:@@g;'",
-				    ">", "{1.}3.xhtml"].join(" ")]);
+				    "|", "tee", "{1.}3.xhtml",
+				    "|", "tee", "{1.}3.html",
+				    "> /dev/null",
+				   ].join(" ")]);
   
   if (at.procs.curltee) {
     at.procs.curl.stdout.pipe(at.procs.curltee.stdin);

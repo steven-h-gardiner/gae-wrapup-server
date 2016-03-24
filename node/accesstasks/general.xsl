@@ -141,6 +141,10 @@
       </html:script>
     </xsl:copy>	
   </xsl:template>
+
+  <xsl:template match="html:iframe" />
+  <xsl:template match="html:link[contains(@href, '/cache/minify/000000')]" />
+  <xsl:template match="html:link[contains(@href, 'ui.racingpost.com/release/v131')]" />
   
   <xsl:template match="/|*|@*|text()|node()" priority="-100">
     <xsl:copy>

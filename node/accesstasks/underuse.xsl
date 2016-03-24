@@ -43,6 +43,7 @@
 	  <xsl:element name="columns"/>
 	</xsl:message>
 	<html:table>
+	  <!--<html:caption>Injected Table</html:caption>-->
           <html:tr>
             <xsl:for-each select="exslt:node-set($columns)//column">
               <html:th>

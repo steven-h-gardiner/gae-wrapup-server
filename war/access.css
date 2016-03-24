@@ -25,6 +25,19 @@ textarea {
     padding: 1em;
     border-radius: 5px;
 }
+.validation {
+    text-align: center;
+    padding: 8px;
+    background: linear-gradient(to right, rgba(240,162,45,1.0), rgba(240,162,45,0.9) 100%, rgba(240,162,45,0.6) 100%, rgba(240,162,45,0.3));
+    font-weight: bold;
+    border-radius: 5px;
+}
+div.interstitial {
+    text-align: center;
+    padding: 8px;
+    font-weight: bold;
+    border-radius: 5px;
+}
 .progress {
     text-align: center;
     padding: 8px;

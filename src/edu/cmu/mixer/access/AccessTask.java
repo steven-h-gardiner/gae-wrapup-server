@@ -6,6 +6,76 @@ public class AccessTask {
     this.numtasks = numtasks;
   }
 
+  public static org.json.JSONObject getGuideObject(javax.servlet.http.HttpSession session,
+						   javax.servlet.http.HttpServletRequest request) throws Exception {
+    if (session.getAttribute("guide") != null) {
+      org.json.JSONObject guide = new org.json.JSONObject((String) session.getAttribute("guide"));
+      //guide.putOpt("literal", (String) session.getAttribute("guide"));
+      return guide;
+    }
+
+    org.json.JSONObject guide = new org.json.JSONObject();
+
+    guide.putOpt("taskno", 0);
+    guide.putOpt("mode", "practice");
+
+    org.json.JSONArray tasks = EventLog.getInstance().getStudyTasks();
+    guide.putOpt("tasks", tasks);
+
+    org.json.JSONObject firstTask = tasks.optJSONObject(0);
+    guide.putOpt("mintask", firstTask.optString("taskno"));
+
+    org.json.JSONObject lastTask = tasks.optJSONObject(tasks.length() - 1);
+    guide.putOpt("maxtask", lastTask.optString("taskno"));
+
+    guide.putOpt("numtasks", tasks.length());
+    guide.putOpt("numtasks2", tasks.length() / 2);
+
+    org.json.JSONObject task = tasks.optJSONObject(guide.optInt("taskno", 0));
+    guide.putOpt("task", task);
+    guide.putOpt("taskid", task.optInt("taskid"));;
+
+    guide.putOpt("sessionid", session.getId());
+    guide.putOpt("sessionhash",
+		 Integer.toString(Math.abs(session.getId().hashCode()), 32).toUpperCase());
+
+    org.json.JSONArray cookies = new org.json.JSONArray();
+    org.json.JSONObject cookiehash = new org.json.JSONObject();
+    System.err.println("REQ: " + request);
+    System.err.println("COOKIES: " + request.getCookies());
+    if (request.getCookies() != null) {
+      for (javax.servlet.http.Cookie cookie : request.getCookies()) {
+	org.json.JSONObject o = new org.json.JSONObject();
+	o.putOpt("name", cookie.getName());
+	o.putOpt("value", cookie.getValue());
+	o.putOpt("maxage", cookie.getMaxAge());
+	
+	cookiehash.putOpt(cookie.getName(), cookie.getValue());
+	
+	cookies.put(o);
+      }
+    }
+
+    java.util.Calendar cal = new java.util.GregorianCalendar();
+    if (cookiehash.has("tablefirst")) {
+      guide.putOpt("tfsrc", "cookies");
+      guide.putOpt("tablefirst", Boolean.parseBoolean(cookiehash.getString("tablefirst")));
+    } else {
+      guide.putOpt("tfsrc", "millis");
+      guide.putOpt("millis", cal.get(java.util.Calendar.MILLISECOND));
+      guide.putOpt("tablefirst", cal.get(java.util.Calendar.MILLISECOND) > 500);
+    }
+    
+    guide.putOpt("cookies", cookies);
+    //guide.putOpt("tablefirst", 
+    
+    guide.putOpt("taskno1", 1+guide.optInt("taskno", 0));
+    session.setAttribute("guide", guide.toString());
+    guide.putOpt("new", true);
+    
+    return guide;
+  }
+    
   public org.json.JSONObject process(javax.servlet.http.HttpSession session,
 				     javax.servlet.http.HttpServletRequest request) throws Exception {
     org.json.JSONObject o = new org.json.JSONObject();
@@ -46,7 +116,7 @@ public class AccessTask {
     org.json.JSONObject orderings = edu.cmu.mixer.access.EventLog.getInstance().drawOrderings(o);
     o.putOpt("orderings", orderings);
 
-    //System.err.println("ORDERINGS: " + orderings.toString(2));
+    System.err.println("ORDERINGS: " + orderings.toString(2));
 
     o.putOpt("pid", session.getAttribute("pid"));
     try { o.putOnce("pid", request.getParameter("pid")); } catch (Exception ex) { /* ignore */ }
@@ -146,6 +216,7 @@ public class AccessTask {
     
     org.json.JSONArray typeorder = orderings.optJSONArray("typeorder");
     org.json.JSONObject tasksByType = orderings.optJSONObject("tasksbytype");
+    if (typeorder != null) {
     String tasktype = typeorder.optString(taskno);
     o.putOpt("tasktype", tasktype);
     //System.err.println("OOOO: " + o.toString(2));
@@ -155,7 +226,7 @@ public class AccessTask {
     //int taskDraw = (int) Math.floor(Math.random() * tasksOfType.length());
     //int staskno = tasksOfType.getJSONObject(taskDraw).optInt("taskno");
     //o.putOpt("pageno.bytasktype", staskno);
-    
+    }
     System.err.println("OOOO: " + o.toString(2));
     
   

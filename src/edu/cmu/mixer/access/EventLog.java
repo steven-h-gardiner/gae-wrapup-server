@@ -49,6 +49,37 @@ public class EventLog {
     return response;
   }
 
+  public org.json.JSONArray getStudyTasks() throws Exception {
+    org.json.JSONArray tasks = new org.json.JSONArray();
+
+    com.google.appengine.api.datastore.Query query = 
+      new com.google.appengine.api.datastore.Query("AccessTask");
+    query =
+      query.setFilter(com.google.appengine.api.datastore.Query.CompositeFilterOperator.and(
+											   new com.google.appengine.api.datastore.Query.FilterPredicate("taskno",
+																			com.google.appengine.api.datastore.Query.FilterOperator.GREATER_THAN_OR_EQUAL,
+																			200),
+											   new com.google.appengine.api.datastore.Query.FilterPredicate("taskno",
+																			com.google.appengine.api.datastore.Query.FilterOperator.LESS_THAN,
+																			300)));
+    query = query.addSort("taskno");
+    com.google.appengine.api.datastore.PreparedQuery pq = ds.prepare(query);
+
+    for (com.google.appengine.api.datastore.Entity result : pq.asIterable()) {
+      org.json.JSONObject task = new org.json.JSONObject();
+      Long taskid = (Long) result.getProperty("taskno");      
+      task.putOpt("taskid", taskid);
+      task.putOpt("practice", taskid == 200);
+
+      task.putOpt("question", result.getProperty("question"));
+      task.putOpt("ataskid", result.getKey().getId());
+      
+      tasks.put(task);
+    }
+    
+    return tasks;
+  }
+    
   private org.json.JSONObject getTasksByType() throws Exception {
     org.json.JSONObject tasks = new org.json.JSONObject();
     com.google.appengine.api.datastore.Query query = 
@@ -136,7 +167,7 @@ public class EventLog {
 
       orderingCache.putOpt("tasksbytype", this.getTasksByType());
     }
-    //System.err.println("ORDERING CACHE: " + orderingCache.toString(2));
+    System.err.println("ORDERING CACHE: " + orderingCache.toString(2));
 
     if (orderingCache.has(info.optString("sessionid"))) {
       return orderingCache.optJSONObject(info.optString("sessionid"));
