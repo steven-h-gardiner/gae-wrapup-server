@@ -358,6 +358,48 @@ public class EventLog {
       }
     }
   }
+
+
+  public static class TableFirstCounter implements com.google.appengine.api.taskqueue.DeferredTask {
+    public void run() {
+      try {
+        com.google.appengine.api.datastore.DatastoreService ds =
+          com.google.appengine.api.datastore.DatastoreServiceFactory.getDatastoreService();
+	com.google.appengine.api.datastore.Query query = 
+	  new com.google.appengine.api.datastore.Query("AccessEvent");
+	query = query.setFilter(new com.google.appengine.api.datastore.Query.FilterPredicate("taskno",
+											     com.google.appengine.api.datastore.Query.FilterOperator.EQUAL,
+											     "0"));
+	com.google.appengine.api.datastore.PreparedQuery pq = ds.prepare(query);
+	int trues = 0;
+	int falses = 0;
+	for (com.google.appengine.api.datastore.Entity result : pq.asIterable()) {
+	  String target = (String) result.getProperty("target");
+	  if ((target != null) && (! target.equals(""))) {
+	    if (target.startsWith("tablefirst=")) {
+	      boolean tablefirst = Boolean.parseBoolean(target.substring(11));
+	      if (tablefirst) {
+		trues++;
+	      } else {
+		falses++;
+	      }
+	    }
+	  }	  
+	}
+	
+	com.google.appengine.api.datastore.Entity studySession =
+	  new com.google.appengine.api.datastore.Entity("StudySession", "counts");
+	studySession.setProperty("trues", trues);
+	studySession.setProperty("falses", falses);
+
+	ds.put(studySession);
+      } catch (Exception ex) {
+        ex.printStackTrace(System.err);
+      }
+    }
+  }
+
+
   
   public boolean getTableFirst(String ipAddr) throws Exception {
     return getTableFirst(ipAddr, 1000*60*60*3); // default 3 hours
@@ -388,11 +430,16 @@ public class EventLog {
         studySession =
           ds.get(com.google.appengine.api.datastore.KeyFactory.createKey("StudySession", "counts"));
         if (studySession != null) {
-          int trues = (int) studySession.getProperty("trues");
-          int falses = (int) studySession.getProperty("falses");
-          tablefirst = (trues < falses);
+          long trues = (long) studySession.getProperty("trues");
+          long falses = (long) studySession.getProperty("falses");
+	  if (trues != falses) {
+	    tablefirst = (trues < falses);
+	  }
         }
+      } catch (Exception ex) {
+	ex.printStackTrace(System.err);
       }
+    }
 
     studySession = new com.google.appengine.api.datastore.Entity("StudySession", ipAddr);
     studySession.setProperty("tablefirst", tablefirst);
@@ -402,7 +449,7 @@ public class EventLog {
       com.google.appengine.api.taskqueue.QueueFactory.getDefaultQueue();
     queue.add(com.google.appengine.api.taskqueue.TaskOptions.Builder.withPayload(new EntityDeleter("StudySession", ipAddr)).countdownMillis(expiration));
 
-    queue.add(com.google.appengine.api.taskqueue.TaskOptions.Builder.withPayload(new TableFirstCounter()).countdownMillis(1000*60*10)); // 10 min
+    queue.add(com.google.appengine.api.taskqueue.TaskOptions.Builder.withPayload(new TableFirstCounter()).countdownMillis(1000*60*5)); // 5 min
     
     return tablefirst;
   }
