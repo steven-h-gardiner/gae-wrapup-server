@@ -3,8 +3,7 @@
   "main": "main.js",
   "dependencies": {
     "nomnom": "*",
-    "eachline": "*",
-    "stdlog": "*"
+    "eachline": "*"
   },
   "version": "0.0.1"
 }

@@ -38,6 +38,16 @@
   </datastore-index>
 
   <datastore-index kind="AccessEvent" ancestor="false">
+    <property name="taskno" direction="asc" />
+    <property name="timestamp" direction="desc" />
+  </datastore-index>
+
+  <datastore-index kind="AccessEvent" ancestor="false">
+    <property name="timestamp" direction="desc" />
+    <property name="taskno" direction="asc" />
+  </datastore-index>
+
+  <datastore-index kind="AccessEvent" ancestor="false">
     <property name="eventname" direction="asc" />
     <property name="taskid" direction="asc" />
     <property name="answercorrect" direction="desc" />

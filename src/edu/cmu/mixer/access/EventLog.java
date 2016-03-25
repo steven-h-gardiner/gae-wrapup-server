@@ -49,6 +49,7 @@ public class EventLog {
     return response;
   }
 
+    
   public org.json.JSONArray getStudyTasks() throws Exception {
     org.json.JSONArray tasks = new org.json.JSONArray();
 
@@ -339,6 +340,71 @@ public class EventLog {
 	ex.printStackTrace(System.err);
       }
     }
+  }
+
+  public static class EntityDeleter implements com.google.appengine.api.taskqueue.DeferredTask {
+    public String kind;
+    public String strKey;
+    public EntityDeleter(String kind, String strKey) { this.kind = kind; this.strKey = strKey; }
+    public void run() {
+      try {
+        com.google.appengine.api.datastore.DatastoreService ds =
+          com.google.appengine.api.datastore.DatastoreServiceFactory.getDatastoreService();
+	com.google.appengine.api.datastore.Entity entity =
+          ds.get(com.google.appengine.api.datastore.KeyFactory.createKey(kind, strKey));
+        ds.delete(entity.getKey());
+      } catch (Exception ex) {
+        ex.printStackTrace(System.err);
+      }
+    }
+  }
+  
+  public boolean getTableFirst(String ipAddr) throws Exception {
+    return getTableFirst(ipAddr, 1000*60*60*3); // default 3 hours
+  }
+
+  public boolean getTableFirst(String ipAddr, long expiration) throws Exception {
+
+    com.google.appengine.api.datastore.Entity studySession = null;
+    
+    if (expiration <= 0) {
+      //new EntityDeleter("StudySession", ipAddr).run();
+    } else {
+      try {
+        studySession = 
+          ds.get(com.google.appengine.api.datastore.KeyFactory.createKey("StudySession", ipAddr));
+        if (studySession != null) {
+          return (boolean) studySession.getProperty("tablefirst");
+        }
+      } catch (Exception ex) {
+        ex.printStackTrace(System.err);
+      }
+    }
+
+    java.util.Calendar cal = new java.util.GregorianCalendar();
+    boolean tablefirst = (cal.get(cal.MILLISECOND) > 500);
+    if (true) {
+      try {
+        studySession =
+          ds.get(com.google.appengine.api.datastore.KeyFactory.createKey("StudySession", "counts"));
+        if (studySession != null) {
+          int trues = (int) studySession.getProperty("trues");
+          int falses = (int) studySession.getProperty("falses");
+          tablefirst = (trues < falses);
+        }
+      }
+
+    studySession = new com.google.appengine.api.datastore.Entity("StudySession", ipAddr);
+    studySession.setProperty("tablefirst", tablefirst);
+
+    ds.put(studySession);
+    com.google.appengine.api.taskqueue.Queue queue = 
+      com.google.appengine.api.taskqueue.QueueFactory.getDefaultQueue();
+    queue.add(com.google.appengine.api.taskqueue.TaskOptions.Builder.withPayload(new EntityDeleter("StudySession", ipAddr)).countdownMillis(expiration));
+
+    queue.add(com.google.appengine.api.taskqueue.TaskOptions.Builder.withPayload(new TableFirstCounter()).countdownMillis(1000*60*10)); // 10 min
+    
+    return tablefirst;
   }
 
 }

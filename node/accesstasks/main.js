@@ -2,11 +2,11 @@ var at = {};
 
 at.mods = {};
 at.mods.cp = require('child_process');
-at.mods.stdlog = require('stdlog');
+//at.mods.stdlog = require('stdlog');
 //at.mods.luigi = require('luigi');
 at.mods.eachline = require('eachline');
 
-at.logger = at.mods.stdlog.call();
+//at.logger = at.mods.stdlog.call();
 
 at.rez = {};
 
@@ -82,7 +82,7 @@ at.eq.on('task', function(spec) {
 
 });
 at.eq.on('tasklist', function() {
-  at.logger.info('hi');
+  //at.logger.info('hi');
 
   at.procs.curl = at.mods.cp.spawn('curl', ['-s', [at.rez.wrapup.prefix, at.rez.wrapup.path].join("")]);
 
@@ -110,7 +110,7 @@ at.eq.on('tasklist', function() {
     at.eq.emit('task', spec);
 
     console.error('task %j', spec);
-    at.logger.info('task %j', spec);
+    //at.logger.info('task %j', spec);
 
     Object.keys(spec.downloads).forEach(function(key) {
       var download = spec.downloads[key];

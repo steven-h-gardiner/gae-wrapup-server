@@ -39,6 +39,7 @@ public class AccessTask {
     guide.putOpt("sessionhash",
 		 Integer.toString(Math.abs(session.getId().hashCode()), 32).toUpperCase());
 
+    /*
     org.json.JSONArray cookies = new org.json.JSONArray();
     org.json.JSONObject cookiehash = new org.json.JSONObject();
     System.err.println("REQ: " + request);
@@ -65,8 +66,12 @@ public class AccessTask {
       guide.putOpt("millis", cal.get(java.util.Calendar.MILLISECOND));
       guide.putOpt("tablefirst", cal.get(java.util.Calendar.MILLISECOND) > 500);
     }
+    */
+
+    //guide.putOpt("tablefirst", EventLog.getInstance().getTableFirst(request.getRemoteAddr(), 1000 * 60 * 2));
+    guide.putOpt("tablefirst", EventLog.getInstance().getTableFirst(request.getRemoteAddr()));
     
-    guide.putOpt("cookies", cookies);
+    //guide.putOpt("cookies", cookies);
     //guide.putOpt("tablefirst", 
     
     guide.putOpt("taskno1", 1+guide.optInt("taskno", 0));

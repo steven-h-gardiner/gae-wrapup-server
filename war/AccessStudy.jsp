@@ -5,15 +5,21 @@
   <jsp:scriptlet>
 <![CDATA[
 
-  
   if (request.getParameter("flush") != null) {
+    edu.cmu.mixer.access.EventLog.getInstance().getTableFirst(request.getRemoteAddr(), 0);
     session.invalidate();
     response.sendRedirect("/AccessStudy.jsp" + ((request.getParameter("debug") == null) ? "" : "?debug=true"));
     return;
   }
 
+  org.json.JSONObject event = new org.json.JSONObject();
+
   org.json.JSONObject guide = edu.cmu.mixer.access.AccessTask.getGuideObject(session, request);
   guide.putOpt("debug", (request.getParameter("debug") != null) ? "debug" : null);
+  guide.putOpt("method", (request.getParameter("debug") != null) ? "post" : "get");
+
+  event.putOpt("sessionid", guide.optString("sessionid"));
+  event.putOpt("hash", guide.optString("sessionhash"));
 
   org.json.JSONObject answers = new org.json.JSONObject();
   try {
@@ -26,12 +32,23 @@
       org.json.JSONObject answer = new org.json.JSONObject();
       answer.putOpt("answer", request.getParameter("answer"));
       answer.putOpt("taskid", request.getParameter("taskid"));
+      answer.putOpt("ataskid", request.getParameter("ataskid"));
+      answer.putOpt("condition", request.getParameter("condition"));
       
       if (answer.optString("answer", "").trim().equals("")) {
         guide.putOpt("validation", "nullanswer");
 	throw new Exception("answer should not be empty!");
       }
-      
+
+      event.putOpt("taskno", answers.length());
+      event.putOpt("taskid", answer.optString("ataskid"));
+      event.putOpt("condition", answer.optString("condition"));
+      event.putOpt("eventname", "submitanswer");
+      event.putOpt("answer", answer.optString("answer"));
+
+      guide.putOpt("answersubmission", 
+                   edu.cmu.mixer.access.EventLog.getInstance().log(event));
+
       answers.put(answer.optString("taskid"), answer);
       session.setAttribute("answers", answers.toString());
     }
@@ -44,12 +61,20 @@
 
   //guide.put("mode", "ouch");
 
+  guide.putOpt("ip", request.getRemoteAddr());
 
   org.json.JSONArray tasks = guide.optJSONArray("tasks");
   if (tasks == null) { tasks = new org.json.JSONArray(); }
 
   int tasknum = guide.optInt("tasknum", tasks.length());
-  if (answers.length() > tasknum) {
+  if (answers.length() >= tasknum) {
+    event.putOpt("taskno", answers.length());
+    event.putOpt("eventname", "confirmtasks");
+    event.remove("answer");
+  
+    guide.putOpt("confirmtasks", 
+                 edu.cmu.mixer.access.EventLog.getInstance().log(event));
+
     response.sendRedirect("/ConfirmTasks.jsp?numtasks=" + tasknum);
     return;
   }
@@ -61,9 +86,9 @@
   
   guide.putOpt("answers", answers);
   guide.putOpt("task", task);
-
+  
   boolean useTable = (answers.length() > guide.optInt("tasknum2", tasks.length() / 2));
-  if (false) { // invert for tablefirst
+  if (guide.optString("tablefirst", "false").equals("true")) { // invert for tablefirst
     useTable = ! useTable; 
   }
   if (task.optBoolean("practice", false)) {
@@ -81,8 +106,19 @@
     guide.putOpt("interstitial", "interstitial");
   }
   session.setAttribute("mode", guide.optString("mode", ""));
+
+  event.putOpt("target", "tablefirst=" + guide.optString("tablefirst", "unset"));
+  event.putOpt("taskno", answers.length());
+  event.putOpt("taskid", task.optString("ataskid"));
+  event.putOpt("condition", guide.optString("condition"));
+  event.putOpt("eventname", "viewtask");
+  event.remove("answer");
   
-  response.addCookie(new javax.servlet.http.Cookie("tablefirst", guide.optString("tablefirst", "false")));
+  guide.putOpt("questionview", 
+               edu.cmu.mixer.access.EventLog.getInstance().log(event));
+
+ 
+  //response.addCookie(new javax.servlet.http.Cookie("tablefirst", guide.optString("tablefirst", "false")));
   
 ]]>
   </jsp:scriptlet>
@@ -121,6 +157,9 @@
   </c:set>
   <c:set var="interstitial">
     <jsp:expression>guide.optString("interstitial", "")</jsp:expression>
+  </c:set>
+  <c:set var="method">
+    <jsp:expression>guide.optString("method", "get")</jsp:expression>
   </c:set>
   <jsp:text>
     <html>
@@ -204,7 +243,7 @@
 	        "pass".
  	      </p>		
 	    </div>
-            <form method="get">
+            <form method="${method}">
               <div class="question ccontainer">
 		<label for="question">
 		  <span class="label">Question</span>
@@ -225,8 +264,7 @@
 		      consulting the
 		      <span class="condition tables practice">table</span>
 		      <span class="condition nontables">page</span>
-		      at this link
-		    </a>.
+		      at this link</a>.
 		  Remember that you will not need to follow any links
 		  from the page nor press any buttons.
 		</div>   
@@ -240,6 +278,15 @@
 		</textarea>		
 	      </div>
               <input type="hidden" id="taskid" name="taskid" value="${taskid}">
+                <!-- jsp parsing workaround -->
+              </input>
+              <input type="hidden" id="ataskid" name="ataskid" value="${ataskid}">
+                <!-- jsp parsing workaround -->
+              </input>
+              <input type="hidden" id="condition" name="condition" value="${condition}">
+                <!-- jsp parsing workaround -->
+              </input>
+              <input type="hidden" id="debug" name="debug" value="${debug}">
                 <!-- jsp parsing workaround -->
               </input>
 	      <div class="button">
