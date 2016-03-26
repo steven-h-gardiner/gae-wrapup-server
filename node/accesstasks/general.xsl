@@ -145,7 +145,26 @@
   <xsl:template match="html:iframe" />
   <xsl:template match="html:link[contains(@href, '/cache/minify/000000')]" />
   <xsl:template match="html:link[contains(@href, 'ui.racingpost.com/release/v131')]" />
+
+  <xsl:template match="html:script[contains(@src, 'maps.googleapis.com')]" />
+
+  <xsl:template match="html:script[contains(., 'agent-list-container')]" />
+
+  <xsl:template match="html:table[contains(@class, 'fruit_nutritional_desktop')][1]" />
+  <xsl:template match="html:table[contains(@class, 'fruit_nutritional_desktop')][3]" />
+  <xsl:template match="html:table[contains(@class, 'fruit_nutritional_mobile')]" />
+
+  <xsl:template match="html:body[@background='Images/greystripes.gif']//html:div[@id='menu']" />
+  <xsl:template match="html:body[@background='Images/greystripes.gif']//html:table//html:td/html:div/html:table[position() > 1]" />
   
+  <xsl:template match="html:div[@id='sidebarleft']" />
+  <xsl:template match="html:link[contains(@href,'wp-jazz/style.php')]" />
+
+  <xsl:template match="html:div[@class='filter-panel']/html:div[@class='suggested-filters']" />
+
+  <xsl:template match="html:div[@id='divContentNav']/html:div[@id='divNavCommon']" />
+  <xsl:template match="html:div[@id='divProductSort1']" />
+
   <xsl:template match="/|*|@*|text()|node()" priority="-100">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>

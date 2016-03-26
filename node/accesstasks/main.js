@@ -37,7 +37,10 @@ at.rez.extratags = [
   "source",
   "glightbox",
   "bdi",
-  "hgroup",  
+  "hgroup",
+  "figure",
+  "symbol",
+  "aside",
 ];
 
 at.procs = {};
@@ -161,12 +164,13 @@ at.eq.on('tasklist', function() {
     spec.line = line;
     spec.downloads = {};
     at.eq.emit('task', spec);    
+    console.error("SPEC: %s", JSON.stringify(spec, null, 2));
       
     output.push(["xsltproc", require.resolve('./clear.xsl'), ["experiments","data",spec.downloads.dom.localfile].join("/") , '|', "java"
 		       , "-jar", require.resolve("./smartwrap-cli.jar")
 		       //, '-l', 'FINEST'
 		       , "-e", ["experiments","data",spec.downloads.examples.localfile].join("/")
-                 , "-d", "-",
+                       , "-d", "-",
 		       , "-i", ["experiments","data",spec.downloads.meta.localfile].join("/")
 		       , "--format", "xhtml"
 		       , "-o", ["war", "atasks", [spec.taskid, '.xhtml'].join("")].join("/")
