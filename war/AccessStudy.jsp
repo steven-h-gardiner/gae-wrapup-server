@@ -15,8 +15,9 @@
   org.json.JSONObject event = new org.json.JSONObject();
 
   org.json.JSONObject guide = edu.cmu.mixer.access.AccessTask.getGuideObject(session, request);
-  guide.putOpt("debug", (request.getParameter("debug") != null) ? "debug" : null);
-  guide.putOpt("method", (request.getParameter("debug") != null) ? "post" : "get");
+  guide.putOpt("debug", request.getParameter("debug"));
+  guide.putOpt("debug",  (guide.optString("debug", "").equals("")) ? ""     : "debug");
+  guide.putOpt("method", (guide.optString("debug", "").equals("")) ? "post" : "get");
 
   event.putOpt("sessionid", guide.optString("sessionid"));
   event.putOpt("hash", guide.optString("sessionhash"));

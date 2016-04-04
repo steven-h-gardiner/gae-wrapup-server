@@ -63,7 +63,17 @@ at.eq.on('task', function(spec) {
   spec.taskno = spec.fields.shift();
   spec.url = spec.fields.join(",");
 
-  spec.server = spec.url.split(/\//).slice(0,3).join("/");					     
+  spec.path = spec.url.split(/\//);
+
+  spec.server = spec.path.slice(0,3).join("/");					     
+  spec.filename = spec.path.pop();
+  if (spec.filename.match(/\./)) {
+    spec.path.push("");
+  } else {
+    spec.path.push(spec.filename);
+  }
+  spec.baseurl = spec.path.join("/");
+  
     
   spec.downloads = spec.downloads || {};
 
@@ -180,7 +190,7 @@ at.eq.on('tasklist', function() {
 		       , ["war", "atasks", [spec.taskid, '.xhtml'].join("")].join("/")
 		       , "\n"].join(" "));
     output.push(["echo"
-		       , spec.url
+		       , spec.baseurl
 		       , "\n"].join(" "));
     output.push(["echo"
 		       , spec.server

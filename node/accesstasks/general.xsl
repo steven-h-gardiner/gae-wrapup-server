@@ -41,12 +41,43 @@
 
   <xsl:template match="attribute::smartwrap:*" />
 
+  <xsl:template name="string-replace-all">
+    <xsl:param name="text" />
+    <xsl:param name="replace" />
+    <xsl:param name="by" />
+    <xsl:choose>
+      <xsl:when test="$text = '' or $replace = '' or not($replace)" >
+        <!-- Prevent this routine from hanging -->
+        <xsl:value-of select="$text" />
+      </xsl:when>
+      <xsl:when test="contains($text, $replace)">
+        <xsl:value-of select="substring-before($text,$replace)" />
+        <xsl:value-of select="$by" />
+        <xsl:call-template name="string-replace-all">
+          <xsl:with-param name="text" select="substring-after($text,$replace)" />
+          <xsl:with-param name="replace" select="$replace" />
+          <xsl:with-param name="by" select="$by" />
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$text" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template match="@*" mode="resolve">
     <xsl:variable name="raw">
-      <xsl:value-of select="."/>
+      <xsl:call-template name="string-replace-all">
+        <xsl:with-param name="text" select="normalize-space(.)" />
+        <xsl:with-param name="replace" select="'%20'" />
+        <xsl:with-param name="by" select="''" />	
+      </xsl:call-template>
     </xsl:variable>
     <xsl:variable name="resolved">
       <xsl:choose>
+	<xsl:when test="starts-with($raw, '%20http')">
+	  <xsl:value-of select="$raw"/>
+	</xsl:when>
 	<xsl:when test="starts-with($raw, 'http')">
 	  <xsl:value-of select="$raw"/>
 	</xsl:when>
@@ -73,6 +104,11 @@
     </xsl:attribute>
   </xsl:template>
   <xsl:template match="html:img/@src">
+    <xsl:attribute name="src">
+      <xsl:apply-templates select="." mode="resolve"/>
+    </xsl:attribute>
+  </xsl:template>
+  <xsl:template match="html:input[@type='image']/@src">
     <xsl:attribute name="src">
       <xsl:apply-templates select="." mode="resolve"/>
     </xsl:attribute>
@@ -139,6 +175,9 @@
 ]]>      
 	</xsl:text>
       </html:script>
+      <html:style>
+	#parktrailsdropdown-block-form { color: red; }
+      </html:style>
     </xsl:copy>	
   </xsl:template>
 
@@ -165,6 +204,22 @@
   <xsl:template match="html:div[@id='divContentNav']/html:div[@id='divNavCommon']" />
   <xsl:template match="html:div[@id='divProductSort1']" />
 
+  <xsl:template match="html:form[@action='/parks-and-trails']" />
+  <xsl:template match="html:form[@id='parktrailsdropdown-block-form']" />
+
+  <xsl:template match="html:form[@id='headerSearchBoxForm']" />
+
+  <xsl:template match="html:nav[@id='nav']" />
+
+  <xsl:template match="html:map[@name='rage_image_map']" />
+  
+  <xsl:template match="html:form[@action='/shows/that-70s-show/season-8/']" />
+  <xsl:template match="html:link[contains(@href,'CACHE/css/9447')]" />
+
+  <xsl:template match="html:a/@draggable" />
+
+  <xsl:template match="html:div[@class='_bento']//html:div[@class='controls']" />
+  
   <xsl:template match="/|*|@*|text()|node()" priority="-100">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>
