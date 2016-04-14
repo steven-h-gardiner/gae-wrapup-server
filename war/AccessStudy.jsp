@@ -206,11 +206,11 @@
 	  </div>
 	  <div class="interstitial tables">
 	    The next several tasks present web pages that have been
-	    rewritten to make use of tables.
+	    enhanced to make use of tables.
 	  </div>
 	  <div class="interstitial nontables">
-	    The next several tasks present web pages that present data
-	    without using tables.
+	    The next several tasks present web pages as they exist on
+	    the web, without any enhancement.
 	  </div>
 	  <div class="progress">
 	    <div>
@@ -231,17 +231,16 @@
           <div class="text">
 	    <div class="instructions">
               <p>	 
-		Please find the answer to the following question in
-		the information presented in the linked page, and
-		enter the answer in the box below.
-              </p>
+	        Please enter the answer to the following question in
+		the box below using the information from the linked
+		page.  Every answer should be based on only the linked
+		page, without visiting links or changing pages.
+	      </p>
               <p>
-	        Every question should be answered based on only the linked page,
-	        without visiting any links or changing pages.  If the
-	        requested information is not present in the linked
-	        page, just answer "No answer found" in the box below.
-	        If you would prefer to skip this page, just answer
-	        "pass".
+		If the requested information is not present in
+	        the linked page, just answer "No answer found" in the
+	        box below.  If you would prefer to skip this page,
+	        just answer "pass".
  	      </p>		
 	    </div>
             <form method="${method}">
