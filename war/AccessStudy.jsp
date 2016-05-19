@@ -222,10 +222,11 @@
 	      This is a practice task to let you get used to the format of the tasks.
 	    </div>
 	    <div class="condition tables">
-	      The linked page has been rewritten to use tables.
+	      The linked page has been enhanced to use tables.
 	    </div>
 	    <div class="condition nontables">
-	      The linked page does not use tables.
+	      The linked page has not been enhanced to use tables.  It
+	      is presented as it appeared out on the web.
 	    </div>
 	  </div>
           <div class="text">
