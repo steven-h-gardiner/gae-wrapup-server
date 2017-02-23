@@ -1,0 +1,10 @@
+digraph G {
+	html -> dom [ label="save to repository" ];
+	dom -> cleared [ label="clear markup inserted by smartwrap" ];
+	cleared -> resolved [ label="resolve images/resources to cached versions" ];	
+	resolved -> dom0 [ label="remove stuff\nthat cause crashes\nand/or loading issues" ];
+	dom0 -> dom1 [ label="inject tables" ];
+	dom1 -> dom3 [ label="remove display tables" ];
+	dom0 -> dom2 [ label="remove display tables" ];
+	
+}
