@@ -23,6 +23,8 @@
   <xsl:param name="resolveServer">
     <xsl:value-of select="//html:link[@rel='canonical']/@href"/>
   </xsl:param>
+
+  <xsl:param name="disableLinks" select="'css'"/>
   
   <xsl:template match="html:*/@class[contains(., 'sw_inserted')]">
     <xsl:variable name="reclass">
@@ -178,6 +180,13 @@
       <html:style>
 	#parktrailsdropdown-block-form { color: red; }
       </html:style>
+      <xsl:choose>
+	<xsl:when test="$disableLinks = 'css'">
+	  <html:style>
+	    a { pointer-events: none; }
+	  </html:style>
+	</xsl:when>
+      </xsl:choose>
     </xsl:copy>	
   </xsl:template>
 
@@ -219,6 +228,23 @@
   <xsl:template match="html:a/@draggable" />
 
   <xsl:template match="html:div[@class='_bento']//html:div[@class='controls']" />
+  
+  <xsl:template match="html:a[@href!='']" priority="-10">
+    <xsl:choose>
+      <xsl:when test="$disableLinks='relabel'">
+	<xsl:element name="html:span">
+	  <xsl:apply-templates select="@*"/>
+	  <xsl:apply-templates select="node()"/>
+	</xsl:element>
+      </xsl:when>
+      <xsl:when test="true()">
+	<xsl:copy>
+	  <xsl:apply-templates select="@*"/>
+	  <xsl:apply-templates select="node()"/>
+	</xsl:copy>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
   
   <xsl:template match="/|*|@*|text()|node()" priority="-100">
     <xsl:copy>
