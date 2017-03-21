@@ -1,3 +1,5 @@
+To build and install from source:
+
 1. `git clone ssh://${USERNAME}@transit.apt.ri.cmu.edu/usr2/sgardine/repos/smartwrap.git`
 2. cd smartwrap/plugin
 3. `ant xpi`
