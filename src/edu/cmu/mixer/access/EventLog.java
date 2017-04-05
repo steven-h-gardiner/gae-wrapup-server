@@ -28,7 +28,7 @@ public class EventLog {
       com.google.appengine.api.datastore.Entity entity =
         new com.google.appengine.api.datastore.Entity("AccessEvent");
       response.putOpt("eventid0", entity.getKey().getId());
-      
+
       entity.setProperty("timestamp", getTimestamp());
       entity.setProperty("eventname", event.optString("eventname", ""));
       entity.setProperty("target", event.optString("target", ""));
@@ -39,9 +39,9 @@ public class EventLog {
       entity.setProperty("condition", event.optString("condition", ""));
       entity.setProperty("sessionid", event.optString("sessionid", ""));
       entity.setProperty("hash", event.optString("hash", ""));
-      
+
       ds.put(entity);
-      
+
       response.putOpt("eventid", entity.getKey().getId());
     } catch (Exception ex) {
       ex.printStackTrace(System.err);
@@ -49,11 +49,11 @@ public class EventLog {
     return response;
   }
 
-    
+
   public org.json.JSONArray getStudyTasks() throws Exception {
     org.json.JSONArray tasks = new org.json.JSONArray();
 
-    com.google.appengine.api.datastore.Query query = 
+    com.google.appengine.api.datastore.Query query =
       new com.google.appengine.api.datastore.Query("AccessTask");
     query =
       query.setFilter(com.google.appengine.api.datastore.Query.CompositeFilterOperator.and(
@@ -68,22 +68,22 @@ public class EventLog {
 
     for (com.google.appengine.api.datastore.Entity result : pq.asIterable()) {
       org.json.JSONObject task = new org.json.JSONObject();
-      Long taskid = (Long) result.getProperty("taskno");      
+      Long taskid = (Long) result.getProperty("taskno");
       task.putOpt("taskid", taskid);
-      task.putOpt("practice", taskid == 200);
+      task.putOpt("practice", (taskid >=200 && taskid <=209));
 
       task.putOpt("question", result.getProperty("question"));
       task.putOpt("ataskid", result.getKey().getId());
-      
+
       tasks.put(task);
     }
-    
+
     return tasks;
   }
-    
+
   private org.json.JSONObject getTasksByType() throws Exception {
     org.json.JSONObject tasks = new org.json.JSONObject();
-    com.google.appengine.api.datastore.Query query = 
+    com.google.appengine.api.datastore.Query query =
       new com.google.appengine.api.datastore.Query("AccessTask");
     com.google.appengine.api.datastore.PreparedQuery pq = ds.prepare(query);
     for (com.google.appengine.api.datastore.Entity result : pq.asIterable()) {
@@ -102,13 +102,13 @@ public class EventLog {
       taskobj.putOpt("taskno", result.getProperty("taskno"));
       tasks.getJSONArray(tasktype).put(taskobj);
     }
-    
+
     return tasks;
   }
 
   private org.json.JSONObject getTaskOrders() throws Exception {
     org.json.JSONObject taskorders = new org.json.JSONObject();
-    com.google.appengine.api.datastore.Query query = 
+    com.google.appengine.api.datastore.Query query =
       new com.google.appengine.api.datastore.Query("TaskOrder");
     com.google.appengine.api.datastore.PreparedQuery pq = ds.prepare(query);
     for (com.google.appengine.api.datastore.Entity result : pq.asIterable()) {
@@ -119,13 +119,13 @@ public class EventLog {
     if (taskorders.length() == 0) {
       taskorders.putOpt("taskthru", new org.json.JSONArray());
     }
-    
+
     return taskorders;
   }
 
   private org.json.JSONObject getTypeOrders() throws Exception {
     org.json.JSONObject typeorders = new org.json.JSONObject();
-    com.google.appengine.api.datastore.Query query = 
+    com.google.appengine.api.datastore.Query query =
       new com.google.appengine.api.datastore.Query("TypeOrder");
     com.google.appengine.api.datastore.PreparedQuery pq = ds.prepare(query);
     for (com.google.appengine.api.datastore.Entity result : pq.asIterable()) {
@@ -136,13 +136,13 @@ public class EventLog {
     if (typeorders.length() == 0) {
       typeorders.putOpt("typethru", new org.json.JSONArray());
     }
-    
+
     return typeorders;
   }
 
   private org.json.JSONObject getCondOrders() throws Exception {
     org.json.JSONObject condorders = new org.json.JSONObject();
-    com.google.appengine.api.datastore.Query query = 
+    com.google.appengine.api.datastore.Query query =
       new com.google.appengine.api.datastore.Query("CondOrder");
     com.google.appengine.api.datastore.PreparedQuery pq = ds.prepare(query);
     for (com.google.appengine.api.datastore.Entity result : pq.asIterable()) {
@@ -153,10 +153,10 @@ public class EventLog {
     if (condorders.length() == 0) {
       condorders.putOpt("condthru", new org.json.JSONArray("[0,1,3]"));
     }
-    
+
     return condorders;
   }
-  
+
   private org.json.JSONObject orderingCache = null;
   public org.json.JSONObject drawOrderings(org.json.JSONObject info) throws Exception {
     if (orderingCache == null) {
@@ -179,7 +179,7 @@ public class EventLog {
     org.json.JSONObject typeorders = orderingCache.optJSONObject("typeorders");
 
     System.err.println("NEW ORDER!");
-    
+
     org.json.JSONObject counts = new org.json.JSONObject();
     for (String orderid : org.json.JSONObject.getNames(taskorders)) {
       counts.putOpt(orderid, 0);
@@ -192,15 +192,15 @@ public class EventLog {
     }
     /*
       taskorders.forEach(function(to) { counts[to.id] = 0; }
-      condorders.forEach(function(co) { counts[co.id] = 0; }      
+      condorders.forEach(function(co) { counts[co.id] = 0; }
      */
 
-    com.google.appengine.api.datastore.Query query = 
+    com.google.appengine.api.datastore.Query query =
       new com.google.appengine.api.datastore.Query("OrderStatus");
     com.google.appengine.api.datastore.PreparedQuery pq = ds.prepare(query);
     for (com.google.appengine.api.datastore.Entity result : pq.asIterable()) {
       //System.err.println("STATUS: " + result);
-      
+
       String taskkey = (String) result.getProperty("taskorderid");
       if (taskkey != null) {
 	counts.putOpt(taskkey, 1+counts.optInt(taskkey, 0));
@@ -244,15 +244,15 @@ public class EventLog {
 	mintypecount = ordercount;
       }
     }
-    /* 
-      taskorders.forEach(function(to) { 
-        if (counts[to.id] < mintaskcount) { 
+    /*
+      taskorders.forEach(function(to) {
+        if (counts[to.id] < mintaskcount) {
           mintaskid = to.id;
           mintaskcount = counts[to.id];
         }
       }
-      condorders.forEach(function(co) { 
-        if (counts[co.id] < mincondcount) { 
+      condorders.forEach(function(co) {
+        if (counts[co.id] < mincondcount) {
           mincondid = co.id;
           mincondcount = counts[co.id];
         }
@@ -268,7 +268,7 @@ public class EventLog {
     orderings.putOpt("typeorderid", mintypeid);
     orderings.putOpt("typeordercount", mintypecount);
     orderings.putOpt("typeorder", typeorders.optJSONArray(mintypeid));
-    
+
     // INSERT RESERVATION FOR mintaskid AS taskrez
     // INSERT RESERVATION FOR mincondid AS condrez
     com.google.appengine.api.datastore.Entity taskrez =
@@ -280,7 +280,7 @@ public class EventLog {
     taskrez.setProperty("reztime", getTimestamp());
     ds.put(taskrez);
     orderings.putOpt("taskstatusid", taskrez.getKey().getId());
-    
+
     com.google.appengine.api.datastore.Entity condrez =
       new com.google.appengine.api.datastore.Entity("OrderStatus");
     condrez.setProperty("condorderid", mincondid);
@@ -290,7 +290,7 @@ public class EventLog {
     condrez.setProperty("reztime", getTimestamp());
     ds.put(condrez);
     orderings.putOpt("condstatusid", condrez.getKey().getId());
-   
+
     com.google.appengine.api.datastore.Entity typerez =
       new com.google.appengine.api.datastore.Entity("OrderStatus");
     typerez.setProperty("typeorderid", mintypeid);
@@ -300,20 +300,20 @@ public class EventLog {
     typerez.setProperty("reztime", getTimestamp());
     ds.put(typerez);
     orderings.putOpt("typestatusid", typerez.getKey().getId());
-    
+
     // ENQUEUE UNRESERVER FOR taskrez.getKey().getID()
     // ENQUEUE UNRESERVER FOR condrez.getKey().getID();
-    com.google.appengine.api.taskqueue.Queue queue = 
+    com.google.appengine.api.taskqueue.Queue queue =
       com.google.appengine.api.taskqueue.QueueFactory.getDefaultQueue();
     queue.add(com.google.appengine.api.taskqueue.TaskOptions.Builder.withPayload(new Unreserver(taskrez.getKey().getId())).countdownMillis(1000*60*60*6));
-    queue.add(com.google.appengine.api.taskqueue.TaskOptions.Builder.withPayload(new Unreserver(condrez.getKey().getId())).countdownMillis(1000*60*60*6));    
-    queue.add(com.google.appengine.api.taskqueue.TaskOptions.Builder.withPayload(new Unreserver(typerez.getKey().getId())).countdownMillis(1000*60*60*6));    
+    queue.add(com.google.appengine.api.taskqueue.TaskOptions.Builder.withPayload(new Unreserver(condrez.getKey().getId())).countdownMillis(1000*60*60*6));
+    queue.add(com.google.appengine.api.taskqueue.TaskOptions.Builder.withPayload(new Unreserver(typerez.getKey().getId())).countdownMillis(1000*60*60*6));
 
     // orderings["taskorder"] = orderingCache.taskorders[mintaskid];
     // orderings["condorder"] = orderingCache.condorders[mincondid];
 
     orderings.putOpt("tasksbytype", orderingCache.optJSONObject("tasksbytype"));
-    
+
     orderingCache.putOpt(info.optString("sessionid"), orderings);
     return orderings;
   }
@@ -327,7 +327,7 @@ public class EventLog {
     public void run() {
       try {
 	System.err.println("REMOVE " + rezid);
-	
+
         com.google.appengine.api.datastore.DatastoreService ds =
           com.google.appengine.api.datastore.DatastoreServiceFactory.getDatastoreService();
 	com.google.appengine.api.datastore.Entity status = ds.get(com.google.appengine.api.datastore.KeyFactory.createKey("OrderStatus", rezid));
@@ -335,7 +335,7 @@ public class EventLog {
 	  return;
 	}
 	System.err.println("REMOVING: " + status.toString());
-	ds.delete(status.getKey());	
+	ds.delete(status.getKey());
       } catch (Exception ex) {
 	ex.printStackTrace(System.err);
       }
@@ -365,7 +365,7 @@ public class EventLog {
       try {
         com.google.appengine.api.datastore.DatastoreService ds =
           com.google.appengine.api.datastore.DatastoreServiceFactory.getDatastoreService();
-	com.google.appengine.api.datastore.Query query = 
+	com.google.appengine.api.datastore.Query query =
 	  new com.google.appengine.api.datastore.Query("AccessEvent");
 	query = query.setFilter(new com.google.appengine.api.datastore.Query.FilterPredicate("taskno",
 											     com.google.appengine.api.datastore.Query.FilterOperator.EQUAL,
@@ -384,9 +384,9 @@ public class EventLog {
 		falses++;
 	      }
 	    }
-	  }	  
+	  }
 	}
-	
+
 	com.google.appengine.api.datastore.Entity studySession =
 	  new com.google.appengine.api.datastore.Entity("StudySession", "counts");
 	studySession.setProperty("trues", trues);
@@ -400,20 +400,20 @@ public class EventLog {
   }
 
 
-  
-  public boolean getTableFirst(String ipAddr) throws Exception {
-    return getTableFirst(ipAddr, 1000*60*60*3); // default 3 hours
+
+  public boolean getTableFirst(String ipAddr, boolean wrapFirst) throws Exception {
+    return getTableFirst(ipAddr, 1000*60*60*3, wrapFirst); // default 3 hours
   }
 
-  public boolean getTableFirst(String ipAddr, long expiration) throws Exception {
+  public boolean getTableFirst(String ipAddr, long expiration, boolean wrapFirst) throws Exception {
 
     com.google.appengine.api.datastore.Entity studySession = null;
-    
+
     if (expiration <= 0) {
       //new EntityDeleter("StudySession", ipAddr).run();
     } else {
       try {
-        studySession = 
+        studySession =
           ds.get(com.google.appengine.api.datastore.KeyFactory.createKey("StudySession", ipAddr));
         if (studySession != null) {
           return (boolean) studySession.getProperty("tablefirst");
@@ -423,34 +423,35 @@ public class EventLog {
       }
     }
 
-    java.util.Calendar cal = new java.util.GregorianCalendar();
-    boolean tablefirst = (cal.get(cal.MILLISECOND) > 500);
-    if (true) {
+    boolean tablefirst = wrapFirst;
+    //java.util.Calendar cal = new java.util.GregorianCalendar();
+    //boolean tablefirst = (cal.get(cal.MILLISECOND) > 500);
+    /*if (true) {
       try {
         studySession =
           ds.get(com.google.appengine.api.datastore.KeyFactory.createKey("StudySession", "counts"));
         if (studySession != null) {
           long trues = (long) studySession.getProperty("trues");
           long falses = (long) studySession.getProperty("falses");
-	  if (trues != falses) {
-	    tablefirst = (trues < falses);
-	  }
+	        if (trues != falses) {
+	          tablefirst = (trues < falses);
+	        }
         }
       } catch (Exception ex) {
 	ex.printStackTrace(System.err);
       }
-    }
+    }*/
 
     studySession = new com.google.appengine.api.datastore.Entity("StudySession", ipAddr);
     studySession.setProperty("tablefirst", tablefirst);
 
     ds.put(studySession);
-    com.google.appengine.api.taskqueue.Queue queue = 
+    com.google.appengine.api.taskqueue.Queue queue =
       com.google.appengine.api.taskqueue.QueueFactory.getDefaultQueue();
     queue.add(com.google.appengine.api.taskqueue.TaskOptions.Builder.withPayload(new EntityDeleter("StudySession", ipAddr)).countdownMillis(expiration));
 
     queue.add(com.google.appengine.api.taskqueue.TaskOptions.Builder.withPayload(new TableFirstCounter()).countdownMillis(1000*60*5)); // 5 min
-    
+
     return tablefirst;
   }
 

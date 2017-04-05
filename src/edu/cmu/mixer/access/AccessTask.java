@@ -7,7 +7,8 @@ public class AccessTask {
   }
 
   public static org.json.JSONObject getGuideObject(javax.servlet.http.HttpSession session,
-						   javax.servlet.http.HttpServletRequest request) throws Exception {
+						   javax.servlet.http.HttpServletRequest request, boolean wrapFirst) throws Exception {
+                 
     if (session.getAttribute("guide") != null) {
       org.json.JSONObject guide = new org.json.JSONObject((String) session.getAttribute("guide"));
       //guide.putOpt("literal", (String) session.getAttribute("guide"));
@@ -50,9 +51,9 @@ public class AccessTask {
 	o.putOpt("name", cookie.getName());
 	o.putOpt("value", cookie.getValue());
 	o.putOpt("maxage", cookie.getMaxAge());
-	
+
 	cookiehash.putOpt(cookie.getName(), cookie.getValue());
-	
+
 	cookies.put(o);
       }
     }
@@ -69,18 +70,18 @@ public class AccessTask {
     */
 
     //guide.putOpt("tablefirst", EventLog.getInstance().getTableFirst(request.getRemoteAddr(), 1000 * 60 * 2));
-    guide.putOpt("tablefirst", EventLog.getInstance().getTableFirst(request.getRemoteAddr()));
-    
+    guide.putOpt("tablefirst", EventLog.getInstance().getTableFirst(request.getRemoteAddr(), wrapFirst));
+
     //guide.putOpt("cookies", cookies);
-    //guide.putOpt("tablefirst", 
-    
+    //guide.putOpt("tablefirst",
+
     guide.putOpt("taskno1", 1+guide.optInt("taskno", 0));
     session.setAttribute("guide", guide.toString());
     guide.putOpt("new", true);
-    
+
     return guide;
   }
-    
+
   public org.json.JSONObject process(javax.servlet.http.HttpSession session,
 				     javax.servlet.http.HttpServletRequest request) throws Exception {
     org.json.JSONObject o = new org.json.JSONObject();
@@ -94,18 +95,18 @@ public class AccessTask {
     o.putOpt("pageno", request.getParameter("pageno"));
     o.putOpt("answer", request.getParameter("answer"));
     o.putOpt("condition", request.getParameter("condition"));
-    
+
     o.putOpt("answers", (session.getAttribute("answers") == null) ? null : new org.json.JSONObject((String) session.getAttribute("answers")));
     //o.putOpt("sanswers", session.getAttribute("answers"));
     o.putOnce("answers", (request.getParameter("answers") == null) ? null : new org.json.JSONObject(request.getParameter("answers")));
     //o.putOpt("ranswers", request.getParameter("answers"));
-    
+
     org.json.JSONObject answers = o.optJSONObject("answers");
     if (answers == null) {
       answers = new org.json.JSONObject();
     }
     answers.putOpt(o.optString("pageno", o.optString("taskid", null)), o.optString("answer", null));
-    
+
     o.putOpt("eventname", "submitanswer");
     if (o.has("taskid") &&  (! o.optString("taskid").equals(""))) {
       o.putOpt("response", edu.cmu.mixer.access.EventLog.getInstance().log(o));
@@ -117,7 +118,7 @@ public class AccessTask {
 
     o.putOpt("answers", answers);
     int taskno = answers.length();
-    
+
     org.json.JSONObject orderings = edu.cmu.mixer.access.EventLog.getInstance().drawOrderings(o);
     o.putOpt("orderings", orderings);
 
@@ -126,10 +127,10 @@ public class AccessTask {
     o.putOpt("pid", session.getAttribute("pid"));
     try { o.putOnce("pid", request.getParameter("pid")); } catch (Exception ex) { /* ignore */ }
     session.setAttribute("pid", o.optString("pid"));
-  
+
     com.google.appengine.api.datastore.DatastoreService ds =
       com.google.appengine.api.datastore.DatastoreServiceFactory.getDatastoreService();
-    
+
     String bltext = (String) session.getAttribute("blacklist");
     org.json.JSONObject blacklist = (bltext == null) ? null : new org.json.JSONObject(bltext);
     if ((blacklist == null) && o.has("pid")) {
@@ -138,7 +139,7 @@ public class AccessTask {
 
       //blacklist.put("20", true);
 
-      com.google.appengine.api.datastore.Query blq = 
+      com.google.appengine.api.datastore.Query blq =
         new com.google.appengine.api.datastore.Query("Participant");
       blq = blq.setFilter(new com.google.appengine.api.datastore.Query.FilterPredicate("ParticipantID",
                                                                                        com.google.appengine.api.datastore.Query.FilterOperator.EQUAL,
@@ -149,7 +150,7 @@ public class AccessTask {
         o.putOpt("oldhash", result.getProperty("DataHash"));
       }
 
-      blq = 
+      blq =
         new com.google.appengine.api.datastore.Query("AccessEvent");
       blq = blq.setFilter(com.google.appengine.api.datastore.Query.CompositeFilterOperator.and(new com.google.appengine.api.datastore.Query.FilterPredicate("eventname",
                                                                                                                                                             com.google.appengine.api.datastore.Query.FilterOperator.EQUAL,
@@ -169,21 +170,21 @@ public class AccessTask {
         com.google.appengine.api.datastore.Entity bltask = ds.get(blkey);
         blacklist.putOpt(bltask.getProperty("taskno").toString(), true);
       }
-      
+
       session.setAttribute("blacklist", blacklist.toString());
     }
     if (blacklist == null) {
       blacklist = new org.json.JSONObject();
     }
     o.putOpt("blacklist", blacklist);
-    
+
     boolean blacklisted = true;
 
     if (blacklist != null) {
       taskno = -1;
       while (blacklisted) {
         taskno++;
-        org.json.JSONArray taskorder = orderings.optJSONArray("taskorder");  
+        org.json.JSONArray taskorder = orderings.optJSONArray("taskorder");
         int pageno = taskorder.optInt(taskno, taskno);
         o.putOpt("pageno", pageno);
         if (blacklist.has(Integer.toString(pageno))) {
@@ -195,7 +196,7 @@ public class AccessTask {
           blacklisted = false;
         }
       }
-    } 
+    }
     o.putOpt("taskno", taskno);
 
     int realanswers = 0;
@@ -203,9 +204,9 @@ public class AccessTask {
       String key = (String) i.next();
       if (! answers.optString(key, "__NA__").equals("__NA__")) {
         realanswers++;
-      } 
+      }
     }
-    
+
     org.json.JSONArray condorder = orderings.optJSONArray("condorder");
     int condix = realanswers % (condorder.length());
     o.putOpt("condix", condix);
@@ -218,7 +219,7 @@ public class AccessTask {
     }
 
     session.setAttribute("answers", answers.toString());
-    
+
     org.json.JSONArray typeorder = orderings.optJSONArray("typeorder");
     org.json.JSONObject tasksByType = orderings.optJSONObject("tasksbytype");
     if (typeorder != null) {
@@ -233,13 +234,13 @@ public class AccessTask {
     //o.putOpt("pageno.bytasktype", staskno);
     }
     System.err.println("OOOO: " + o.toString(2));
-    
-  
-    com.google.appengine.api.datastore.Entity entity = 
+
+
+    com.google.appengine.api.datastore.Entity entity =
       new com.google.appengine.api.datastore.Entity("AccessTask");
     // default so non-null but never stored to datastore
-    
-    com.google.appengine.api.datastore.Query query = 
+
+    com.google.appengine.api.datastore.Query query =
       new com.google.appengine.api.datastore.Query("AccessTask");
     com.google.appengine.api.datastore.PreparedQuery pq = null;
     /*
@@ -247,21 +248,21 @@ public class AccessTask {
       query = query.setFilter(new com.google.appengine.api.datastore.Query.FilterPredicate("url",
 											   com.google.appengine.api.datastore.Query.FilterOperator.EQUAL,
 											   o.optString("url")));
-      
+
       pq = ds.prepare(query);
       for (com.google.appengine.api.datastore.Entity result : pq.asIterable()) {
 	entity = result;
       }
     }
     */
-    
+
     if (o.optInt("pageno", -1) >= 0) {
-      
-      
+
+
       query = query.setFilter(new com.google.appengine.api.datastore.Query.FilterPredicate("taskno",
 											   com.google.appengine.api.datastore.Query.FilterOperator.EQUAL,
 											   o.optInt("pageno", -1)));
-      
+
       pq = ds.prepare(query);
     }
     if (pq != null) {
@@ -278,9 +279,9 @@ public class AccessTask {
     o.putOpt("eventname", "viewtask");
     o.putOpt("response", edu.cmu.mixer.access.EventLog.getInstance().log(o));
     o.remove("eventname");
-    
+
     System.err.println("OOO: " + o.toString(2));
-    
+
     return o;
   }
 }

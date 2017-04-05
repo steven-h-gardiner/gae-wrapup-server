@@ -39,9 +39,7 @@
       <li>
         <h2 id="survey">Survey</h2>
         <p>
-          Please
-          follow <a href="https://www.surveymonkey.com/r/VDD2VFS">this
-          link to complete the survey</a>, then return here and
+          Please complete the oral survey</a>, then return here and
           continue the study.
         </p>
       </li>
@@ -89,12 +87,27 @@
           time.  Simply answer "pass" to those questions.  
         </p>
 	<p>
-          Now, please follow <a href="AccessStudy.jsp">this link to
+          Now, please follow <a id="studyLink" onclick="check()" href="AccessStudy.jsp">this link to
           begin the tasks</a>
         </p>
       </li>
     </ol>
     <h2 id="thanks">Thanks!</h2>
     <p>That's all!  Thanks for helping us with the study!</p>
+
+    <input type="checkbox" id="wrapFirst" value="false" onclick="toggleBox(this)">
+  
+<script type="text/javascript">
+function check(){
+	if (document.getElementById("wrapFirst").checked){
+		document.getElementById("studyLink").href="AccessStudy.jsp?wrapFirst=1";
+	}
+	else{
+		document.getElementById("studyLink").href="AccessStudy.jsp";
+	}
+	return false;
+}
+</script>
+
   </body>
 </html>

@@ -1,12 +1,14 @@
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" 
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
           version="1.2">
   <jsp:directive.page contentType="text/html;charset=UTF-8" language="java" />
   <jsp:scriptlet>
 <![CDATA[
 
+  boolean wrapFirst = (request.getParameter("wrapFirst") != null);
+
   if (request.getParameter("flush") != null) {
-    edu.cmu.mixer.access.EventLog.getInstance().getTableFirst(request.getRemoteAddr(), 0);
+    edu.cmu.mixer.access.EventLog.getInstance().getTableFirst(request.getRemoteAddr(), 0, wrapFirst);
     session.invalidate();
     response.sendRedirect("/AccessStudy.jsp" + ((request.getParameter("debug") == null) ? "" : "?debug=true"));
     return;
@@ -14,8 +16,9 @@
 
   org.json.JSONObject event = new org.json.JSONObject();
 
-  org.json.JSONObject guide = edu.cmu.mixer.access.AccessTask.getGuideObject(session, request);
+  org.json.JSONObject guide = edu.cmu.mixer.access.AccessTask.getGuideObject(session, request, wrapFirst);
   guide.putOpt("debug", request.getParameter("debug"));
+
   guide.putOpt("debug",  (guide.optString("debug", "").equals("")) ? ""     : "debug");
   guide.putOpt("method", (guide.optString("debug", "").equals("")) ? "post" : "get");
 
@@ -35,7 +38,7 @@
       answer.putOpt("taskid", request.getParameter("taskid"));
       answer.putOpt("ataskid", request.getParameter("ataskid"));
       answer.putOpt("condition", request.getParameter("condition"));
-      
+
       if (answer.optString("answer", "").trim().equals("")) {
         guide.putOpt("validation", "nullanswer");
 	throw new Exception("answer should not be empty!");
@@ -47,7 +50,7 @@
       event.putOpt("eventname", "submitanswer");
       event.putOpt("answer", answer.optString("answer"));
 
-      guide.putOpt("answersubmission", 
+      guide.putOpt("answersubmission",
                    edu.cmu.mixer.access.EventLog.getInstance().log(event));
 
       answers.put(answer.optString("taskid"), answer);
@@ -72,8 +75,8 @@
     event.putOpt("taskno", answers.length());
     event.putOpt("eventname", "confirmtasks");
     event.remove("answer");
-  
-    guide.putOpt("confirmtasks", 
+
+    guide.putOpt("confirmtasks",
                  edu.cmu.mixer.access.EventLog.getInstance().log(event));
 
     response.sendRedirect("/ConfirmTasks.jsp?numtasks=" + tasknum);
@@ -84,22 +87,23 @@
   if (task == null) { task = new org.json.JSONObject(); }
 
   //System.err.println("ANSWERS: " + session.getAttribute("answers"));
-  
+
   guide.putOpt("answers", answers);
   guide.putOpt("task", task);
-  
+
   boolean useTable = (answers.length() > guide.optInt("tasknum2", tasks.length() / 2));
   if (guide.optString("tablefirst", "false").equals("true")) { // invert for tablefirst
-    useTable = ! useTable; 
+    useTable = ! useTable;
   }
   if (task.optBoolean("practice", false)) {
-    useTable = true;
+    useTable = false;
     guide.putOpt("mode", "practice");
   } else {
     guide.putOpt("mode", useTable ? "tables" : "nontables");
   }
   guide.putOpt("condition", useTable ? 3 : 0);
-  
+  guide.putOpt("extension", useTable ? ".xhtml" : ".html");
+
   guide.putOpt("taskno1", 1+answers.length());
 
   String oldmode = (String) session.getAttribute("mode");
@@ -114,13 +118,13 @@
   event.putOpt("condition", guide.optString("condition"));
   event.putOpt("eventname", "viewtask");
   event.remove("answer");
-  
-  guide.putOpt("questionview", 
+
+  guide.putOpt("questionview",
                edu.cmu.mixer.access.EventLog.getInstance().log(event));
 
- 
+
   //response.addCookie(new javax.servlet.http.Cookie("tablefirst", guide.optString("tablefirst", "false")));
-  
+
 ]]>
   </jsp:scriptlet>
   <c:set var="taskno1">
@@ -143,6 +147,9 @@
   </c:set>
   <c:set var="condition">
    <jsp:expression>guide.optInt("condition", 0)</jsp:expression>
+  </c:set>
+  <c:set var="extension">
+   <jsp:expression>guide.optString("extension", ".html")</jsp:expression>
   </c:set>
   <c:set var="guideStr">
     <jsp:expression>guide.toString(2)</jsp:expression>
@@ -186,9 +193,9 @@
 	  body.interstitial .practice   .interstitial.practice  { display: inherit; }
 	  body.interstitial .tables     .interstitial.tables    { display: inherit; }
 	  body.interstitial .nontables  .interstitial.nontables { display: inherit; }
-	  
+
 	</style>
-      </head>       
+      </head>
       <body class="${validation} ${interstitial}">
         <div class="main ${mode} ${debug}">
   	  <div class="validation ${validation}">
@@ -205,12 +212,10 @@
 	    </span>
 	  </div>
 	  <div class="interstitial tables">
-	    The next several tasks present web pages that have been
-	    enhanced to make use of tables.
+	    The next several tasks involve tables on the web.
 	  </div>
 	  <div class="interstitial nontables">
-	    The next several tasks present web pages as they exist on
-	    the web, without any enhancement.
+      The next several tasks involve tables on the web.
 	  </div>
 	  <div class="progress">
 	    <div>
@@ -222,16 +227,15 @@
 	      This is a practice task to let you get used to the format of the tasks.
 	    </div>
 	    <div class="condition tables">
-	      The linked page has been enhanced to use tables.
+        This is an actual task.
 	    </div>
 	    <div class="condition nontables">
-	      The linked page has not been enhanced to use tables.  It
-	      is presented as it appeared out on the web.
+        This is an actual task.
 	    </div>
 	  </div>
           <div class="text">
 	    <div class="instructions">
-              <p>	 
+              <p>
 	        Please enter the answer to the following question in
 		the box below using the information from the linked
 		page.  Every answer should be based on only the linked
@@ -242,7 +246,7 @@
 	        the linked page, just answer "No answer found" in the
 	        box below.  If you would prefer to skip this page,
 	        just answer "pass".
- 	      </p>		
+ 	      </p>
 	    </div>
             <form method="${method}">
               <div class="question ccontainer">
@@ -260,7 +264,7 @@
      		<div class="mainlink card">
 		  Please answer the preceding question by
 		    <a class="mainlink" id="mainlink"
-                       href="/atasks/${ataskid}${condition}.xhtml?hash=${hash}"
+                       href="/atasks/${ataskid}${condition}${extension}?hash=${hash}"
                        target="${accesstarget}">
 		      consulting the
 		      <span class="condition tables practice">table</span>
@@ -268,7 +272,7 @@
 		      at this link</a>.
 		  Remember that you will not need to follow any links
 		  from the page nor press any buttons.
-		</div>   
+		</div>
               </div>
 	      <div class="answer ccontainer">
 		<label for="answer">
@@ -276,7 +280,7 @@
 		</label>
 		<textarea id="answer" name="answer">
                   <!-- jsp parsing workaround -->
-		</textarea>		
+		</textarea>
 	      </div>
               <input type="hidden" id="taskid" name="taskid" value="${taskid}">
                 <!-- jsp parsing workaround -->
@@ -285,6 +289,9 @@
                 <!-- jsp parsing workaround -->
               </input>
               <input type="hidden" id="condition" name="condition" value="${condition}">
+                <!-- jsp parsing workaround -->
+              </input>
+              <input type="hidden" id="extension" name="extension" value="${extension}">
                 <!-- jsp parsing workaround -->
               </input>
               <input type="hidden" id="debug" name="debug" value="${debug}">
@@ -305,7 +312,7 @@
 	        <pre>
 		  ${guideStr}
 		</pre>
-	      </dd>		
+	      </dd>
 	    </dl>
 	  </div>
  	</div>
