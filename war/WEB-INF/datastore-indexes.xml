@@ -90,4 +90,16 @@
     <property name="timestamp" direction="asc" />
   </datastore-index>
 
+  <datastore-index kind="AccessTask" ancestor="false">
+    <property name="taskno" direction="asc" />
+    <property name="pairid" direction="asc" />
+    <property name="taskorder" direction="asc" />
+  </datastore-index>
+
+  <datastore-index kind="AccessTask" ancestor="false">
+    <property name="taskno" direction="asc" />
+    <property name="pairid" direction="desc" />
+    <property name="taskorder" direction="asc" />
+  </datastore-index>
+
 </datastore-indexes>

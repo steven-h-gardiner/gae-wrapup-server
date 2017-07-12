@@ -26,7 +26,7 @@
 	in webpages as accurately and quickly as you can.</li>
       <li>We'll finish by chatting briefly about what happened
 	during the tasks.</li>
-    </ol>    
+    </ol>
     <p>
       The tasks may be difficult and/or annoying.  We ask you to
       continue to struggle for awhile with them, but do remember that
@@ -84,7 +84,7 @@
           answer is not there, you can answer "no answer found".
           Additionally, some pages may be so difficult to access that
           you might want to abandon the task after trying for some
-          time.  Simply answer "pass" to those questions.  
+          time.  Simply answer "pass" to those questions.
         </p>
 	<p>
           Now, please follow <a id="studyLink" onclick="check()" href="AccessStudy.jsp">this link to
@@ -94,16 +94,26 @@
     </ol>
     <h2 id="thanks">Thanks!</h2>
     <p>That's all!  Thanks for helping us with the study!</p>
-
+    <p>Checked = wrap first five, Unchecked = wrap second five</p>
     <input type="checkbox" id="wrapFirst" value="false" onclick="toggleBox(this)">
-  
+    <p>Checked = altered first (Task set 2), Unchecked = unaltered first (Task set 1)</p>
+    <input type="checkbox" id="alteredFirst" value="false" onclick="toggleBox(this)">
+
 <script type="text/javascript">
 function check(){
+  document.getElementById("studyLink").href = "AccessStudy.jsp";
+  var firstChecked = false;
 	if (document.getElementById("wrapFirst").checked){
-		document.getElementById("studyLink").href="AccessStudy.jsp?wrapFirst=1";
+		document.getElementById("studyLink").href += "?wrapFirst=1";
+    firstChecked = true;
 	}
-	else{
-		document.getElementById("studyLink").href="AccessStudy.jsp";
+  if (document.getElementById("alteredFirst").checked){
+    if (firstChecked){
+      document.getElementById("studyLink").href += "&alteredFirst=1";
+    }
+    else{
+		  document.getElementById("studyLink").href += "?alteredFirst=1";
+    }
 	}
 	return false;
 }

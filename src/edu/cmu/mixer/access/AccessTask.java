@@ -7,8 +7,8 @@ public class AccessTask {
   }
 
   public static org.json.JSONObject getGuideObject(javax.servlet.http.HttpSession session,
-						   javax.servlet.http.HttpServletRequest request, boolean wrapFirst) throws Exception {
-                 
+						   javax.servlet.http.HttpServletRequest request, boolean wrapFirst, boolean alteredFirst) throws Exception {
+
     if (session.getAttribute("guide") != null) {
       org.json.JSONObject guide = new org.json.JSONObject((String) session.getAttribute("guide"));
       //guide.putOpt("literal", (String) session.getAttribute("guide"));
@@ -20,7 +20,7 @@ public class AccessTask {
     guide.putOpt("taskno", 0);
     guide.putOpt("mode", "practice");
 
-    org.json.JSONArray tasks = EventLog.getInstance().getStudyTasks();
+    org.json.JSONArray tasks = EventLog.getInstance().getStudyTasks(wrapFirst, alteredFirst);
     guide.putOpt("tasks", tasks);
 
     org.json.JSONObject firstTask = tasks.optJSONObject(0);
@@ -71,7 +71,7 @@ public class AccessTask {
 
     //guide.putOpt("tablefirst", EventLog.getInstance().getTableFirst(request.getRemoteAddr(), 1000 * 60 * 2));
     guide.putOpt("tablefirst", EventLog.getInstance().getTableFirst(request.getRemoteAddr(), wrapFirst));
-
+    guide.putOpt("alteredfirst", alteredFirst);
     //guide.putOpt("cookies", cookies);
     //guide.putOpt("tablefirst",
 

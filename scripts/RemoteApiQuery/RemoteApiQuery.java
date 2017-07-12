@@ -35,16 +35,16 @@ public class RemoteApiQuery
     RemoteApiInstaller installer = new RemoteApiInstaller();
     installer.install(options);
 
-  
+
     try {
       DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
       Query query = new Query("AccessEvent");
       query.addSort("timestamp",
                             com.google.appengine.api.datastore.Query.SortDirection.ASCENDING);
 
-      Filter dateFilter = new FilterPredicate("timestamp", FilterOperator.GREATER_THAN_OR_EQUAL, "2017");
+      Filter dateFilter = new FilterPredicate("timestamp", FilterOperator.GREATER_THAN_OR_EQUAL, "2017-07-07");
       query.setFilter(dateFilter);
-      
+
       PreparedQuery pq = ds.prepare(query);
       FetchOptions fo = FetchOptions.Builder.withDefaults();
 
@@ -52,9 +52,9 @@ public class RemoteApiQuery
       FileWriter writer = new FileWriter(path);
 
       writer.append("answer|condition|eventname|hash|target|taskid|taskno|timestamp\n");
-      
+
       int i = 0;
-      
+
       for (Entity e : pq.asIterable(fo)){
         String answer = (String)e.getProperty("answer");
         String noEscape = answer.replace("\n", "\\n");
@@ -85,14 +85,14 @@ public class RemoteApiQuery
         writer.append("|");
         writer.append(timestamp);
         writer.append("\n");
-        
-        
+
+
         i++;
         }
-      
+
       System.out.print("Number of records = ");
       System.out.println(i);
-      
+
       writer.flush();
       writer.close();
     }
