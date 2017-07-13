@@ -253,10 +253,10 @@
             </span>
           </div>
           <div class="interstitial tables">
-            The next several tasks utilize pages that have been processed to use tables by SmartWrap.
+            The next several tasks use pages that have been rewritten using Entable.
           </div>
           <div class="interstitial nontables">
-            The next several tasks utilize pages straight from the web.
+            The next several tasks use pages from the web.
           </div>
           <div class="interstitial break">
             Please stop working on the questions for now. We will review how the tasks went at this time.
@@ -273,10 +273,10 @@
               This is a practice task to let you get used to the format of the tasks.
             </div>
             <div class="condition tables">
-              This is a task utilizing a page that has been processed to use tables by SmartWrap.
+              This task uses a web page that has been rewritten using Entable.
             </div>
             <div class="condition nontables">
-              This is a task utilizing a page straight from the web.
+              This task uses a page from the web.
             </div>
             <div class="condition break">
               Please stop working on the questions for now. We will review how the tasks went at this time.
