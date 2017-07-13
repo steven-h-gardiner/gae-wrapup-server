@@ -1,0 +1,23 @@
+/* Effective stylesheet produced by snapshot save */
+.ui-helper-clearfix::before, .ui-helper-clearfix::after { content: ""; display: table; }
+.ui-helper-clearfix::after { clear: both; }
+.ui-helper-clearfix {  }
+.ui-icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; }
+.ui-widget { font-family: Lucida Grande,Lucida Sans,Arial,sans-serif; font-size: 1.1em; }
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Lucida Grande,Lucida Sans,Arial,sans-serif; font-size: 1em; }
+.ui-widget-content { border: 1px solid rgb(221, 221, 221); background: rgb(242, 245, 247) url("ui-bg_highlight-hard_100_f2f5f7_1x100.png") repeat-x scroll 50% top; color: rgb(54, 43, 54); }
+.ui-widget-header { border: 1px solid rgb(174, 208, 234); background: rgb(222, 237, 247) url("urn:not-loaded:https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/cupertino/images/ui-bg_highlight-soft_100_deedf7_1x100.png") repeat-x scroll 50% 50%; color: rgb(34, 34, 34); font-weight: bold; }
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { border: 1px solid rgb(174, 208, 234); background: rgb(215, 235, 249) url("ui-bg_glass_80_d7ebf9_1x400.png") repeat-x scroll 50% 50%; font-weight: bold; color: rgb(39, 121, 170); }
+.ui-widget :active { outline: medium none; }
+.ui-icon { width: 16px; height: 16px; background-image: url("urn:not-loaded:https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/cupertino/images/ui-icons_72a7cf_256x240.png"); }
+.ui-widget-content .ui-icon { background-image: url("urn:not-loaded:https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/cupertino/images/ui-icons_72a7cf_256x240.png"); }
+.ui-widget-header .ui-icon { background-image: url("urn:not-loaded:https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/cupertino/images/ui-icons_72a7cf_256x240.png"); }
+.ui-state-default .ui-icon { background-image: url("urn:not-loaded:https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/cupertino/images/ui-icons_3d80b3_256x240.png"); }
+.ui-icon-carat-2-n-s { background-position: -128px 0px; }
+.ui-icon-circle-minus { background-position: -16px -192px; }
+.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl { border-top-left-radius: 6px; }
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr { border-top-right-radius: 6px; }
+.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl { border-bottom-left-radius: 6px; }
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br { border-bottom-right-radius: 6px; }
+button.ui-button::-moz-focus-inner { border: 0px none; padding: 0px; }
+.ui-datepicker { width: 17em; padding: 0.2em 0.2em 0px; display: none; }

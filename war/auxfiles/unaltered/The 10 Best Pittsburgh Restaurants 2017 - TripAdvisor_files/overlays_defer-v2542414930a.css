@@ -1,0 +1,15 @@
+/* Effective stylesheet produced by snapshot save */
+.overlay.typeLD.relAbove .ldarrow::before, .overlay.typePS.relAbove .ldarrow::before { position: absolute; border-color: white transparent transparent; border-style: solid; border-width: 9px; content: " "; left: -9px; top: -10px; }
+.overlay.typeLD.relBelow .ldarrow::before, .overlay.typePS.relBelow .ldarrow::before { position: absolute; border-color: transparent transparent white; border-style: solid; border-width: 9px; content: " "; left: -9px; top: -8px; }
+.overlay.typeSA .arrow::before { content: ""; position: absolute; top: -10px; left: 1px; border-width: 10px 10px 10px 0px; border-style: solid; border-color: transparent rgb(255, 255, 255) transparent transparent; -moz-border-top-colors: none; -moz-border-right-colors: none; -moz-border-bottom-colors: none; -moz-border-left-colors: none; border-image: none; }
+.overlay.typeSA.relAbove .ldarrow::before { position: absolute; border-color: white transparent transparent; border-style: solid; border-width: 9px; content: " "; left: -9px; top: -10px; }
+.overlay.typeSA.relBelow .ldarrow::before { position: absolute; border-color: transparent transparent white; border-style: solid; border-width: 9px; content: " "; left: -9px; top: -8px; }
+.overlay.typeAC .arrow::before { content: ""; position: absolute; top: -10px; left: 2px; border-width: 10px 10px 10px 0px; border-style: solid; border-color: transparent rgb(255, 255, 255) transparent transparent; -moz-border-top-colors: none; -moz-border-right-colors: none; -moz-border-bottom-colors: none; -moz-border-left-colors: none; border-image: none; }
+.overlay.typeAAG_PP.ie8 .arrow::before { content: ""; position: absolute; top: -10px; left: 2px; border-width: 10px 10px 10px 0px; border-style: solid; border-color: transparent rgb(255, 255, 255) transparent transparent; -moz-border-top-colors: none; -moz-border-right-colors: none; -moz-border-bottom-colors: none; -moz-border-left-colors: none; border-image: none; }
+.overlay.tooltip .close::before { content: "x"; font-size: 1.75em; transition: opacity 200ms ease 0s; line-height: 16px; color: rgb(255, 255, 255); }
+:root .overlay.tooltip .close::before { content: "✕"; }
+.overlay.tooltip .close:hover::before { opacity: 0.7; }
+.overlay.tooltip.ttWhite .close::before, .overlay.tooltip.ttWhite h1, .overlay.tooltip.ttWhite h3 { color: rgb(88, 148, 66); }
+.facebookConnect3::after { display: block; position: absolute; top: 0px; left: 32px; width: 1px; height: 32px; background: rgb(52, 78, 134) none repeat scroll 0% 0%; content: ""; }
+.googleConnect::after { display: block; position: absolute; top: 0px; left: 32px; width: 1px; height: 32px; background: rgb(183, 45, 32) none repeat scroll 0% 0%; content: ""; }
+.vkConnect::after { display: block; position: absolute; top: 0px; left: 32px; width: 1px; height: 32px; background: rgb(70, 106, 144) none repeat scroll 0% 0%; content: ""; }

@@ -1,0 +1,31 @@
+/* Effective stylesheet produced by snapshot save */
+body { background-color: rgb(255, 255, 255); }
+H2 { color: rgb(0, 0, 128); }
+H2 { margin-top: 0em; margin-bottom: 0.1em; font-size: 130%; }
+#noScript { padding: 0.5em; color: rgb(143, 0, 0); font-weight: bold; font-size: 0.9em; }
+.collapse_div { margin: 1em 0em; padding: 0px; width: 100%; font-size: 95%; overflow: auto; }
+.ui-icon { background-image: url("ui-icons_454545_256x240.png") !important; }
+.news_tx_header_div_expanded { margin: 1px; color: rgb(153, 0, 0); font-weight: bold; font-size: 0.9em; padding: 3px 10px; cursor: pointer; position: relative; background-color: rgb(248, 240, 219); border-top-left-radius: 15px; border-top-right-radius: 15px; }
+#news_header_tx { padding: 0.3em; }
+#news_tx { margin-top: -0.6em; padding: 1px; background-color: rgb(248, 240, 219); font-size: 0.9em; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; }
+#collapsingNewsIcon { display: inline-block; margin-bottom: -0.15em; }
+.station_tx_header_div { margin: 1px; color: rgb(153, 0, 0); font-weight: bold; font-size: 0.9em; padding: 3px 10px; cursor: pointer; position: relative; background-color: rgb(248, 240, 219); border-radius: 15px; }
+#station_header_tx { padding: 0.3em; }
+#station_tx { padding: 5px 10px; background-color: rgb(250, 250, 250); }
+#collapsingStationIcon { display: inline-block; margin-bottom: -0.15em; }
+#availableData { background-color: rgb(0, 97, 163); color: rgb(255, 255, 255); font-size: 0.75em; padding: 0.4em; text-align: center; border-radius: 15px; }
+#available_parameters_table { border: 7px double rgb(0, 0, 128); padding: 0.4em; border-radius: 15px; }
+.available_parameters_float1 { display: inline-block; width: 100%; float: left; padding: 0.5em; font-size: 95%; }
+.available_parameters_float2 { display: inline-block; width: 25%; min-width: 200px; float: left; padding: 0.5em; font-size: 85%; }
+.available_parameters_float3 { display: inline-block; width: 35%; min-width: 100px; float: left; padding: 0.5em; font-size: 95%; }
+.stationContainer { margin-left: 35px; width: 95%; }
+.tablesorter-jui .tablesorter-filter-row td { display: none; }
+#subtitle { display: none; }
+#usgsccsa { display: none; }
+#usgssubfooter { display: none; }
+#usgsfootertext { display: none; }
+.clear { clear: both; }
+#usgssubfooter { width: 100%; display: inline; bottom: 0px; left: 0px; padding: 5px 0px; clear: both; font-size: 0.9em; }
+#leftsubfooter { float: left; width: 100%; }
+#rightsubfooter { float: left; width: 100%; }
+#usgsfooter { width: 100%; display: inline; bottom: 0px; left: 0px; padding: 5px 0px; clear: both; }

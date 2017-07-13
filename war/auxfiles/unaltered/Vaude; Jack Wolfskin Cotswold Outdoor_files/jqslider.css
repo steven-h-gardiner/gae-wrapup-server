@@ -1,0 +1,15 @@
+/* Effective stylesheet produced by snapshot save */
+.ui-slider { position: relative; text-align: left; }
+.ui-slider .ui-slider-handle { position: absolute; z-index: 2; width: 1.2em; height: 1.2em; cursor: default; }
+.ui-slider .ui-slider-range { position: absolute; z-index: 1; font-size: 0.7em; display: block; border: 0px none; background-position: 0px 0px; }
+.ui-slider-horizontal { height: 0.8em; }
+.ui-slider-horizontal .ui-slider-handle { top: -12px; margin-left: -0.6em; }
+.ui-slider-horizontal .ui-slider-range { top: 0px; height: 100%; background: rgb(48, 135, 189) none repeat scroll 0% 0%; }
+.ui-helper-clearfix::after { content: "."; display: block; height: 0px; clear: both; visibility: hidden; }
+.ui-widget { font-family: Verdana,Arial,sans-serif; font-size: 1.1em; }
+.ui-widget-content { border: 1px solid rgb(166, 201, 226); background: rgb(252, 253, 253) none repeat scroll 0% 0%; color: rgb(34, 34, 34); }
+.ui-widget-content a { color: rgb(34, 34, 34); }
+.ui-widget-header { border: 1px solid rgb(29, 31, 32); background: rgb(30, 31, 30) none repeat-x scroll 50% 50%; color: rgb(234, 245, 247); font-weight: bold; }
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { background-color: transparent; background-image: url("urn:not-loaded:http://www.cotswoldoutdoor.com/images/style/slider-left.png"); background-repeat: no-repeat; background-attachment: scroll; background-clip: border-box; background-origin: padding-box; background-size: auto auto; background-position: 0px 5px !important; height: 27px; width: 18px; font-weight: normal; color: rgb(255, 255, 255); }
+.ui-widget :active { outline: medium none; }
+.ui-corner-all { border-radius: 5px; }

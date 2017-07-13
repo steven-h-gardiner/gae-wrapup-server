@@ -1,0 +1,14 @@
+/* Effective stylesheet produced by snapshot save */
+#emf-container-wrap {  }
+#emf-container { background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Verdana; font-size: 13px; }
+html { background-image: none; background-color: rgb(238, 238, 238); }
+#emf-container #emf-logo { background-image: none; background-color: transparent; border-radius: 0px; }
+#emf-container #emf-logo a { text-indent: -99999px; background-image: url("urn:not-loaded:http://assets.emailmeform.com/images/themes/logos/airplane.png"); background-repeat: no-repeat; height: 40px; display: none; }
+#emf-container { background-color: rgb(255, 255, 255); border-width: 1px; border-style: solid; border-color: rgb(204, 204, 204); }
+#emf-form-title { font-family: Bookman Old Style; font-style: normal; font-size: 20px; color: rgb(0, 0, 102); font-weight: normal; background-image: none; }
+#emf-form-description { font-family: Bookman Old Style; font-style: normal; font-size: 14px; color: rgb(0, 0, 102); background-image: none; }
+label.emf-label-desc, div.emf-div-field label { font-family: Courier New; font-style: normal; font-size: 18px; color: rgb(153, 153, 153); font-weight: normal; background-image: none; }
+div.emf-div-field input, div.emf-div-field textarea, div.emf-div-field select { color: rgb(0, 0, 102); background-image: none; font-size: 13px; }
+#emf-form-shadows { display: block; margin: 0px auto; height: 9px; width: 640px; border: medium none; visibility: visible; }
+#emf-container .emf-head-widget, #emf-container li .emf-section-separator { border-bottom-style: dashed; border-color: rgb(204, 204, 204); }
+#emf-container li .emf-div-instruction, #emf-container li .emf-div-field label.emf-bottom-label { font-family: Arial; font-style: italic; font-size: 10px; color: rgb(0, 51, 51); background-image: none; }

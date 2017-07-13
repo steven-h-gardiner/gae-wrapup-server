@@ -1,0 +1,11 @@
+/* Effective stylesheet produced by snapshot save */
+.tablesorter-jui { width: 100%; border-collapse: separate; border-spacing: 2px; margin: 10px 0px 15px; padding: 5px; font-size: 0.8em; }
+.tablesorter-jui th, .tablesorter-jui thead td { position: relative; background-repeat: no-repeat; background-position: right center; font-weight: bold !important; border-width: 1px !important; text-align: left; }
+.tablesorter-jui .header, .tablesorter-jui .tablesorter-header { cursor: pointer; white-space: normal; padding: 8px; }
+.tablesorter-jui .tablesorter-header-inner { padding-right: 20px; }
+.tablesorter-jui thead tr th .ui-icon { position: absolute; right: 3px; top: 50%; margin-top: -8px; }
+.tablesorter-jui td { padding: 4px; vertical-align: top; }
+.tablesorter-jui tbody > tr:hover td { opacity: 0.7; }
+.tablesorter-jui tr.ui-state-default { background-image: none; font-weight: normal; }
+.tablesorter-jui .tablesorter-filter-row td { background: transparent none repeat scroll 0% 0%; line-height: normal; text-align: center; transition: line-height 0.1s ease 0s; }
+.tablesorter-jui .tablesorter-filter { width: 98%; height: inherit; margin: 0px; padding: 4px; background-color: rgb(255, 255, 255); border: 1px solid rgb(187, 187, 187); color: rgb(51, 51, 51); box-sizing: border-box; transition: height 0.1s ease 0s; }

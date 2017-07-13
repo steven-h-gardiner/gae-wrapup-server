@@ -1,0 +1,21 @@
+/* Effective stylesheet produced by snapshot save */
+.ui-helper-clearfix::after { content: "."; display: block; height: 0px; clear: both; visibility: hidden; }
+.ui-helper-clearfix { display: inline-block; }
+.ui-helper-clearfix { display: block; }
+.ui-icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; }
+.ui-widget { font-family: Helvetica,Arial,sans-serif; font-size: 1.1em; }
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Helvetica,Arial,sans-serif; font-size: 1em; }
+.ui-widget-content { border: 1px solid rgb(221, 221, 221); background: rgb(255, 255, 255) url("urn:not-loaded:https://waterdata.usgs.gov/nwisweb/stylesheets/images/ui-bg_flat_75_ffffff_40x100.png") repeat-x scroll 50% 50%; color: rgb(68, 68, 68); }
+.ui-widget-header { border: 1px solid rgb(221, 221, 221); background: rgb(221, 221, 221) url("urn:not-loaded:https://waterdata.usgs.gov/nwisweb/stylesheets/images/ui-bg_highlight-soft_50_dddddd_1x100.png") repeat-x scroll 50% 50%; color: rgb(68, 68, 68); font-weight: bold; }
+.ui-state-default, .ui-widget-content .ui-state-default { border: 1px solid rgb(221, 221, 221); background: rgb(246, 246, 246) url("urn:not-loaded:https://waterdata.usgs.gov/nwisweb/stylesheets/images/ui-bg_highlight-soft_100_f6f6f6_1x100.png") repeat-x scroll 50% 50%; font-weight: bold; color: rgb(0, 115, 234); }
+.ui-widget :active { outline: medium none; }
+.ui-icon { width: 16px; height: 16px; background-image: url("urn:not-loaded:https://waterdata.usgs.gov/nwisweb/stylesheets/images/ui-icons_ff0084_256x240.png"); }
+.ui-widget-content .ui-icon { background-image: url("urn:not-loaded:https://waterdata.usgs.gov/nwisweb/stylesheets/images/ui-icons_ff0084_256x240.png"); }
+.ui-widget-header .ui-icon { background-image: url("urn:not-loaded:https://waterdata.usgs.gov/nwisweb/stylesheets/images/ui-icons_0073ea_256x240.png"); }
+.ui-state-default .ui-icon { background-image: url("urn:not-loaded:https://waterdata.usgs.gov/nwisweb/stylesheets/images/ui-icons_666666_256x240.png"); }
+.ui-icon-carat-2-n-s { background-position: -128px 0px; }
+.ui-icon-circle-minus { background-position: -16px -192px; }
+.ui-corner-all { border-radius: 2px; }
+button.ui-button::-moz-focus-inner { border: 0px none; padding: 0px; }
+.ui-datepicker { width: 17em; padding: 0.2em 0.2em 0px; }
+#ui-datepicker-div { display: none; }

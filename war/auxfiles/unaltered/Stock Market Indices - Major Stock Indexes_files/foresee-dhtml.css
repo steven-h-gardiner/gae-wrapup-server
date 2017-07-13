@@ -1,0 +1,6 @@
+/* Effective stylesheet produced by snapshot save */
+html.fsrInvitePresent:not(.fsrM) { overflow: hidden; }
+.fsrB a:active, html:not(.fsrM) .fsrB a:hover, .fsrDoHover a { background: transparent -moz-linear-gradient(center top , rgb(227, 227, 227) 0px, rgb(198, 198, 198) 100%) repeat scroll 0% 0%; }
+:-moz-placeholder { color: rgb(118, 118, 118); }
+*::-moz-placeholder { color: rgb(118, 118, 118); }
+a:active, a:focus, input:active, input:focus { outline: 2px solid rgb(19, 111, 126); }

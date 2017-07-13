@@ -1,0 +1,90 @@
+/* Effective stylesheet produced by snapshot save */
+#center { background-color: rgb(255, 255, 255); margin-top: 0px; }
+#footer { margin-top: 0px !important; padding-top: 25px; background-color: white; float: left; }
+.data-box .scroll-ul li:not(.selected) .swatch { padding: 0px; }
+.popupClickAndCollect .body input[type="submit"]::-moz-focus-inner { border: 0px none; }
+.inner-filter li .box a:hover, .inner-filter li .box a strong { color: rgb(0, 0, 0); text-decoration: none; }
+.product-detail-new .new, .product-detail .thumb-overlay { top: 45px; }
+.inner-right-box .search-box { float: left; margin-top: 10px; margin-left: 25px; position: relative; width: 550px; }
+.inner-right-box .search-box form { float: left; }
+.header-promos a:not(.visible) { display: none; }
+.menu { padding-top: 0px; position: relative; z-index: 1038; }
+.menu .rows-10-box { background: transparent linear-gradient(to bottom, rgb(111, 111, 111) 0px, rgb(77, 76, 77) 100%) repeat scroll 0% 0%; }
+.menu ul li.menu-item:not(.no-standard) { background: transparent linear-gradient(to bottom, rgb(111, 111, 111) 0px, rgb(77, 76, 77) 100%) repeat scroll 0% 0%; text-align: center; width: auto; }
+.menu ul li.menu-item.restore:not(.no-standard) { background: transparent linear-gradient(to bottom, rgb(84, 84, 83) 0px, rgb(55, 54, 55) 100%) repeat scroll 0% 0%; }
+.menu ul li.menu-item:hover:not(.no-sub) .catitem::after { background-image: url("urn:not-loaded:http://www.cotswoldoutdoor.com/images/style/nav_arrow_up.png"); background-position: center bottom; background-repeat: no-repeat; bottom: 0px; content: ""; display: block; height: 10px; position: absolute; width: 100%; }
+.menu ul li.no-standard { background: transparent linear-gradient(to bottom, transparent 0px, rgba(0, 0, 0, 0.3) 100%) repeat scroll 0% 0%; text-align: center; width: auto; }
+.menu ul li.no-standard:hover { background: transparent linear-gradient(to bottom, transparent 0px, rgba(0, 0, 0, 0.3) 100%) repeat scroll 0% 0%; width: auto; }
+.menu ul li.menu-item .catitem { background: transparent url("menu_splitter.png") no-repeat scroll right center; color: rgb(234, 234, 234); height: 50px !important; line-height: 40px !important; font-size: 13px; font-weight: lighter; padding: 0px 5px; text-align: center; }
+.menu ul li.menu-item .catitem:hover { text-decoration: underline; }
+#header { background: transparent none repeat scroll 0% 0%; height: 100%; padding-top: 15px; font-family: "Droid Sans",tahoma,arial,verdana,sans-serif,"Trebuchet MS"; }
+#header .right-box { height: 100px; z-index: 1039; }
+#header .right-box .inner-right-box { margin-top: 15px; }
+.inner-right-box .search-box .search-button { display: none; float: right; width: auto; height: 35px; border: medium none; background-color: rgb(84, 140, 177); background-image: url("search_header_uk.png"); background-repeat: no-repeat; background-position: 10px center; padding: 7px 15px 7px 35px; border-radius: 0px; color: rgb(255, 255, 255); cursor: pointer; font-size: 12px; }
+.inner-right-box .search-box .search-button:hover { background-color: rgb(103, 158, 189); }
+#main-menu .rows-1-box { margin: 0px; width: 96px; }
+.total_nr_products { position: absolute; top: 85px; width: 130px; text-align: center; text-decoration: none; color: rgb(0, 0, 0); left: 0px; }
+.price-slider-info { height: 30px; }
+.fh_price_high { float: right; }
+#menu-basket-icon { display: none; }
+.topmenu-bar { background: rgb(154, 180, 197) none repeat scroll 0% 0%; height: 5px; left: 0px; position: absolute; top: 0px; width: 100%; z-index: 1039; }
+.topmenu { background: transparent none repeat scroll 0% 0% !important; height: 5px; position: absolute; z-index: 1040; }
+.topmenu ul li:hover:not(.omega) div, .topmenu ul li a:hover { background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); }
+.topmenu ul li:hover div, .topmenu ul li a:hover div { visibility: hidden; }
+.product-detail a { color: rgb(0, 0, 0); }
+#topmenulinks { background: transparent none repeat scroll 0% 0%; margin-top: 10px; }
+.topmenu ul li { float: right; }
+.topmenu ul li:last-child { background: transparent none repeat scroll 0% 0%; }
+.topmenu ul li { background: transparent url("border_topmenu.png") no-repeat scroll left center; padding-left: 20px; padding-right: 20px; }
+.topmenu ul li:not(.name):not(.headershopslink):not(.loginlink):not(.shopName):not(.header_subscribe) > a::after { background-image: url("topmenu_arrow_cw.png"); background-repeat: no-repeat; content: ""; cursor: pointer; display: block; height: 6px; position: absolute; right: 5px; top: 8px; width: 6px; }
+.topmenu ul li a, .topmenu ul li a:visited, .topmenu ul li .no-link, .topmenu ul li a:hover { background: transparent none repeat scroll 0% 0%; border: medium none; color: rgb(135, 135, 135); font-size: 11px; font-weight: normal; padding-left: 0px; }
+.topmenu ul li a strong { font-weight: lighter; }
+.topmenu ul li div::before { background: transparent url("popup-topmenu-arrow.png") no-repeat scroll center center; content: ""; display: inline-block; height: 10px; position: relative; top: -10px; width: 100%; }
+.topmenu ul li div { background-color: rgb(255, 255, 255); background-position: -20px center; border: 1px solid rgb(201, 201, 201); border-radius: 6px 6px 0px 0px; box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.2); margin-left: 110px; top: 25px; }
+.topmenu ul li .countrySelector { margin-left: 0px; right: 0px; width: 192px; }
+.topmenu ul li .selectCountryButton { background-image: url("update.png"); background-repeat: no-repeat; background-position: 10px center; background-color: rgb(79, 130, 158); cursor: pointer; color: rgb(255, 255, 255); margin: 0px 10px 10px; padding: 5px 0px; text-align: center; width: 170px; }
+.topmenu ul li .selectCountryButton:hover { background-image: url("update.png"); background-repeat: no-repeat; background-position: 10px center; background-color: rgb(103, 158, 189); color: rgb(255, 255, 255); text-decoration: none; }
+.topmenu ul li .countrySelector span { color: rgb(103, 158, 189); display: block; margin: 0px 0px 5px 10px; }
+.topmenu ul li .countrySelector::before { background-position: 100px center; }
+.topmenu ul li .countrySelector select { background: rgb(242, 242, 242) none repeat scroll 0% 0%; border: 1px solid rgb(217, 217, 217); color: rgb(89, 89, 89); font-size: 12px; margin: 0px 10px 10px; padding: 3px 5px; width: 170px; border-radius: 2px; outline: medium none; display: inline-block; cursor: pointer; box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.1); }
+.topmenu ul .countrySelectorLink .flag { float: left; margin: 5px 5px 0px 0px; max-height: 12px; max-width: 18px; }
+.topmenu ul .countrySelectorLink a { float: left; }
+.topmenu ul li .menu-customerservice { color: rgb(44, 85, 108) !important; display: none; margin-left: 0px; right: 0px; text-align: center; width: 132px; }
+.topmenu ul li .top-menuitem2 p a:not(.logoutbever) { display: block; height: 25px; padding-left: 0px; }
+.topmenu ul li .top-menuitem1 a { display: block; height: 25px; padding-left: 0px; }
+.topmenu ul li div a, .topmenu ul li div a:visited { color: rgb(103, 158, 189); text-align: center; width: 100%; }
+.topmenu ul li .container_10 a:first-child { color: rgb(103, 158, 189) !important; }
+.container_10 .grid_1 { width: auto; }
+.shoppingcart { background: rgb(125, 144, 156) none repeat scroll 0px 0px; cursor: pointer; float: right; height: 36px; margin-top: 37px; padding-left: 5px; position: relative; width: 210px; }
+.shoppingcart.active::after { background-position: 0px -224px; }
+.shoppingcart::after { background-image: url("icons-sprite.png"); background-repeat: no-repeat; background-position: 0px -359px; content: ""; display: block; height: 7px; position: absolute; right: 10px; top: 16px; width: 10px; }
+.shoppingcart a { color: rgb(255, 255, 255); font-size: 13px; font-weight: bold; line-height: 34px; text-decoration: none; }
+.shoppingcart > a::before { background-image: url("basket-icon-cotswold.png"); background-position: 5px 3px; background-repeat: no-repeat; }
+.shoppingcart > a::before { content: ""; display: inline-block; height: 23px; margin-right: 8px; position: relative; top: 5px; width: 27px; }
+.shoppingcart .no-items { color: rgb(240, 240, 240); }
+.shoppingcart .menu-basket { font-size: 12px; }
+.intro-text-header { color: rgb(58, 58, 57); margin-left: 25px; font-size: 13px; }
+.intro-text-header a { color: rgb(58, 58, 57); }
+.level1-dropdown::before { content: ""; position: relative; top: -20px; width: 5px; height: 5px; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 5px solid rgb(103, 158, 189); }
+.level1-dropdown { background: transparent url("urn:not-loaded:http://www.cotswoldoutdoor.com/images/style/dropdown_background_pattern.jpg") repeat-y scroll 0% 0%; border-width: 6px 1px; border-style: solid; border-color: rgb(103, 158, 189); padding-bottom: 20px; top: 50px; box-shadow: none; width: 958px; z-index: 11; }
+.level1-dropdown .dropdown_close { display: block; position: absolute; top: 0px; right: 0px; height: 30px; width: 29px; background: transparent url("overlay_close.png") no-repeat scroll 0% 0%; cursor: pointer; margin: 15px 15px 0px 0px; border: medium none; }
+@media only screen and (min-width: 1024px) {
+  .level1-dropdown .dropdown_close { display: none !important; }
+}
+.level1-dropdown .campaign { background: rgb(218, 227, 232) none repeat scroll 0% 0%; float: left; line-height: normal; min-height: inherit; height: inherit; margin-right: 20px; max-width: 145px; width: 145px; padding: 45px 20px 0px; overflow: hidden; }
+.level1-dropdown .campaign div[class*="rows-"] { background: transparent none repeat scroll 0% 0% !important; margin-top: 6px; }
+.level1-dropdown .rows-2-box { margin-right: 29px; margin-top: 45px; width: 123px; }
+.level1-dropdown .rows-2-box.last-column { margin-right: 20px; }
+.level1-dropdown .rows-2-box p { margin-left: 0px !important; text-align: left; }
+.level1-dropdown .rows-2-box a { color: rgb(103, 103, 103); font-size: 12px; padding: 0px !important; }
+.level1-dropdown .rows-2-box .title a { color: rgb(51, 51, 51); font-size: 13px; }
+.level1-dropdown .rows-2-box p a:hover { color: rgb(42, 105, 142); text-decoration: underline; }
+.level1-dropdown .rows-2-box .title a:hover { color: rgb(51, 51, 51); text-decoration: underline; }
+.level1-dropdown .rows-2-box .title { margin-bottom: 20px !important; }
+.level1-dropdown p a::after { content: ""; }
+.suggest-dropdown { top: 34px; width: 345px; }
+.inner-right-box .search-box .search-input-field { width: 340px; border-radius: 0px; }
+.dividerCampaigns { display: none; }
+.inner-center-item-added .certona .products-detail-ul .firstThumb .product-detail .img-box a:not(.thumb-overlay) img { height: 300px; width: 300px; }
+.brandspage_container .az_block .az_links .subtitle_holder .subtitle::after { content: url("urn:not-loaded:http://www.cotswoldoutdoor.com/images/style/arrow-right-brands.png"); display: block; float: right; margin: 2px 0px 0px 6px; }
+.voucher-wrapper .btn-group.back-to-step2 .btn-right-arrow::after { content: ""; }
