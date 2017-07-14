@@ -1,372 +1,200 @@
 <html>
-  <head>
-    <title>Accessible Tables Consent Form</title>
-    <script src="./js/jquery-2.1.3.min.js"></script>
-    <script src="./js/jquery.qrcode.js"></script>
-    <script src="./js/qrcode.js"></script>
-    <script src="./js/jquery.rc4.js"></script>
-    <script>
-      jQuery(document).on('ready', function() {
-        setTimeout(function() {
-          var plaintext = jQuery(".email.plaintext").text();
-	  plaintext = plaintext.split(/\./).reverse().join(".");
-	  
-	  var cipher = jQuery(jQuery(".email.encrypted").get().reverse()).text();
-	  cipher = cipher || jQuery.hexEncode(plaintext);
-	  //jQuery(".email.encrypted").text(cipher);
-           jQuery(".email.decrypted").text(jQuery.hexDecode(cipher).split(/\./).reverse().join("."));
-        }, 500);
+
+<head>
+  <title>Accessible Tables Consent Form</title>
+  <script src="./js/jquery-2.1.3.min.js"></script>
+  <script src="./js/jquery.qrcode.js"></script>
+  <script src="./js/qrcode.js"></script>
+  <script src="./js/jquery.rc4.js"></script>
+  <script>
+    jQuery(document).on('ready', function() {
+      setTimeout(function() {
+        var plaintext = jQuery(".email.plaintext").text();
+        plaintext = plaintext.split(/\./).reverse().join(".");
+        var cipher = jQuery(jQuery(".email.encrypted").get().reverse()).text();
+        cipher = cipher || jQuery.hexEncode(plaintext);
+        //jQuery(".email.encrypted").text(cipher);
+        jQuery(".email.decrypted").text(jQuery.hexDecode(cipher).split(/\./).reverse().join("."));
+      }, 500);
+    });
+  </script>
+  <script>
+    jQuery(document).on('ready', function() {
+      jQuery(".title.copy").text(jQuery("#title").text());
+      var header1 = jQuery("header");
+      header1.toggleClass('offscreen');
+      var header2 = header1.clone();
+      header2.attr('class', '');
+      header2.toggleClass('primal');
+      header2.attr('aria-hidden', 'false');
+      header2.insertBefore(jQuery("main"));
+    });
+  </script>
+  <script>
+    var qrtext = "http://tinyurl.com/tablesconsent";
+    var linktext = "http://tinyurl.com/tablesconsent";
+    var viztext = "http://tinyurl.com/tablesconsent";
+    jQuery(document).on('ready', function() {
+      jQuery(".qrlink, .vizlink").text('');
+      jQuery(".vizlink").text(viztext);
+      jQuery(".qrlink, .vizlink").attr('href', linktext);
+      jQuery(".qrlink").qrcode({
+        text: qrtext,
+        render1: "table",
       });
-    </script>
-    <script>
-      jQuery(document).on('ready', function() {
-        jQuery(".title.copy").text(jQuery("#title").text());
+    });
+  </script>
+  <style>
+    .email.encrypted {
+      display: none;
+    }
 
-        var header1 = jQuery("header");
-        header1.toggleClass('offscreen');
-        var header2 = header1.clone();
-        header2.attr('class', '');
-        header2.toggleClass('primal');
-        header2.attr('aria-hidden', 'true');
-        header2.insertBefore(jQuery("main"));
-      });
-    </script>
-    <script>
-      var qrtext = "http://tinyurl.com/tablesconsent";
-      var linktext = "http://tinyurl.com/tablesconsent";
-      var viztext = "http://tinyurl.com/tablesconsent";
-      jQuery(document).on('ready', function() {
-      
-        jQuery(".qrlink, .vizlink").text('');
-        jQuery(".vizlink").text(viztext);
-        jQuery(".qrlink, .vizlink").attr('href', linktext);
+    .offscreen {
+      position: absolute;
+      left: -10000px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
 
-        jQuery(".qrlink").qrcode({
-          text: qrtext,
-          render1: "table",
-        });
-      });
-    </script>
-    <style>
-      .email.encrypted { display: none; }
-      
-      .offscreen {
-        position:absolute;
-        left:-10000px;
-        top:auto;
-        width:1px;
-        height:1px;
-        overflow:hidden;
-      }
+    dt {
+      margin: 2ex 1ex;
+      font-weight: bold;
+    }
 
-      dt {
-        margin: 2ex 1ex;
-        font-weight: bold;
-      }
+    body {
+      margin: 10%;
+    }
 
-      body {
-        margin: 10%;
-      }
+    .sigline {
+      display: table;
+      width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 6em;
+      margin-bottom: 2em;
+    }
 
+    .sigline>div {
+      display: table-row;
+    }
 
-      .sigline {
-        display: table;
-        width: 90%;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 6em;
-        margin-bottom: 2em;
-      }
-      .sigline > div { display: table-row; }
-      .sigline > div > span {
-        display: table-cell;
-        border-top: 1px solid black;
-        padding: 0em 4em;
-      }
-      span.spacer {
-        border-top: none !important
-      }
+    .sigline>div>span {
+      display: table-cell;
+      border-top: 1px solid black;
+      padding: 0em 4em;
+    }
 
-      span.signature {
-        width: 75%;
-        text-align: center;
-      }
+    span.spacer {
+      border-top: none !important
+    }
 
-      .videoradio {
-        -webkit-appearance: checkbox;
-        margin: 0em 0em;
-      }
+    span.signature {
+      width: 75%;
+      text-align: center;
+    }
 
-      input[type=text] {
-        min-height: 4em;
-        min-width: 7em;
-      }
+    .videoradio {
+      -webkit-appearance: checkbox;
+      margin: 0em 0em;
+    }
 
-      footer {
-        font-size: small;
-      }
+    input[type=text] {
+      min-height: 4em;
+      min-width: 7em;
+    }
 
-      header {
-        margin-left: 3em;
-        margin-right: 3em;
-      }
+    footer {
+      font-size: small;
+    }
 
-      .zoom {
-        zoom: 1.8;
-        margin: 0px;
+    header {
+      margin-left: 3em;
+      margin-right: 3em;
+    }
 
-      }
+    .zoom {
+      zoom: 1.8;
+      margin: 0px;
+    }
 
-      .qr {
-        float: right;
-        padding: 1ex;
-        border: 1px solid black;
-      }
+    .qr {
+      float: right;
+      padding: 1ex;
+      border: 1px solid black;
+    }
 
-      .qr .vizlink {
-        color: black;        
-      }
-      
-      footer .qrlink {
-        zoom: 0.6;
-      }
-      header .qrlink {
-        zoom: 0.7;
-      }
-    </style>
-  </head>
-  <body>
-    <span class="email encrypted">6577</span>
-    <h1>Carnegie Mellon University &mdash; Consent Form for Participation in Research</h1>
-    <h2 class="offscreen">Study Title: <span id="title">Utility of tabular structure for nonvisual browsing</span></h2>
-    <main>
-    <dl>
-      <dt>Purpose of this Study</dt>
+    .qr .vizlink {
+      color: black;
+    }
 
+    footer .qrlink {
+      zoom: 0.6;
+    }
+
+    header .qrlink {
+      zoom: 0.7;
+    }
+  </style>
+</head>
+
+<body> <span class="email encrypted">6577</span>
+  <h1>Carnegie Mellon University &mdash; Consent Form for Participation in Research</h1>
+  <h2 class="offscreen">Study Title: <span id="title">Utility of tabular structure for nonvisual browsing</span></h2>
+  <main>
+    <dl> <dt>Purpose of this Study</dt>
       <dd>
-        <p>
-	  The purpose of the study is to determine whether websites
-	  presenting data as tables are easier to use with a screen
-	  reader than websites presenting the same information as a
-	  formatted list.
-        </p>
-      </dd>
-      
-      <dt>Procedures</dt>
-
+        <p> The purpose of the study is to determine whether websites presenting data as tables are easier to use with a screen reader than websites presenting the same information as a formatted list. </p>
+      </dd> <dt>Procedures</dt>
       <dd>
-	<p>
-	  You will be asked to complete a series of lookup tasks on
-	  websites which may be presented in various formats.  Each
-	  task will be presented as a web form.  Each form will pose a
-	  question whose answer is contained within a single linked
-	  website.  You should answer the question as accurately as
-	  possible, working at a speed comfortable to you.
-	</p>
-
-	<p>
-	  Additionally, you will be asked to complete a brief online
-	  survey relating to your expertise using a screen reader.
-	</p>
-
-	<p>
-	  After completion of the tasks, you may be asked a series of
-	  follow-up questions about problems you might have
-	  encountered during the tasks.  At this time, you are also
-	  welcome to point out problems with the tasks or things that
-	  you noticed.
-	</p>
-
-	<p>
-	  Your interactions with the task web forms will be logged for
-	  subsequent analysis.  Your voice and any actions appearing
-	  on the screen will also be recorded, as will the audio of
-	  the follow-up interview.
-	</p>
-
-	<p>
-	  The duration of the study will be 60-90 minutes.  The study
-	  will take place in a designated lab on Carnegie Mellon
-	  campus, or in your customized workspace.
-	</p>
-      </dd>
-
-      <dt>Participant Requirements</dt>
-
+        <p> You will be asked to complete a series of lookup tasks on websites which may be presented in various formats. Each task will be presented as a web form. Each form will pose a question whose answer is contained within a single linked website. You should answer the question as quickly and accurately as possible, while still working at a speed comfortable to you. </p>
+        <p> Additionally, you will be asked to complete a brief survey relating to your background and expertise using a screen reader. </p>
+        <p> After completion of the tasks, you may be asked a series of follow-up questions about your experience doing the tasks and any problems you might have encountered during the tasks. At this time, you are also welcome to point out problems with the tasks or things that you noticed. </p>
+        <p> Your interactions with our site will be logged for subsequent analysis. We will also video record the entire study session. This will include your voice and any actions appearing on the screen, as well as the audio of the follow-up interview. </p>
+        <p> We have designed the study to last 60-90 minutes. The study will take place in a designated lab on Carnegie Mellon campus, or in your customized workspace. </p>
+      </dd> <dt>Participant Requirements</dt>
       <dd>
-	To participate in the study you must be older than 18.
-	Additionally, study participants should be experienced users
-	of screen readers.
-      </dd>
-
-      <dt>Risks</dt>
-
+        <p> To participate in the study you must be older than 18. Additionally, study participants should be experienced with screen readers and regularly use the internet. </p>
+      </dd> <dt>Risks</dt>
       <dd>
-	The risks and discomfort associated with participation in this
-	study are no greater than those ordinarily encountered in
-	daily life, during ordinary internet use, or during routine
-	psychological examinations or tests.  There is a small risk
-	that other people will find out that you participated in this
-	study, though we will make every effort to avoid such a breach
-	of your confidentiality.
-      </dd>
-      
-      <dt>Benefits</dt>
-
+        <p> The risks and discomfort associated with participation in this study are no greater than those ordinarily encountered in daily life, during ordinary internet use, or during routine psychological examinations or tests. There is a small risk that other people will find out that you participated in this study, though we will make every effort to avoid such a breach of your confidentiality. </p>
+      </dd> <dt>Benefits</dt>
       <dd>
-	There may be no personal benefit from your participation in
-	the study but the knowledge received may be of value to
-	humanity.
-      </dd>
-	
-      <dt>Compensation &amp; Costs</dt>
-
+        <p> There may be no personal benefit from your participation in the study but the knowledge received may be of value to humanity. </p>
+      </dd> <dt>Compensation &amp; Costs</dt>
       <dd>
-	<p>
-	  <!--
-	  You will be paid $25 per hour for participating in this
-	  study.  If you finish or the study in less than 60 minutes,
-	  you will be paid for the full hour.  If you decide to
-	  terminate the study at any time, you will be paid for the
-	  time you spent participating.
-	    -->
-	  For participating in this study, you will be paid a base
-	  rate of $30, which will be adjusted based on your
-	  performance on the tasks.  For each question answered
-	  incorrectly, a penalty of one dollar will be subtracted.
-	  For each correctly answered question that is faster than
-	  average, a bonus of one dollar will be added.  There is no
-	  penalty nor bonus for skipped questions.
-	</p>
-	<p>
-	  After adjustment for penalties and bonuses, the minimum
-	  amount you will be paid is $22, and the maximum amount is
-	  $38.
-	</p>
-	<p>
-	  There will be no cost to you if you participate in this study.
-	</p>
-      </dd>
-      
-      <dt>Confidentiality</dt>
-
+        <p> For participating in this study, we will pay you $30. </p>
+        <p> There will be no cost to you if you participate in this study. </p>
+      </dd> <dt>Confidentiality</dt>
       <dd>
-	<p>
-	  By participating in the study, you understand and agree that
-	  Carnegie Mellon may be required to disclose your consent
-	  form, data and other personally identifiable information as
-	  required by law, regulation, subpoena or court
-	  order. Otherwise, your confidentiality will be maintained in
-	  the following manner:
-	</p>
-	<p>
-	  To protect your identity, you will be assigned and told a
-	  unique number.  All collected data will refer to this
-	  number, not to your name.  Any publication or dissemination
-	  of the research data and/or results will not contain your
-	  name or any personal identifiers.  All collected recordings
-	  and data files will be stored in a secured location accessed
-	  only by authorized researchers, and personal identifiers
-	  (including your name) will not be disclosed except by legal
-	  requirement as described above.
-	</p>
-	<p>
-	  Your data and consent form will be kept separate. Your
-	  consent form will be stored in a locked location on Carnegie
-	  Mellon property and will not be disclosed to third
-	  parties. By participating, you understand and agree that the
-	  data and information gathered during this study may be used
-	  by Carnegie Mellon and published and/or disclosed by
-	  Carnegie Mellon to others outside of Carnegie
-	  Mellon. However, your name, address, contact information and
-	  other direct personal identifiers in your consent form will
-	  not be mentioned in any such publication or dissemination of
-	  the research data and/or results by Carnegie Mellon.
-	</p>
-      </dd>
-      
-      <dt>Optional Permission</dt>
-
+        <p> By participating in the study, you understand and agree that Carnegie Mellon may be required to disclose your consent form, data and other personally identifiable information as required by law, regulation, subpoena or court order. Otherwise, your confidentiality will be maintained in the following manner: </p>
+        <p> To protect your identity, you will be assigned a unique number. All collected data will refer to this number, not to your name. Any publication or dissemination of the research data and/or results will not contain your name or any personal identifiers. All collected recordings and data files will be stored in a secured location accessed only by authorized researchers, and personal identifiers (including your name) will not be disclosed except by legal requirement as described below. </p>
+        <p> Your data and consent form will be kept separate. Your consent form will be stored in a locked location on Carnegie Mellon property and will not be disclosed to third parties. By participating, you understand and agree that the data and information gathered during this study may be used by Carnegie Mellon and published and/or disclosed by Carnegie Mellon to others outside of Carnegie Mellon. However, your name, address, contact information and other direct personal identifiers in your consent
+          form will not be mentioned in any such publication or dissemination of the research data and/or results by Carnegie Mellon. </p>
+      </dd> <dt>Optional Permission</dt>
       <dd>
-	I understand that the researchers may want to use a short
-	portion of any video or audio recording for illustrative
-	reasons in presentations of this work for scientific or
-	educational purposes. 
+        <p> I understand that the researchers may want to use a short portion of any video or audio recording for illustrative reasons in presentations of this work for scientific or educational purposes. </p>
         <div class="sigline1">
-          <div>
-            <span class="zoom">
-              <input type="radio" name="video" class="videoradio"
-	      value="yes" id="optin"></input>
-            </span>
-            <label for="optin">I give my permission to do so provided that
-	      my name and face will not appear.</label>
-	    <span class="initial">INITIAL HERE:</span>
-	    <input type="text"/>
-          </div>
-          <div>
-            <span class="zoom">
-              <input type="radio" name="video" class="videoradio"
-              value="no" id="optout"></input>
-            </span>
-            <label for="optout">I do not give my permission.</label>
-          </div>
-          <div style="display: none">
-            <input type="radio" name="video" class="videoradio"  value="default" checked="true">I have not made a selection</input>
-          </div>
+          <div> <span class="zoom">
+              <input name="video" class="videoradio" value="yes" id="optin" type="radio">
+            </span> <label for="optin">I give my permission to do so provided that
+	      my name and face will not appear.</label> <span class="initial">INITIAL HERE:</span> <input type="text"> </div>
+          <div> <span class="zoom">
+              <input name="video" class="videoradio" value="no" id="optout" type="radio">
+            </span> <label for="optout">I do not give my permission.</label> </div>
+          <div style="display: none"> <input name="video" class="videoradio" value="default" checked="checked" type="radio">I have not made a selection </div>
         </div>
-      </dd>
-     
-      <dt>Rights</dt>
-
+      </dd> <dt>Rights</dt>
       <dd>
-	<p>
-	  Your participation is voluntary. You are free to stop your
-	  participation at any point. Refusal to participate or
-	  withdrawal of your consent or discontinued participation in
-	  the study will not result in any penalty or loss of benefits
-	  or rights to which you might otherwise be entitled. The
-	  Principal Investigator may at his/her discretion remove you
-	  from the study for any of a number of reasons. In such an
-	  event, you will not suffer any penalty or loss of benefits
-	  or rights which you might otherwise be entitled.
-	</p>
-	<p>
-	  At your discretion, you may arrange for assistance from any
-	  people, devices or animals in completing any or all parts of
-	  the study.
-	</p>
-      </dd>
-      
-      <dt>Right to Ask Questions &amp; Contact Information</dt>
-
+        <p> Your participation is voluntary. You are free to stop your participation at any point. Refusal to participate or withdrawal of your consent or discontinued participation in the study will not result in any penalty or loss of benefits or rights to which you might otherwise be entitled. The Principal Investigator may at his/her discretion remove you from the study for any of a number of reasons. In such an event, you will not suffer any penalty or loss of benefits or rights which you might
+          otherwise be entitled. </p>
+        <p> At your discretion, you may arrange for assistance from any people, devices or animals in completing any or all parts of the study. </p>
+      </dd> <dt>Right to Ask Questions &amp; Contact Information</dt>
       <dd>
-	<p>
-	  An electronic version of this document was provided to you
-	  before the study, and is available at <a class="vizlink"
-	  href="www.google.com">GHI</a>.  A QR code is provided at the
-	  bottom right of the last page, and at the top right of the
-	  first page, of this document.
-	</p>
-	<p>
-	  If you have any questions about this study, you should feel
-	  free to ask them at any time before or during the study. If
-	  you have questions later, desire additional information, or
-	  wish to withdraw your participation please contact the
-	  Principal Investigator by mail, phone or e-mail in
-	  accordance with the contact information listed in this
-	  document.
-	</p>
-	<p>
-	  If you have questions pertaining to your rights as a
-	  research participant; or to report concerns to this study,
-	  you should contact the Office of Research Integrity and
-	  Compliance at Carnegie Mellon University. Email:
-	  irb-review@andrew.cmu.edu . Phone: 412-268-1901 or
-	  412-268-5460.
-	</p>
-	<span class="email encrypted">6540616e6472</span>	    
-      </dd>
-
+        <p> An electronic version of this document was provided to you before the study, and is available at <a class="vizlink" href="http://tinyurl.com/tablesconsent">http://tinyurl.com/tablesconsent</a>. A QR code is provided at the bottom right of the last page, and at the top right of the first page, of this document. </p>
+        <p> If you have any questions about this study, you should feel free to ask them at any time before or during the study. If you have questions later, desire additional information, or wish to withdraw your participation please contact the Principal Investigator by mail, phone or e-mail in accordance with the contact information listed in this document. </p>
+        <p> If you have questions pertaining to your rights as a research participant; or to report concerns to this study, you should contact the Office of Research Integrity and Compliance at Carnegie Mellon University. Email: irb-review@andrew.cmu.edu . Phone: 412-268-1901 or 412-268-5460. </p> <span class="email encrypted">6140616e6472</span> </dd>
       <!--
 	  Conflict of Interest
 
@@ -375,94 +203,44 @@
 	  but not limited to, financial conflicts of interests. If
 	  there are no conflicts of interest, please delete this
 	  section]
-	-->
-
-      <dt style="page-break-before: always">Voluntary Consent</dt>
-
+	--><dt style="page-break-before: always">Voluntary Consent</dt>
       <dd>
-	<p>
-	  By signing below, you agree that you have read and
-	  understood the above information and that all your current
-	  questions have been answered. You are encouraged to ask
-	  questions about any aspect of this research study during the
-	  course of the study and in the future. By signing this form,
-	  you agree to participate in this research study.
-	</p>
+        <p> By signing below, you agree that you have read and understood the above information and that all your current questions have been answered. You are encouraged to ask questions about any aspect of this research study during the course of the study and in the future. By signing this form, you agree to participate in this research study. </p>
         <div class="sigline">
-          <div>
-	    <span class="signature participant">PARTICIPANT SIGNATURE</span>
-            <span class="spacer" _aria-hidden="true">&nbsp;</span>
-            <span class="date">DATE</span>
-          </div>
+          <div> <span class="signature participant">PARTICIPANT SIGNATURE</span> <span class="spacer" _aria-hidden="true">&nbsp;</span> <span class="date">DATE</span> </div>
         </div>
-
-	<p>
-	  I certify that I have explained the nature and purpose of
-	  this research study to the above individual and I have
-	  discussed the potential benefits and possible risks of
-	  participation in the study.  The above individual has been
-	  provided an electronic copy of this form, as well as a
-	  signed paper copy.  Any questions the individual has about
-	  this study have been answered and any future questions will
-	  be answered as they arise.
-	</p>
-	
+        <p> I certify that I have explained the nature and purpose of this research study to the above individual and I have discussed the potential benefits and possible risks of participation in the study. The above individual has been provided an electronic copy of this form, as well as a signed paper copy. Any questions the individual has about this study have been answered and any future questions will be answered as they arise. </p>
         <div class="sigline">
-          <div>
-	    <span class="signature participant">SIGNATURE OF PERSON OBTAINING CONSENT</span>
-            <span class="spacer" _aria-hidden="true">&nbsp;</span>
-            <span class="date">DATE</span>
-         </div>
+          <div> <span class="signature participant">SIGNATURE OF PERSON OBTAINING CONSENT</span> <span class="spacer" _aria-hidden="true">&nbsp;</span> <span class="date">DATE</span> </div>
         </div>
       </dd>
     </dl>
-    </main>
-    <div class="email encrypted">e636d752e7367617264696e</div>  
-    <header class="insitu">
-      <hr/>
-      <div class="qr">
-	A copy of this form is<br/>
-	available at <br/>
-	<a href="www.google.com" class="vizlink">DEF</a>
-	<br/>
-	<br/>
-	<a href="www.google.com" class="qrlink">ABC</a>
-      </div>
-      <dl>
-	<dt>Study Title</dt>
-	<dd class="title copy">Utility of tabular structure for nonvisual browsing</dd>
-	
-	<dt>Principal Investigator</dt>
-	<dd>
-	  <div>Steven Gardiner, Post Doctoral Researcher</div>
-          <div class="email decrypted">junkmail@yahoo.com</div>  
-	  <div>Language Technologies Institute, Carnegie Mellon, GHC 6405</div>
-	</dd>
-	
-	<dt>Faculty Advisor</dt>
-	<dd>Anthony Tomasic, Systems Scientist, ISR</dd>
-	
-	<dt>Other Investigator</dt>
-	<dd>John Zimmerman, Associate Professor, HCI</dd>
-
-        <!--
+  </main>
+  <div class="email encrypted">e636d752e6b6d77696c6c69</div>
+  <header class="insitu">
+    <hr/>
+    <div class="qr"> A copy of this form is<br/> available at <br/> <a href="www.google.com" class="vizlink">DEF</a> <br/> <br/> <a href="www.google.com" class="qrlink">ABC</a> </div>
+    <dl> <dt>Study Title</dt>
+      <dd class="title copy">Utility of tabular structure for nonvisual browsing</dd> <dt>Principal Investigator</dt>
+      <dd>
+        <div>Kristin Williams, PhD Student</div>
+        <div class="email decrypted">junkmail@yahoo.com</div>
+        <div>Human Computer Interaction Institute, Carnegie Mellon, NSH 4607</div>
+      </dd> <dt>Faculty Advisor</dt>
+      <dd>John Zimmerman, Associate Professor, HCI</dd> <dt>Other Investigator</dt>
+      <dd>Anthony Tomasic, Systems Scientist, ISR</dd>
+      <dd>Steve Gardiner, PhD, LTI</dd>
+      <dd>Taylor Clarke, Research Programmer, LTI</dd>
+      <!--
 	<dt>Sponsor</dt>
 	<dd> [Insert the name of the sponsor(s)]</dd>
-        -->
-      </dl>
-      <hr/>
-    </header>
-    <div class="email encrypted">6564752</div>	    
-    <footer>
-      <hr/>
-      <div class="qr">
-	A copy of this form is<br/>
-	available at <br/>
-	<a href="www.google.com" class="vizlink">DEF</a>
-	<br/><br/>
-	<a href="www.google.com" class="qrlink">ABC</a>
-      </div>
-      <!--
+        --></dl>
+    <hr/> </header>
+  <div class="email encrypted">6564752</div>
+  <footer>
+    <hr/>
+    <div class="qr"> A copy of this form is<br/> available at <br/> <a href="www.google.com" class="vizlink">DEF</a> <br/><br/> <a href="www.google.com" class="qrlink">ABC</a> </div>
+    <!--
       <dl>
 	<dt>IRB No</dt>
 	<dd>HS15-141</dd>
@@ -477,6 +255,7 @@
 	<dd></dd>
       </dl>
       -->
-    </footer>
-  </body>
+  </footer>
+</body>
+
 </html>
